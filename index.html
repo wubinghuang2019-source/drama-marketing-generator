@@ -13,18 +13,11 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-            /* 电影级深色背景 - 深邃优雅 */
-            background: #0a0e1a;
-            background-image: 
-                /* 微妙的噪点纹理 */
-                url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E"),
-                /* 优雅的径向渐变 */
-                radial-gradient(ellipse at top left, rgba(218, 165, 32, 0.08) 0%, transparent 50%),
-                radial-gradient(ellipse at bottom right, rgba(139, 69, 19, 0.06) 0%, transparent 50%),
-                linear-gradient(180deg, #0a0e1a 0%, #12172a 100%);
+            /* 清新渐变背景 - 浅粉到浅蓝 */
+            background: linear-gradient(135deg, #FFF5F5 0%, #FFF9F9 25%, #F0F9FF 75%, #EEF8FF 100%);
             min-height: 100vh;
-            padding: 20px;
-            color: #e8e8e8;
+            padding: 30px 20px;
+            color: #2D3748;
         }
 
         .container {
@@ -34,145 +27,103 @@
 
         .header {
             text-align: center;
-            color: white;
-            margin-bottom: 40px;
-            padding: 60px 20px 40px;
-            position: relative;
+            margin-bottom: 50px;
+            padding: 20px;
         }
 
-        /* Logo重新设计 - 电影胶片风格 */
+        /* Logo - 导演板图标 */
         .logo {
-            width: 140px;
-            height: 140px;
-            margin: 0 auto 30px;
-            background: linear-gradient(135deg, #1a1f35 0%, #0d1117 100%);
-            border-radius: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 
-                0 20px 60px rgba(0,0,0,0.5),
-                inset 0 1px 0 rgba(255,255,255,0.1);
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 25px;
             position: relative;
-            overflow: hidden;
-            border: 2px solid rgba(218, 165, 32, 0.3);
+            filter: drop-shadow(0 4px 12px rgba(255, 107, 107, 0.15));
         }
 
-        .logo::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(218, 165, 32, 0.15) 0%, transparent 70%);
-            animation: logoGlow 4s ease-in-out infinite;
-        }
-
-        @keyframes logoGlow {
-            0%, 100% { transform: translate(0, 0); opacity: 0.5; }
-            50% { transform: translate(10px, 10px); opacity: 0.8; }
-        }
-
-        .logo-icon {
-            position: relative;
-            z-index: 2;
-            width: 70px;
-            height: 70px;
-        }
-
-        /* SVG胶片图标 */
-        .logo-icon svg {
+        .logo svg {
             width: 100%;
             height: 100%;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
         }
 
         .header h1 {
-            font-size: 3em;
-            margin-bottom: 15px;
+            font-size: 2.8em;
+            margin-bottom: 12px;
             font-weight: 700;
-            background: linear-gradient(135deg, #daa520 0%, #ffd700 50%, #daa520 100%);
+            color: #2D3748;
+            letter-spacing: 1px;
+        }
+
+        .header h1 .highlight {
+            background: linear-gradient(135deg, #FF6B6B 0%, #FF8787 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            letter-spacing: 2px;
-            text-shadow: 0 0 30px rgba(218, 165, 32, 0.3);
         }
 
-        .header p {
-            font-size: 1.15em;
-            opacity: 0.75;
-            color: #b8b8b8;
-            font-weight: 300;
-            letter-spacing: 0.5px;
+        .header .subtitle {
+            font-size: 1.1em;
+            color: #718096;
+            font-weight: 400;
+            margin-bottom: 15px;
         }
 
         .version-badge {
             display: inline-block;
-            background: rgba(218, 165, 32, 0.15);
-            border: 1px solid rgba(218, 165, 32, 0.3);
+            background: linear-gradient(135deg, #FF6B6B 0%, #FF8787 100%);
+            color: white;
             padding: 6px 18px;
             border-radius: 20px;
             font-size: 0.85em;
-            margin-top: 15px;
-            color: #daa520;
-            font-weight: 500;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(255, 107, 107, 0.25);
         }
 
         .main-card {
-            background: rgba(26, 31, 53, 0.6);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
+            background: white;
+            border-radius: 24px;
             padding: 45px;
-            box-shadow: 
-                0 20px 60px rgba(0,0,0,0.4),
-                inset 0 1px 0 rgba(255,255,255,0.05);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
             margin-bottom: 30px;
-            border: 1px solid rgba(255,255,255,0.05);
+            border: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         .section-title {
-            font-size: 1.6em;
-            color: #daa520;
-            margin-bottom: 25px;
+            font-size: 1.5em;
+            color: #2D3748;
+            margin-bottom: 30px;
             display: flex;
             align-items: center;
-            gap: 12px;
-            font-weight: 600;
+            gap: 10px;
+            font-weight: 700;
         }
 
-        .section-title::before {
-            content: '';
-            width: 4px;
-            height: 28px;
-            background: linear-gradient(180deg, #daa520 0%, #b8860b 100%);
-            border-radius: 2px;
+        .section-title .icon {
+            font-size: 1.3em;
         }
 
         .form-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 25px;
-            margin-bottom: 30px;
+            margin-bottom: 35px;
         }
 
         .form-group label {
             display: block;
-            color: #c8c8c8;
+            color: #4A5568;
             margin-bottom: 10px;
-            font-weight: 500;
+            font-weight: 600;
             font-size: 0.95em;
         }
 
         .form-group input,
         .form-group select {
             width: 100%;
-            padding: 14px 18px;
-            background: rgba(13, 17, 31, 0.6);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 10px;
-            color: #e8e8e8;
+            padding: 14px 16px;
+            background: #F7FAFC;
+            border: 2px solid #E2E8F0;
+            border-radius: 12px;
+            color: #2D3748;
             font-size: 1em;
             transition: all 0.3s ease;
         }
@@ -180,9 +131,9 @@
         .form-group input:focus,
         .form-group select:focus {
             outline: none;
-            border-color: #daa520;
-            background: rgba(13, 17, 31, 0.8);
-            box-shadow: 0 0 0 3px rgba(218, 165, 32, 0.1);
+            border-color: #FF6B6B;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
         }
 
         .form-group select {
@@ -192,21 +143,21 @@
         .generate-btn {
             width: 100%;
             padding: 18px;
-            background: linear-gradient(135deg, #daa520 0%, #b8860b 100%);
+            background: linear-gradient(135deg, #FF6B6B 0%, #FF8787 100%);
             border: none;
-            border-radius: 12px;
+            border-radius: 14px;
             color: white;
             font-size: 1.15em;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 8px 24px rgba(218, 165, 32, 0.3);
-            letter-spacing: 1px;
+            box-shadow: 0 4px 16px rgba(255, 107, 107, 0.3);
+            letter-spacing: 0.5px;
         }
 
         .generate-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 12px 32px rgba(218, 165, 32, 0.4);
+            box-shadow: 0 6px 24px rgba(255, 107, 107, 0.4);
         }
 
         .generate-btn:active {
@@ -217,13 +168,16 @@
             display: none;
             text-align: center;
             padding: 60px 20px;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
         }
 
         .spinner {
             width: 50px;
             height: 50px;
-            border: 4px solid rgba(218, 165, 32, 0.2);
-            border-top-color: #daa520;
+            border: 4px solid #FFE5E5;
+            border-top-color: #FF6B6B;
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin: 0 auto 20px;
@@ -233,15 +187,20 @@
             to { transform: rotate(360deg); }
         }
 
+        .loading p {
+            color: #718096;
+            font-size: 1.05em;
+        }
+
         .result-section {
             display: none;
             margin-top: 40px;
         }
 
         .result-header {
-            background: linear-gradient(135deg, rgba(218, 165, 32, 0.2) 0%, rgba(184, 134, 11, 0.2) 100%);
-            border: 1px solid rgba(218, 165, 32, 0.3);
-            border-radius: 12px 12px 0 0;
+            background: linear-gradient(135deg, #FFF5F5 0%, #F0F9FF 100%);
+            border: 2px solid #FFE5E5;
+            border-radius: 20px 20px 0 0;
             padding: 25px 30px;
             display: flex;
             justify-content: space-between;
@@ -251,9 +210,9 @@
         }
 
         .result-header h2 {
-            color: #daa520;
+            color: #FF6B6B;
             font-size: 1.8em;
-            font-weight: 600;
+            font-weight: 700;
         }
 
         .action-btns {
@@ -264,98 +223,122 @@
 
         .action-btn {
             padding: 10px 20px;
-            background: rgba(218, 165, 32, 0.15);
-            border: 1px solid rgba(218, 165, 32, 0.3);
-            border-radius: 8px;
-            color: #daa520;
+            background: white;
+            border: 2px solid #FF6B6B;
+            border-radius: 10px;
+            color: #FF6B6B;
             cursor: pointer;
             font-size: 0.9em;
-            font-weight: 500;
+            font-weight: 600;
             transition: all 0.3s ease;
         }
 
         .action-btn:hover {
-            background: rgba(218, 165, 32, 0.25);
-            border-color: #daa520;
+            background: #FF6B6B;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.25);
         }
 
         .result-content {
-            background: rgba(26, 31, 53, 0.4);
-            border: 1px solid rgba(255,255,255,0.05);
+            background: white;
+            border: 2px solid #E2E8F0;
             border-top: none;
-            border-radius: 0 0 12px 12px;
+            border-radius: 0 0 20px 20px;
             padding: 40px;
-            color: #d0d0d0;
+            color: #2D3748;
             line-height: 1.8;
         }
 
         .result-content h3 {
-            color: #daa520;
+            color: #FF6B6B;
             font-size: 1.5em;
             margin: 35px 0 20px 0;
             padding-bottom: 12px;
-            border-bottom: 2px solid rgba(218, 165, 32, 0.3);
-            font-weight: 600;
+            border-bottom: 3px solid #FFE5E5;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .result-content h3:first-child {
             margin-top: 0;
         }
 
+        .result-content p {
+            margin: 12px 0;
+            color: #4A5568;
+        }
+
+        .result-content strong {
+            color: #2D3748;
+            font-weight: 600;
+        }
+
         .strategy-item {
-            background: rgba(13, 17, 31, 0.5);
-            border-left: 3px solid #daa520;
+            background: linear-gradient(135deg, #FFF5F5 0%, #F0F9FF 100%);
+            border-left: 4px solid #FF6B6B;
             padding: 20px 25px;
             margin: 20px 0;
-            border-radius: 8px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
         }
 
         .strategy-item strong {
-            color: #daa520;
-            font-size: 1.1em;
+            color: #FF6B6B;
+            font-size: 1.15em;
             display: block;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            font-weight: 700;
         }
 
         .chart-container {
             max-width: 450px;
-            margin: 30px auto;
+            margin: 35px auto;
             padding: 30px;
-            background: rgba(13, 17, 31, 0.5);
-            border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.05);
+            background: #F7FAFC;
+            border-radius: 16px;
+            border: 2px solid #E2E8F0;
         }
 
         .history-section {
-            background: rgba(26, 31, 53, 0.4);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 25px;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
             margin-top: 30px;
-            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         .history-section h3 {
-            color: #daa520;
+            color: #2D3748;
             margin-bottom: 20px;
-            font-size: 1.3em;
+            font-size: 1.4em;
+            font-weight: 700;
         }
 
         .history-item {
-            background: rgba(13, 17, 31, 0.6);
-            padding: 15px 20px;
+            background: #F7FAFC;
+            padding: 16px 20px;
             margin: 12px 0;
-            border-radius: 10px;
+            border-radius: 12px;
             cursor: pointer;
-            border: 1px solid rgba(255,255,255,0.05);
+            border: 2px solid transparent;
             transition: all 0.3s ease;
-            color: #c8c8c8;
+            color: #4A5568;
         }
 
         .history-item:hover {
-            background: rgba(218, 165, 32, 0.1);
-            border-color: rgba(218, 165, 32, 0.3);
+            background: #FFF5F5;
+            border-color: #FF6B6B;
             transform: translateX(5px);
+            box-shadow: 0 2px 8px rgba(255, 107, 107, 0.15);
+        }
+
+        .history-item strong {
+            color: #2D3748;
+            font-weight: 600;
         }
 
         @media (max-width: 768px) {
@@ -364,7 +347,7 @@
             }
             
             .main-card {
-                padding: 25px;
+                padding: 30px 20px;
             }
             
             .form-grid {
@@ -375,6 +358,10 @@
                 flex-direction: column;
                 align-items: flex-start;
             }
+
+            .result-content {
+                padding: 25px 20px;
+            }
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -383,30 +370,36 @@
     <div class="container">
         <div class="header">
             <div class="logo">
-                <div class="logo-icon">
-                    <!-- 电影胶片风格SVG图标 -->
-                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                        <!-- 胶片框架 -->
-                        <rect x="10" y="20" width="80" height="60" rx="4" fill="none" stroke="#daa520" stroke-width="3"/>
-                        <!-- 胶片齿孔 -->
-                        <rect x="12" y="25" width="6" height="8" fill="#daa520"/>
-                        <rect x="12" y="42" width="6" height="8" fill="#daa520"/>
-                        <rect x="12" y="59" width="6" height="8" fill="#daa520"/>
-                        <rect x="82" y="25" width="6" height="8" fill="#daa520"/>
-                        <rect x="82" y="42" width="6" height="8" fill="#daa520"/>
-                        <rect x="82" y="59" width="6" height="8" fill="#daa520"/>
-                        <!-- 播放三角形 -->
-                        <path d="M 40 35 L 40 65 L 65 50 Z" fill="#daa520"/>
-                    </svg>
-                </div>
+                <!-- 导演板图标 - 精美设计 -->
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <!-- 底部板 -->
+                    <rect x="20" y="55" width="60" height="30" rx="3" fill="#FF6B6B"/>
+                    <!-- 顶部拍板 -->
+                    <g transform="rotate(-15 50 40)">
+                        <rect x="15" y="30" width="70" height="20" rx="2" fill="#4ECDC4"/>
+                        <!-- 黑白条纹 -->
+                        <rect x="20" y="32" width="8" height="16" fill="white"/>
+                        <rect x="31" y="32" width="8" height="16" fill="white"/>
+                        <rect x="42" y="32" width="8" height="16" fill="white"/>
+                        <rect x="53" y="32" width="8" height="16" fill="white"/>
+                        <rect x="64" y="32" width="8" height="16" fill="white"/>
+                        <rect x="75" y="32" width="8" height="16" fill="white"/>
+                    </g>
+                    <!-- 铰链 -->
+                    <circle cx="22" cy="55" r="3" fill="#2D3748"/>
+                    <circle cx="78" cy="55" r="3" fill="#2D3748"/>
+                    <!-- 文字区域装饰 -->
+                    <rect x="28" y="63" width="44" height="3" rx="1.5" fill="white" opacity="0.3"/>
+                    <rect x="28" y="70" width="30" height="3" rx="1.5" fill="white" opacity="0.3"/>
+                </svg>
             </div>
-            <h1>大剧营销方案生成器</h1>
-            <p>基于140种营销策略，智能生成全链路营销方案</p>
+            <h1><span class="highlight">大剧</span>营销方案生成器</h1>
+            <p class="subtitle">基于140种营销策略，智能生成全链路营销方案</p>
             <span class="version-badge">PRO 专业版</span>
         </div>
 
         <div class="main-card">
-            <h2 class="section-title">📝 填写剧集信息</h2>
+            <h2 class="section-title"><span class="icon">📝</span> 填写剧集信息</h2>
             <div class="form-grid">
                 <div class="form-group">
                     <label>剧名 *</label>
@@ -489,7 +482,7 @@
 
         <div class="loading" id="loading">
             <div class="spinner"></div>
-            <p style="color: #daa520;">AI正在分析140种营销策略，智能匹配最佳方案...</p>
+            <p>AI正在分析140种营销策略，智能匹配最佳方案...</p>
         </div>
 
         <div class="result-section" id="resultSection">
@@ -620,7 +613,7 @@
                             labels: ['短视频', '社交媒体', '付费广告', '内容营销'],
                             datasets: [{
                                 data: [30, 25, 25, 20],
-                                backgroundColor: ['#daa520', '#b8860b', '#8b6914', '#6b5610']
+                                backgroundColor: ['#FF6B6B', '#4ECDC4', '#FFD93D', '#A8DADC']
                             }]
                         },
                         options: {
@@ -628,13 +621,18 @@
                             plugins: {
                                 legend: { 
                                     position: 'bottom',
-                                    labels: { color: '#d0d0d0' }
+                                    labels: { 
+                                        color: '#4A5568',
+                                        padding: 15,
+                                        font: { size: 13 }
+                                    }
                                 },
                                 title: { 
                                     display: true, 
                                     text: '预算分配方案',
-                                    color: '#daa520',
-                                    font: { size: 16 }
+                                    color: '#2D3748',
+                                    font: { size: 16, weight: 'bold' },
+                                    padding: { bottom: 20 }
                                 }
                             }
                         }
