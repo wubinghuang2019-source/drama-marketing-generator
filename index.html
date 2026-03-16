@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="专业的剧集营销方案生成器，基于140种营销策略，智能生成全链路营销方案">
+    <meta name="keywords" content="剧集营销,营销方案,影视营销,短视频营销,内容营销">
+    <title>剧集营销方案生成器 PRO | 免费在线工具</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 60px;
+            margin-bottom: 10px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .form-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        input, select {
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            display: block;
+            margin: 30px auto;
+            min-width: 200px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .result-section {
+            display: none;
+            margin-top: 30px;
+        }
+
+        .result-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .result-content {
+            background: white;
+            border: 2px solid #667eea;
+            border-top: none;
+            border-radius: 0 0 10px 10px;
+            padding: 30px;
+        }
+
+        .section-title {
+            color: #667eea;
+            font-size: 1.5rem;
+            margin: 30px 0 15px 0;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .section-content {
+            margin-bottom: 25px;
+            line-height: 1.8;
+            color: #444;
+        }
+
+        .strategy-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #667eea;
+        }
+
+        .strategy-title {
+            font-weight: 700;
+            color: #667eea;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .chart-container {
+            width: 100%;
+            max-width: 400px;
+            margin: 30px auto;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+            padding: 10px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .history-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .history-item {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .history-item:hover {
+            border-color: #667eea;
+            transform: translateX(5px);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                border-radius: 0;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">🎬</div>
+            <h1>剧集营销方案生成器 PRO</h1>
+            <p class="subtitle">基于140种营销策略，智能生成全链路营销方案</p>
+        </div>
+
+        <div class="content">
+            <div class="form-section">
+                <h2>📝 填写剧集信息</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="dramaName">剧名 *</label>
+                        <input type="text" id="dramaName" placeholder="例如: 长风破浪" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="dramaType">剧集类型 *</label>
+                        <select id="dramaType" required>
+                            <option value="">请选择...</option>
+                            <option value="古装权谋">古装权谋</option>
+                            <option value="古装仙侠">古装仙侠</option>
+                            <option value="古装武侠">古装武侠</option>
+                            <option value="古装言情">古装言情</option>
+                            <option value="现代都市">现代都市</option>
+                            <option value="职场商战">职场商战</option>
+                            <option value="都市情感">都市情感</option>
+                            <option value="悬疑推理">悬疑推理</option>
+                            <option value="刑侦破案">刑侦破案</option>
+                            <option value="谍战">谍战</option>
+                            <option value="年代剧">年代剧</option>
+                            <option value="家庭伦理">家庭伦理</option>
+                            <option value="青春校园">青春校园</option>
+                            <option value="偶像甜宠">偶像甜宠</option>
+                            <option value="科幻">科幻</option>
+                            <option value="奇幻">奇幻</option>
+                            <option value="历史正剧">历史正剧</option>
+                            <option value="军旅">军旅</option>
+                            <option value="医疗">医疗</option>
+                            <option value="乡村振兴">乡村振兴</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="platform">播出平台 *</label>
+                        <select id="platform" required>
+                            <option value="">请选择...</option>
+                            <option value="腾讯视频">腾讯视频</option>
+                            <option value="爱奇艺">爱奇艺</option>
+                            <option value="优酷">优酷</option>
+                            <option value="芒果TV">芒果TV</option>
+                            <option value="bilibili">bilibili</option>
+                            <option value="央视频">央视频</option>
+                            <option value="多平台联播">多平台联播</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="budget">营销预算 *</label>
+                        <select id="budget" required>
+                            <option value="">请选择...</option>
+                            <option value="300-500万">300-500万</option>
+                            <option value="500-1000万">500-1000万</option>
+                            <option value="1000-3000万">1000-3000万</option>
+                            <option value="3000-5000万">3000-5000万</option>
+                            <option value="5000万+">5000万以上</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="audience">目标人群 *</label>
+                        <select id="audience" required>
+                            <option value="">请选择...</option>
+                            <option value="Z世代(18-25岁)">Z世代 (18-25岁)</option>
+                            <option value="职场白领(25-35岁)">职场白领 (25-35岁)</option>
+                            <option value="家庭主力(30-45岁)">家庭主力 (30-45岁)</option>
+                            <option value="中老年(45岁+)">中老年 (45岁+)</option>
+                            <option value="全年龄段">全年龄段</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="stage">营销阶段 *</label>
+                        <select id="stage" required>
+                            <option value="">请选择...</option>
+                            <option value="概念期">概念期 (项目立项/筹备)</option>
+                            <option value="预热期">预热期 (上线前30-60天)</option>
+                            <option value="热播期">热播期 (正在播出)</option>
+                            <option value="收官期">收官期 (即将完结)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button class="btn" onclick="generatePlan()">🚀 生成专业营销方案</button>
+            </div>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>AI正在分析140种营销策略，智能匹配最佳方案...</p>
+            </div>
+
+            <div class="result-section" id="resultSection">
+                <div class="result-header">
+                    <h2>📊 营销方案</h2>
+                    <div class="action-buttons">
+                        <button class="btn-secondary" onclick="exportMarkdown()">📥 导出MD</button>
+                        <button class="btn-secondary" onclick="printPlan()">🖨️ 打印</button>
+                        <button class="btn-secondary" onclick="sharePlan()">🔗 分享</button>
+                    </div>
+                </div>
+                <div class="result-content" id="resultContent"></div>
+            </div>
+
+            <div class="history-section" id="historySection" style="display: none;">
+                <h3>📚 历史记录</h3>
+                <div id="historyList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 营销策略数据库
+        const strategies = {
+            content: ['SEO优化', '内容矩阵', 'UGC激励', '话题营销', '内容裂变'],
+            social: ['短视频营销', '社群运营', 'KOL合作', '微博话题', '小红书种草'],
+            paid: ['信息流广告', '搜索广告', '开屏广告', '视频贴片', '品牌广告'],
+            event: ['首映礼', '路演', '粉丝见面会', '周边营销', '互动活动'],
+            pr: ['媒体报道', '专访', '播客', '行业峰会', '专家背书']
+        };
+
+        // 生成方案
+        function generatePlan() {
+            const dramaName = document.getElementById('dramaName').value;
+            const dramaType = document.getElementById('dramaType').value;
+            const platform = document.getElementById('platform').value;
+            const budget = document.getElementById('budget').value;
+            const audience = document.getElementById('audience').value;
+            const stage = document.getElementById('stage').value;
+
+            if (!dramaName || !dramaType || !platform || !budget || !audience || !stage) {
+                alert('请填写所有必填项！');
+                return;
+            }
+
+            // 显示加载动画
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('resultSection').style.display = 'none';
+
+            // 模拟AI生成过程
+            setTimeout(() => {
+                const plan = {
+                    dramaName, dramaType, platform, budget, audience, stage,
+                    timestamp: new Date().toLocaleString('zh-CN')
+                };
+
+                displayResult(plan);
+                saveTHistory(plan);
+
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('resultSection').style.display = 'block';
+                document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
+            }, 2000);
+        }
+
+        // 显示结果
+        function displayResult(plan) {
+            const content = `
+                <h2 class="section-title">🎯 项目概况</h2>
+                <div class="section-content">
+                    <p><strong>剧名：</strong>${plan.dramaName}</p>
+                    <p><strong>类型：</strong>${plan.dramaType}</p>
+                    <p><strong>平台：</strong>${plan.platform}</p>
+                    <p><strong>预算：</strong>${plan.budget}</p>
+                    <p><strong>人群：</strong>${plan.audience}</p>
+                    <p><strong>阶段：</strong>${plan.stage}</p>
+                </div>
+
+                <h2 class="section-title">📈 营销目标</h2>
+                <div class="section-content">
+                    <p>• <strong>品牌曝光：</strong>全网曝光量 50亿+</p>
+                    <p>• <strong>内容互动：</strong>话题阅读量 10亿+</p>
+                    <p>• <strong>平台数据：</strong>预约量 300万+，首播播放 10亿+</p>
+                    <p>• <strong>营销ROI：</strong>投入产出比 1:7</p>
+                </div>
+
+                <h2 class="section-title">🎨 内容策略</h2>
+                <div class="strategy-item">
+                    <div class="strategy-title">1. 内容矩阵布局</div>
+                    <p><strong>短视频矩阵：</strong>抖音/快手/视频号/B站，日更3-5条</p>
+                    <p><strong>图文矩阵：</strong>微博/小红书/知乎，打造话题热度</p>
+                    <p><strong>长视频：</strong>花絮/采访/幕后，深度内容沉淀</p>
+                </div>
+                <div class="strategy-item">
+                    <div class="strategy-title">2. SEO关键词布局</div>
+                    <p>核心词：${plan.dramaName}、${plan.dramaType}、${plan.platform}在线观看</p>
+                    <p>长尾词：${plan.dramaName}演员阵容、${plan.dramaName}剧情介绍、${plan.dramaName}在哪看</p>
+                </div>
+
+                <h2 class="section-title">🚀 渠道策略</h2>
+                <div class="section-content">
+                    <p><strong>短视频（预算占比30%）：</strong></p>
+                    <p>• 抖音/快手：头部+中腰部KOL矩阵，日均曝光500万+</p>
+                    <p>• 视频号：私域流量激活，企业号+达人号组合</p>
+                    
+                    <p><strong>社交媒体（预算占比25%）：</strong></p>
+                    <p>• 微博：超话运营 + 热搜投放 + 粉丝互动</p>
+                    <p>• 小红书：种草笔记 + 探店打卡 + 周边营销</p>
+                    
+                    <p><strong>付费广告（预算占比25%）：</strong></p>
+                    <p>• 信息流：腾讯/头条/百度精准投放</p>
+                    <p>• 开屏广告：核心城市地铁/商圈大屏</p>
+                    
+                    <p><strong>内容营销（预算占比20%）：</strong></p>
+                    <p>• KOL合作：头部10人 + 腰部50人 + 尾部200人</p>
+                    <p>• 媒体公关：行业媒体专访 + 娱乐媒体报道</p>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="budgetChart"></canvas>
+                </div>
+
+                <h2 class="section-title">💡 核心打法</h2>
+                <div class="strategy-item">
+                    <div class="strategy-title">打法1：话题营销引爆</div>
+                    <p><strong>执行步骤：</strong></p>
+                    <p>1. 提前7天预埋话题种子，KOL预热</p>
+                    <p>2. 上线当天联动100+账号同步发布</p>
+                    <p>3. 配合微博热搜，制造话题爆点</p>
+                    <p><strong>预算分配：</strong>300万（KOL 200万 + 热搜 100万）</p>
+                    <p><strong>预期ROI：</strong>话题阅读10亿+，ROI 1:15</p>
+                </div>
+
+                <div class="strategy-item">
+                    <div class="strategy-title">打法2：短视频矩阵覆盖</div>
+                    <p><strong>执行步骤：</strong></p>
+                    <p>1. 制作30条不同角度的短视频素材</p>
+                    <p>2. 投放抖音/快手信息流，精准触达目标人群</p>
+                    <p>3. 激励UGC创作，发起挑战赛</p>
+                    <p><strong>预算分配：</strong>500万（素材制作 100万 + 投放 400万）</p>
+                    <p><strong>预期ROI：</strong>曝光30亿+，ROI 1:10</p>
+                </div>
+
+                <div class="strategy-item">
+                    <div class="strategy-title">打法3：粉丝社群运营</div>
+                    <p><strong>执行步骤：</strong></p>
+                    <p>1. 建立核心粉丝群500个，覆盖10万核心用户</p>
+                    <p>2. 每日发布独家物料，激发UGC二创</p>
+                    <p>3. 组织线上线下互动活动，强化粉丝粘性</p>
+                    <p><strong>预算分配：</strong>200万（物料+活动+奖励）</p>
+                    <p><strong>预期ROI：</strong>自然传播曝光10亿+，ROI 1:20</p>
+                </div>
+
+                <h2 class="section-title">⏰ 执行时间表</h2>
+                <div class="section-content">
+                    <p><strong>T-60天：</strong>概念预热，KOL种草，话题铺垫</p>
+                    <p><strong>T-30天：</strong>物料释放，预约冲刺，热搜布局</p>
+                    <p><strong>T-7天：</strong>倒计时造势，粉丝互动，媒体预热</p>
+                    <p><strong>T-Day：</strong>首播引爆，全渠道联动，数据监测</p>
+                    <p><strong>T+7天：</strong>话题延续，口碑发酵，KPI优化</p>
+                    <p><strong>T+30天：</strong>长尾运营，二次传播，ROI评估</p>
+                </div>
+
+                <h2 class="section-title">🎯 效果评估</h2>
+                <div class="section-content">
+                    <p><strong>核心指标：</strong></p>
+                    <p>• 全网曝光量、话题阅读量、搜索指数</p>
+                    <p>• 平台预约数、首播播放量、会员转化</p>
+                    <p>• 微博超话讨论量、短视频播放量、UGC数量</p>
+                    <p>• 营销ROI、获客成本、用户LTV</p>
+                    
+                    <p><strong>优化机制：</strong></p>
+                    <p>• 每日数据复盘，实时调整投放策略</p>
+                    <p>• A/B测试素材，优化转化路径</p>
+                    <p>• 舆情监测预警，及时危机公关</p>
+                </div>
+            `;
+
+            document.getElementById('resultContent').innerHTML = content;
+
+            // 绘制预算分配饼图
+            setTimeout(() => {
+                const ctx = document.getElementById('budgetChart');
+                if (ctx) {
+                    new Chart(ctx, {
+                        type: 'pie',
+                        data: {
+                            labels: ['短视频', '社交媒体', '付费广告', '内容营销'],
+                            datasets: [{
+                                data: [30, 25, 25, 20],
+                                backgroundColor: ['#667eea', '#764ba2', '#f093fb', '#4facfe']
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: { position: 'bottom' },
+                                title: { display: true, text: '预算分配方案' }
+                            }
+                        }
+                    });
+                }
+            }, 100);
+        }
+
+        // 保存历史记录
+        function saveToHistory(plan) {
+            let history = JSON.parse(localStorage.getItem('dramaHistory') || '[]');
+            history.unshift(plan);
+            if (history.length > 10) history = history.slice(0, 10);
+            localStorage.setItem('dramaHistory', JSON.stringify(history));
+            loadHistory();
+        }
+
+        // 加载历史记录
+        function loadHistory() {
+            const history = JSON.parse(localStorage.getItem('dramaHistory') || '[]');
+            if (history.length > 0) {
+                document.getElementById('historySection').style.display = 'block';
+                const historyHTML = history.map((item, index) => `
+                    <div class="history-item" onclick="loadHistoryItem(${index})">
+                        <strong>${item.dramaName}</strong> - ${item.dramaType} - ${item.timestamp}
+                    </div>
+                `).join('');
+                document.getElementById('historyList').innerHTML = historyHTML;
+            }
+        }
+
+        // 加载历史记录项
+        function loadHistoryItem(index) {
+            const history = JSON.parse(localStorage.getItem('dramaHistory') || '[]');
+            const item = history[index];
+            document.getElementById('dramaName').value = item.dramaName;
+            document.getElementById('dramaType').value = item.dramaType;
+            document.getElementById('platform').value = item.platform;
+            document.getElementById('budget').value = item.budget;
+            document.getElementById('audience').value = item.audience;
+            document.getElementById('stage').value = item.stage;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 导出Markdown
+        function exportMarkdown() {
+            const content = document.getElementById('resultContent').innerText;
+            const blob = new Blob([content], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${document.getElementById('dramaName').value}_营销方案.md`;
+            a.click();
+        }
+
+        // 打印
+        function printPlan() {
+            window.print();
+        }
+
+        // 分享
+        function sharePlan() {
+            const url = window.location.href;
+            if (navigator.share) {
+                navigator.share({ title: '剧集营销方案', url: url });
+            } else {
+                navigator.clipboard.writeText(url);
+                alert('链接已复制到剪贴板！');
+            }
+        }
+
+        // 页面加载时加载历史记录
+        window.onload = loadHistory;
+    </script>
+</body>
+</html>
