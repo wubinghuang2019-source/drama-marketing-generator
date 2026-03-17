@@ -13,16 +13,16 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-            /* 水墨晕染背景 - 黄栗留到石青 */
+            /* 水墨晕染背景 - 苏梅到青翠 */
             background: 
-                radial-gradient(ellipse at 20% 30%, rgba(250, 220, 94, 0.3) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 70%, rgba(123, 207, 166, 0.3) 0%, transparent 50%),
+                radial-gradient(ellipse at 20% 30%, rgba(221, 118, 148, 0.25) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 70%, rgba(83, 183, 111, 0.25) 0%, transparent 50%),
                 linear-gradient(180deg, 
-                    #FFFDF5 0%, 
-                    #FFF9E6 20%,
-                    #F5FCF8 50%,
-                    #E8F9F0 80%,
-                    #DFF5EB 100%
+                    #FFF8FA 0%, 
+                    #FFF5F7 20%,
+                    #F8FBF9 50%,
+                    #F0F9F3 80%,
+                    #EBF7EE 100%
                 );
             min-height: 100vh;
             padding: 30px 20px;
@@ -39,9 +39,9 @@
             width: 100%;
             height: 100%;
             background-image: 
-                radial-gradient(circle at 15% 25%, rgba(250, 220, 94, 0.15) 0%, transparent 25%),
-                radial-gradient(circle at 85% 75%, rgba(123, 207, 166, 0.15) 0%, transparent 25%),
-                radial-gradient(circle at 50% 50%, rgba(250, 220, 94, 0.08) 0%, transparent 40%);
+                radial-gradient(circle at 15% 25%, rgba(221, 118, 148, 0.12) 0%, transparent 25%),
+                radial-gradient(circle at 85% 75%, rgba(83, 183, 111, 0.12) 0%, transparent 25%),
+                radial-gradient(circle at 50% 50%, rgba(221, 118, 148, 0.06) 0%, transparent 40%);
             pointer-events: none;
             z-index: 0;
         }
@@ -87,7 +87,7 @@
         }
 
         .header h1 .highlight {
-            background: linear-gradient(135deg, #7BCFA6 0%, #5BAF8A 100%);
+            background: linear-gradient(135deg, #53B76F 0%, #3D9F5A 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -102,13 +102,13 @@
 
         .version-badge {
             display: inline-block;
-            background: linear-gradient(135deg, #7BCFA6 0%, #5BAF8A 100%);
+            background: linear-gradient(135deg, #DD7694 0%, #C9627D 100%);
             color: white;
             padding: 6px 18px;
             border-radius: 20px;
             font-size: 0.85em;
             font-weight: 600;
-            box-shadow: 0 2px 8px rgba(123, 207, 166, 0.25);
+            box-shadow: 0 2px 8px rgba(221, 118, 148, 0.25);
         }
 
         .main-card {
@@ -164,9 +164,9 @@
         .form-group input:focus,
         .form-group select:focus {
             outline: none;
-            border-color: #7BCFA6;
+            border-color: #53B76F;
             background: white;
-            box-shadow: 0 0 0 3px rgba(123, 207, 166, 0.1);
+            box-shadow: 0 0 0 3px rgba(83, 183, 111, 0.1);
         }
 
         .form-group select {
@@ -176,7 +176,7 @@
         .generate-btn {
             width: 100%;
             padding: 18px;
-            background: linear-gradient(135deg, #7BCFA6 0%, #5BAF8A 100%);
+            background: linear-gradient(135deg, #53B76F 0%, #3D9F5A 100%);
             border: none;
             border-radius: 14px;
             color: white;
@@ -184,13 +184,13 @@
             font-weight: 700;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 16px rgba(123, 207, 166, 0.3);
+            box-shadow: 0 4px 16px rgba(83, 183, 111, 0.3);
             letter-spacing: 0.5px;
         }
 
         .generate-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 24px rgba(123, 207, 166, 0.4);
+            box-shadow: 0 6px 24px rgba(83, 183, 111, 0.4);
         }
 
         .generate-btn:active {
@@ -209,8 +209,8 @@
         .spinner {
             width: 50px;
             height: 50px;
-            border: 4px solid #C9EFE0;
-            border-top-color: #7BCFA6;
+            border: 4px solid #E6F4EB;
+            border-top-color: #53B76F;
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin: 0 auto 20px;
@@ -232,10 +232,10 @@
 
         .result-header {
             background: linear-gradient(135deg, 
-                rgba(250, 220, 94, 0.15) 0%, 
-                rgba(123, 207, 166, 0.15) 100%
+                rgba(221, 118, 148, 0.12) 0%, 
+                rgba(83, 183, 111, 0.12) 100%
             );
-            border: 2px solid rgba(123, 207, 166, 0.3);
+            border: 2px solid rgba(83, 183, 111, 0.3);
             border-radius: 20px 20px 0 0;
             padding: 25px 30px;
             display: flex;
@@ -246,7 +246,7 @@
         }
 
         .result-header h2 {
-            color: #7BCFA6;
+            color: #53B76F;
             font-size: 1.8em;
             font-weight: 700;
         }
@@ -260,9 +260,9 @@
         .action-btn {
             padding: 10px 20px;
             background: white;
-            border: 2px solid #7BCFA6;
+            border: 2px solid #53B76F;
             border-radius: 10px;
-            color: #7BCFA6;
+            color: #53B76F;
             cursor: pointer;
             font-size: 0.9em;
             font-weight: 600;
@@ -270,10 +270,10 @@
         }
 
         .action-btn:hover {
-            background: #7BCFA6;
+            background: #53B76F;
             color: white;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(123, 207, 166, 0.25);
+            box-shadow: 0 4px 12px rgba(83, 183, 111, 0.25);
         }
 
         .result-content {
@@ -287,11 +287,11 @@
         }
 
         .result-content h3 {
-            color: #7BCFA6;
+            color: #53B76F;
             font-size: 1.5em;
             margin: 35px 0 20px 0;
             padding-bottom: 12px;
-            border-bottom: 3px solid rgba(250, 220, 94, 0.4);
+            border-bottom: 3px solid rgba(221, 118, 148, 0.3);
             font-weight: 700;
             display: flex;
             align-items: center;
@@ -314,10 +314,10 @@
 
         .strategy-item {
             background: linear-gradient(135deg, 
-                rgba(250, 220, 94, 0.1) 0%, 
-                rgba(123, 207, 166, 0.1) 100%
+                rgba(221, 118, 148, 0.08) 0%, 
+                rgba(83, 183, 111, 0.08) 100%
             );
-            border-left: 4px solid #7BCFA6;
+            border-left: 4px solid #53B76F;
             padding: 20px 25px;
             margin: 20px 0;
             border-radius: 12px;
@@ -325,7 +325,7 @@
         }
 
         .strategy-item strong {
-            color: #7BCFA6;
+            color: #53B76F;
             font-size: 1.15em;
             display: block;
             margin-bottom: 12px;
@@ -367,18 +367,19 @@
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
 </head>
 <body>
     <div class="container">
         <div class="header">
             <div class="logo">
-                <!-- 导演板图标 - 石青+黄栗留配色 -->
+                <!-- 导演板图标 - 青翠+苏梅配色 -->
                 <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                    <!-- 底部板 - 石青色 -->
-                    <rect x="20" y="55" width="60" height="30" rx="3" fill="#7BCFA6"/>
-                    <!-- 顶部拍板 - 黄栗留色 -->
+                    <!-- 底部板 - 青翠色 -->
+                    <rect x="20" y="55" width="60" height="30" rx="3" fill="#53B76F"/>
+                    <!-- 顶部拍板 - 苏梅色 -->
                     <g transform="rotate(-15 50 40)">
-                        <rect x="15" y="30" width="70" height="20" rx="2" fill="#FADC5E"/>
+                        <rect x="15" y="30" width="70" height="20" rx="2" fill="#DD7694"/>
                         <!-- 黑白条纹 -->
                         <rect x="20" y="32" width="8" height="16" fill="white"/>
                         <rect x="31" y="32" width="8" height="16" fill="white"/>
@@ -519,6 +520,7 @@
                 <h2>📊 营销方案</h2>
                 <div class="action-btns">
                     <button class="action-btn" onclick="exportMarkdown()">📥 导出MD</button>
+                    <button class="action-btn" onclick="exportPPT()">📊 下载PPT</button>
                     <button class="action-btn" onclick="printPlan()">🖨️ 打印</button>
                     <button class="action-btn" onclick="sharePlan()">🔗 分享</button>
                 </div>
@@ -551,6 +553,7 @@
 
             setTimeout(() => {
                 const plan = { dramaName, dramaType, platform, budget, audience, stage, coreSelling, castType, ipType, timestamp: new Date().toLocaleString('zh-CN') };
+                window.currentPlan = plan; // 保存到全局变量，供PPT导出使用
                 displayResult(plan);
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('resultSection').style.display = 'block';
@@ -835,7 +838,7 @@
                             labels: ['短视频', '社交媒体', '付费广告', '内容营销', '线下活动'],
                             datasets: [{
                                 data: [30, 25, 25, 15, 5],
-                                backgroundColor: ['#7BCFA6', '#5BAF8A', '#FADC5E', '#F9C74F', '#A4D4AE']
+                                backgroundColor: ['#53B76F', '#DD7694', '#89CDA0', '#E99BB3', '#6AC288']
                             }]
                         },
                         options: {
@@ -864,6 +867,192 @@
         }
 
 
+
+        function exportPPT() {
+            const content = document.getElementById('resultContent').innerText;
+            const plan = window.currentPlan; // 保存当前方案到全局变量
+            
+            if (!plan) {
+                alert('请先生成营销方案！');
+                return;
+            }
+            
+            let pptx = new PptxGenJS();
+            
+            // 设置主题色
+            const primaryColor = '53B76F'; // 青翠
+            const accentColor = 'DD7694';  // 苏梅
+            
+            // 封面页
+            let slide1 = pptx.addSlide();
+            slide1.background = { color: 'F8FBF9' };
+            slide1.addText('剧集营销方案', {
+                x: 0.5, y: 2.0, w: 9, h: 1.5,
+                fontSize: 44, bold: true, color: primaryColor, align: 'center'
+            });
+            slide1.addText(plan.dramaName, {
+                x: 0.5, y: 3.5, w: 9, h: 0.8,
+                fontSize: 32, color: accentColor, align: 'center'
+            });
+            slide1.addText(plan.timestamp, {
+                x: 0.5, y: 5.0, w: 9, h: 0.5,
+                fontSize: 14, color: '666666', align: 'center'
+            });
+            
+            // 本体分析页
+            let slide2 = pptx.addSlide();
+            slide2.addText('🎯 本体分析', {
+                x: 0.5, y: 0.3, w: 9, h: 0.6,
+                fontSize: 28, bold: true, color: primaryColor
+            });
+            slide2.addText([
+                { text: '剧集名称：', options: { bold: true, color: '333333' }},
+                { text: plan.dramaName, options: { color: '666666' }}
+            ], { x: 0.8, y: 1.2, w: 8.5, fontSize: 16, lineSpacing: 24 });
+            slide2.addText([
+                { text: '类型定位：', options: { bold: true, color: '333333' }},
+                { text: plan.dramaType, options: { color: '666666' }}
+            ], { x: 0.8, y: 1.7, w: 8.5, fontSize: 16, lineSpacing: 24 });
+            slide2.addText([
+                { text: '核心卖点：', options: { bold: true, color: '333333' }},
+                { text: plan.coreSelling, options: { color: '666666' }}
+            ], { x: 0.8, y: 2.2, w: 8.5, fontSize: 16, lineSpacing: 24 });
+            slide2.addText([
+                { text: 'IP类型：', options: { bold: true, color: '333333' }},
+                { text: plan.ipType, options: { color: '666666' }}
+            ], { x: 0.8, y: 2.7, w: 8.5, fontSize: 16, lineSpacing: 24 });
+            slide2.addText([
+                { text: '演员阵容：', options: { bold: true, color: '333333' }},
+                { text: plan.castType, options: { color: '666666' }}
+            ], { x: 0.8, y: 3.2, w: 8.5, fontSize: 16, lineSpacing: 24 });
+            
+            // 市场分析页
+            let slide3 = pptx.addSlide();
+            slide3.addText('📈 市场分析', {
+                x: 0.5, y: 0.3, w: 9, h: 0.6,
+                fontSize: 28, bold: true, color: primaryColor
+            });
+            slide3.addText('目标受众：' + plan.audience, {
+                x: 0.8, y: 1.2, w: 8.5, fontSize: 18, bold: true, color: '333333'
+            });
+            slide3.addText('播出平台：' + plan.platform, {
+                x: 0.8, y: 1.8, w: 8.5, fontSize: 18, bold: true, color: '333333'
+            });
+            slide3.addText('营销预算：' + plan.budget, {
+                x: 0.8, y: 2.4, w: 8.5, fontSize: 18, bold: true, color: '333333'
+            });
+            slide3.addText('营销阶段：' + plan.stage, {
+                x: 0.8, y: 3.0, w: 8.5, fontSize: 18, bold: true, color: '333333'
+            });
+            
+            // 内容策略页
+            let slide4 = pptx.addSlide();
+            slide4.addText('🎨 内容策略', {
+                x: 0.5, y: 0.3, w: 9, h: 0.6,
+                fontSize: 28, bold: true, color: primaryColor
+            });
+            slide4.addText('短视频矩阵', {
+                x: 0.8, y: 1.2, w: 8.5, fontSize: 20, bold: true, color: accentColor
+            });
+            slide4.addText('• 抖音/快手/视频号/B站多平台覆盖\n• 日更10-15条，CP/剧情/花絮多方向\n• 达人合作：头部10+腰部50+尾部200', {
+                x: 1.2, y: 1.7, w: 8, fontSize: 14, color: '666666', lineSpacing: 20
+            });
+            slide4.addText('图文内容矩阵', {
+                x: 0.8, y: 3.0, w: 8.5, fontSize: 20, bold: true, color: accentColor
+            });
+            slide4.addText('• 微博超话日均50+条，冲刺热搜\n• 小红书KOC矩阵100篇/周\n• 知乎深度内容+豆瓣口碑运营', {
+                x: 1.2, y: 3.5, w: 8, fontSize: 14, color: '666666', lineSpacing: 20
+            });
+            
+            // 渠道策略页
+            let slide5 = pptx.addSlide();
+            slide5.addText('📱 渠道策略', {
+                x: 0.5, y: 0.3, w: 9, h: 0.6,
+                fontSize: 28, bold: true, color: primaryColor
+            });
+            slide5.addText('线上渠道', {
+                x: 0.8, y: 1.2, w: 4, fontSize: 18, bold: true, color: accentColor
+            });
+            slide5.addText('• 短视频平台\n• 社交媒体\n• 长视频平台\n• 搜索引擎', {
+                x: 1.2, y: 1.7, w: 3.5, fontSize: 14, color: '666666', lineSpacing: 24
+            });
+            slide5.addText('线下渠道', {
+                x: 5.2, y: 1.2, w: 4, fontSize: 18, bold: true, color: accentColor
+            });
+            slide5.addText('• 院线广告\n• 地铁/公交广告\n• 商圈LED屏\n• 线下活动', {
+                x: 5.6, y: 1.7, w: 3.5, fontSize: 14, color: '666666', lineSpacing: 24
+            });
+            
+            // 核心打法页
+            let slide6 = pptx.addSlide();
+            slide6.addText('💡 核心打法', {
+                x: 0.5, y: 0.3, w: 9, h: 0.6,
+                fontSize: 28, bold: true, color: primaryColor
+            });
+            slide6.addText('话题营销', {
+                x: 0.8, y: 1.2, w: 8.5, fontSize: 20, bold: true, color: accentColor
+            });
+            slide6.addText('设计10个核心话题，配合剧情节奏引爆社交媒体讨论', {
+                x: 1.2, y: 1.7, w: 8, fontSize: 14, color: '666666'
+            });
+            slide6.addText('KOL种草', {
+                x: 0.8, y: 2.4, w: 8.5, fontSize: 20, bold: true, color: accentColor
+            });
+            slide6.addText('头部+腰部+尾部KOL阶梯式传播，覆盖不同圈层受众', {
+                x: 1.2, y: 2.9, w: 8, fontSize: 14, color: '666666'
+            });
+            slide6.addText('粉丝运营', {
+                x: 0.8, y: 3.6, w: 8.5, fontSize: 20, bold: true, color: accentColor
+            });
+            slide6.addText('建立粉丝社群，激励UGC内容创作，形成自传播效应', {
+                x: 1.2, y: 4.1, w: 8, fontSize: 14, color: '666666'
+            });
+            
+            // 预算分配页
+            let slide7 = pptx.addSlide();
+            slide7.addText('💰 预算分配', {
+                x: 0.5, y: 0.3, w: 9, h: 0.6,
+                fontSize: 28, bold: true, color: primaryColor
+            });
+            slide7.addText('线上推广：30%', {
+                x: 0.8, y: 1.5, w: 4, fontSize: 16, color: '666666'
+            });
+            slide7.addText('内容制作：25%', {
+                x: 0.8, y: 2.1, w: 4, fontSize: 16, color: '666666'
+            });
+            slide7.addText('KOL合作：25%', {
+                x: 0.8, y: 2.7, w: 4, fontSize: 16, color: '666666'
+            });
+            slide7.addText('线下活动：15%', {
+                x: 0.8, y: 3.3, w: 4, fontSize: 16, color: '666666'
+            });
+            slide7.addText('应急储备：5%', {
+                x: 0.8, y: 3.9, w: 4, fontSize: 16, color: '666666'
+            });
+            
+            // 效果评估页
+            let slide8 = pptx.addSlide();
+            slide8.addText('📊 效果评估', {
+                x: 0.5, y: 0.3, w: 9, h: 0.6,
+                fontSize: 28, bold: true, color: primaryColor
+            });
+            slide8.addText('核心指标', {
+                x: 0.8, y: 1.2, w: 8.5, fontSize: 20, bold: true, color: accentColor
+            });
+            slide8.addText('• 播放量/点击量\n• 社交媒体互动率\n• 热搜话题数\n• 搜索指数峰值\n• ROI投资回报率', {
+                x: 1.2, y: 1.7, w: 8, fontSize: 14, color: '666666', lineSpacing: 24
+            });
+            
+            // 保存PPT
+            pptx.writeFile({ fileName: plan.dramaName + '_营销方案.pptx' })
+                .then(() => {
+                    alert('PPT已生成下载！');
+                })
+                .catch(err => {
+                    console.error('PPT生成失败:', err);
+                    alert('PPT生成失败，请重试！');
+                });
+        }
 
         function exportMarkdown() {
             const content = document.getElementById('resultContent').innerText;
