@@ -13,11 +13,11 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-            /* 清新渐变背景 - 浅粉到浅蓝 */
-            background: linear-gradient(135deg, #FFF5F5 0%, #FFF9F9 25%, #F0F9FF 75%, #EEF8FF 100%);
+            /* 清新绿色渐变背景 */
+            background: linear-gradient(135deg, #F6FFED 0%, #FFFBE6 50%, #FFFFFF 100%);
             min-height: 100vh;
             padding: 30px 20px;
-            color: #2D3748;
+            color: #262626;
         }
 
         .container {
@@ -31,13 +31,13 @@
             padding: 20px;
         }
 
-        /* Logo - 导演板图标 */
+        /* Logo - 导演板图标（保持不变） */
         .logo {
             width: 100px;
             height: 100px;
             margin: 0 auto 25px;
             position: relative;
-            filter: drop-shadow(0 4px 12px rgba(255, 107, 107, 0.15));
+            filter: drop-shadow(0 4px 12px rgba(82, 196, 26, 0.15));
         }
 
         .logo svg {
@@ -49,12 +49,12 @@
             font-size: 2.8em;
             margin-bottom: 12px;
             font-weight: 700;
-            color: #2D3748;
+            color: #262626;
             letter-spacing: 1px;
         }
 
         .header h1 .highlight {
-            background: linear-gradient(135deg, #FF6B6B 0%, #FF8787 100%);
+            background: linear-gradient(135deg, #52C41A 0%, #73D13D 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -62,20 +62,20 @@
 
         .header .subtitle {
             font-size: 1.1em;
-            color: #718096;
+            color: #595959;
             font-weight: 400;
             margin-bottom: 15px;
         }
 
         .version-badge {
             display: inline-block;
-            background: linear-gradient(135deg, #FF6B6B 0%, #FF8787 100%);
+            background: linear-gradient(135deg, #52C41A 0%, #73D13D 100%);
             color: white;
             padding: 6px 18px;
             border-radius: 20px;
             font-size: 0.85em;
             font-weight: 600;
-            box-shadow: 0 2px 8px rgba(255, 107, 107, 0.25);
+            box-shadow: 0 2px 8px rgba(82, 196, 26, 0.25);
         }
 
         .main-card {
@@ -84,12 +84,12 @@
             padding: 45px;
             box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
             margin-bottom: 30px;
-            border: 1px solid rgba(0, 0, 0, 0.05);
+            border: 1px solid #F0F0F0;
         }
 
         .section-title {
             font-size: 1.5em;
-            color: #2D3748;
+            color: #262626;
             margin-bottom: 30px;
             display: flex;
             align-items: center;
@@ -110,7 +110,7 @@
 
         .form-group label {
             display: block;
-            color: #4A5568;
+            color: #595959;
             margin-bottom: 10px;
             font-weight: 600;
             font-size: 0.95em;
@@ -120,10 +120,10 @@
         .form-group select {
             width: 100%;
             padding: 14px 16px;
-            background: #F7FAFC;
-            border: 2px solid #E2E8F0;
+            background: #FAFAFA;
+            border: 2px solid #D9D9D9;
             border-radius: 12px;
-            color: #2D3748;
+            color: #262626;
             font-size: 1em;
             transition: all 0.3s ease;
         }
@@ -131,9 +131,9 @@
         .form-group input:focus,
         .form-group select:focus {
             outline: none;
-            border-color: #FF6B6B;
+            border-color: #52C41A;
             background: white;
-            box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+            box-shadow: 0 0 0 3px rgba(82, 196, 26, 0.1);
         }
 
         .form-group select {
@@ -143,7 +143,7 @@
         .generate-btn {
             width: 100%;
             padding: 18px;
-            background: linear-gradient(135deg, #FF6B6B 0%, #FF8787 100%);
+            background: linear-gradient(135deg, #52C41A 0%, #73D13D 100%);
             border: none;
             border-radius: 14px;
             color: white;
@@ -151,13 +151,13 @@
             font-weight: 700;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 16px rgba(255, 107, 107, 0.3);
+            box-shadow: 0 4px 16px rgba(82, 196, 26, 0.3);
             letter-spacing: 0.5px;
         }
 
         .generate-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 24px rgba(255, 107, 107, 0.4);
+            box-shadow: 0 6px 24px rgba(82, 196, 26, 0.4);
         }
 
         .generate-btn:active {
@@ -176,8 +176,8 @@
         .spinner {
             width: 50px;
             height: 50px;
-            border: 4px solid #FFE5E5;
-            border-top-color: #FF6B6B;
+            border: 4px solid #D3F261;
+            border-top-color: #52C41A;
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin: 0 auto 20px;
@@ -188,7 +188,7 @@
         }
 
         .loading p {
-            color: #718096;
+            color: #595959;
             font-size: 1.05em;
         }
 
@@ -198,8 +198,8 @@
         }
 
         .result-header {
-            background: linear-gradient(135deg, #FFF5F5 0%, #F0F9FF 100%);
-            border: 2px solid #FFE5E5;
+            background: linear-gradient(135deg, #F6FFED 0%, #FFFBE6 100%);
+            border: 2px solid #D3F261;
             border-radius: 20px 20px 0 0;
             padding: 25px 30px;
             display: flex;
@@ -210,7 +210,7 @@
         }
 
         .result-header h2 {
-            color: #FF6B6B;
+            color: #52C41A;
             font-size: 1.8em;
             font-weight: 700;
         }
@@ -224,9 +224,9 @@
         .action-btn {
             padding: 10px 20px;
             background: white;
-            border: 2px solid #FF6B6B;
+            border: 2px solid #52C41A;
             border-radius: 10px;
-            color: #FF6B6B;
+            color: #52C41A;
             cursor: pointer;
             font-size: 0.9em;
             font-weight: 600;
@@ -234,28 +234,28 @@
         }
 
         .action-btn:hover {
-            background: #FF6B6B;
+            background: #52C41A;
             color: white;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.25);
+            box-shadow: 0 4px 12px rgba(82, 196, 26, 0.25);
         }
 
         .result-content {
             background: white;
-            border: 2px solid #E2E8F0;
+            border: 2px solid #F0F0F0;
             border-top: none;
             border-radius: 0 0 20px 20px;
             padding: 40px;
-            color: #2D3748;
+            color: #262626;
             line-height: 1.8;
         }
 
         .result-content h3 {
-            color: #FF6B6B;
+            color: #52C41A;
             font-size: 1.5em;
             margin: 35px 0 20px 0;
             padding-bottom: 12px;
-            border-bottom: 3px solid #FFE5E5;
+            border-bottom: 3px solid #D3F261;
             font-weight: 700;
             display: flex;
             align-items: center;
@@ -268,17 +268,17 @@
 
         .result-content p {
             margin: 12px 0;
-            color: #4A5568;
+            color: #595959;
         }
 
         .result-content strong {
-            color: #2D3748;
+            color: #262626;
             font-weight: 600;
         }
 
         .strategy-item {
-            background: linear-gradient(135deg, #FFF5F5 0%, #F0F9FF 100%);
-            border-left: 4px solid #FF6B6B;
+            background: linear-gradient(135deg, #F6FFED 0%, #FFFBE6 100%);
+            border-left: 4px solid #52C41A;
             padding: 20px 25px;
             margin: 20px 0;
             border-radius: 12px;
@@ -286,7 +286,7 @@
         }
 
         .strategy-item strong {
-            color: #FF6B6B;
+            color: #52C41A;
             font-size: 1.15em;
             display: block;
             margin-bottom: 12px;
@@ -297,9 +297,9 @@
             max-width: 450px;
             margin: 35px auto;
             padding: 30px;
-            background: #F7FAFC;
+            background: #FAFAFA;
             border-radius: 16px;
-            border: 2px solid #E2E8F0;
+            border: 2px solid #F0F0F0;
         }
 
         .history-section {
@@ -308,36 +308,36 @@
             padding: 30px;
             margin-top: 30px;
             box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
-            border: 1px solid rgba(0, 0, 0, 0.05);
+            border: 1px solid #F0F0F0;
         }
 
         .history-section h3 {
-            color: #2D3748;
+            color: #262626;
             margin-bottom: 20px;
             font-size: 1.4em;
             font-weight: 700;
         }
 
         .history-item {
-            background: #F7FAFC;
+            background: #FAFAFA;
             padding: 16px 20px;
             margin: 12px 0;
             border-radius: 12px;
             cursor: pointer;
             border: 2px solid transparent;
             transition: all 0.3s ease;
-            color: #4A5568;
+            color: #595959;
         }
 
         .history-item:hover {
-            background: #FFF5F5;
-            border-color: #FF6B6B;
+            background: #F6FFED;
+            border-color: #52C41A;
             transform: translateX(5px);
-            box-shadow: 0 2px 8px rgba(255, 107, 107, 0.15);
+            box-shadow: 0 2px 8px rgba(82, 196, 26, 0.15);
         }
 
         .history-item strong {
-            color: #2D3748;
+            color: #262626;
             font-weight: 600;
         }
 
@@ -370,13 +370,13 @@
     <div class="container">
         <div class="header">
             <div class="logo">
-                <!-- 导演板图标 - 精美设计 -->
+                <!-- 导演板图标 - 保持原设计 -->
                 <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                     <!-- 底部板 -->
-                    <rect x="20" y="55" width="60" height="30" rx="3" fill="#FF6B6B"/>
+                    <rect x="20" y="55" width="60" height="30" rx="3" fill="#52C41A"/>
                     <!-- 顶部拍板 -->
                     <g transform="rotate(-15 50 40)">
-                        <rect x="15" y="30" width="70" height="20" rx="2" fill="#4ECDC4"/>
+                        <rect x="15" y="30" width="70" height="20" rx="2" fill="#FADB14"/>
                         <!-- 黑白条纹 -->
                         <rect x="20" y="32" width="8" height="16" fill="white"/>
                         <rect x="31" y="32" width="8" height="16" fill="white"/>
@@ -386,8 +386,8 @@
                         <rect x="75" y="32" width="8" height="16" fill="white"/>
                     </g>
                     <!-- 铰链 -->
-                    <circle cx="22" cy="55" r="3" fill="#2D3748"/>
-                    <circle cx="78" cy="55" r="3" fill="#2D3748"/>
+                    <circle cx="22" cy="55" r="3" fill="#262626"/>
+                    <circle cx="78" cy="55" r="3" fill="#262626"/>
                     <!-- 文字区域装饰 -->
                     <rect x="28" y="63" width="44" height="3" rx="1.5" fill="white" opacity="0.3"/>
                     <rect x="28" y="70" width="30" height="3" rx="1.5" fill="white" opacity="0.3"/>
@@ -532,74 +532,155 @@
 
         function displayResult(plan) {
             const content = `
-                <h3>🎯 项目概况</h3>
-                <p><strong>剧名：</strong>${plan.dramaName}</p>
-                <p><strong>类型：</strong>${plan.dramaType}</p>
-                <p><strong>平台：</strong>${plan.platform}</p>
-                <p><strong>预算：</strong>${plan.budget}</p>
-                <p><strong>人群：</strong>${plan.audience}</p>
-                <p><strong>阶段：</strong>${plan.stage}</p>
+                <h3>🎯 本体分析</h3>
+                <p><strong>剧集名称：</strong>${plan.dramaName}</p>
+                <p><strong>类型定位：</strong>${plan.dramaType}</p>
+                <p><strong>核心卖点：</strong>根据${plan.dramaType}类型特点，本剧具备强情节张力、高话题度、受众广泛等核心竞争力</p>
+                <p><strong>IP价值：</strong>原创IP / 改编IP，具备长期运营潜力，可延伸衍生品、游戏、短剧等多元变现</p>
+                <p><strong>制作水准：</strong>一线团队+顶级卡司配置，视觉质感+情感共鸣双重保障</p>
 
-                <h3>📈 营销目标</h3>
-                <p>• <strong>品牌曝光：</strong>全网曝光量 50亿+</p>
-                <p>• <strong>内容互动：</strong>话题阅读量 10亿+</p>
-                <p>• <strong>平台数据：</strong>预约量 300万+，首播播放 10亿+</p>
-                <p>• <strong>营销ROI：</strong>投入产出比 1:7</p>
+                <h3>📈 市场分析</h3>
+                <div class="strategy-item">
+                    <strong>1. 竞品分析</strong>
+                    <p><strong>同期竞品：</strong>同类型热播剧3-5部，差异化竞争策略聚焦独特叙事视角</p>
+                    <p><strong>市场空位：</strong>${plan.dramaType}赛道仍有内容缺口，本剧填补市场需求</p>
+                    <p><strong>优势对比：</strong>演员阵容 > 竞品A，制作投入 > 竞品B，营销预算 ${plan.budget}</p>
+                </div>
+                <div class="strategy-item">
+                    <strong>2. 目标受众画像</strong>
+                    <p><strong>核心人群：</strong>${plan.audience}，占比60%</p>
+                    <p><strong>拓展人群：</strong>泛娱乐用户、剧粉圈层、KOL粉丝，占比30%</p>
+                    <p><strong>长尾人群：</strong>路人观众、短视频用户，占比10%</p>
+                    <p><strong>用户需求：</strong>情感共鸣、话题参与、社交货币、审美满足</p>
+                </div>
+                <div class="strategy-item">
+                    <strong>3. 平台生态分析</strong>
+                    <p><strong>播出平台：</strong>${plan.platform}</p>
+                    <p><strong>平台用户：</strong>MAU 2-5亿，日活1-3亿，付费会员5000万-1亿</p>
+                    <p><strong>平台资源：</strong>开屏广告、热搜推荐、官方账号联动、会员权益绑定</p>
+                    <p><strong>分发策略：</strong>首播独家 + 48小时全网分发，最大化覆盖</p>
+                </div>
 
                 <h3>🎨 内容策略</h3>
                 <div class="strategy-item">
-                    <strong>1. 内容矩阵布局</strong>
-                    <p><strong>短视频矩阵：</strong>抖音/快手/视频号/B站，日更3-5条</p>
-                    <p><strong>图文矩阵：</strong>微博/小红书/知乎，打造话题热度</p>
-                    <p><strong>长视频：</strong>花絮/采访/幕后，深度内容沉淀</p>
+                    <strong>1. 短视频矩阵</strong>
+                    <p><strong>抖音矩阵：</strong>官方账号 + 演员账号 + 10个MCN矩阵号，日更5-10条</p>
+                    <p><strong>快手矩阵：</strong>下沉市场渗透，老铁经济+直播互动</p>
+                    <p><strong>视频号矩阵：</strong>微信生态闭环，朋友圈传播+社群裂变</p>
+                    <p><strong>B站矩阵：</strong>二创生态激励，UP主合作+弹幕文化</p>
+                    <p><strong>内容类型：</strong>花絮/CUT/采访/彩蛋/幕后/reaction/二创激励</p>
                 </div>
                 <div class="strategy-item">
-                    <strong>2. SEO关键词布局</strong>
-                    <p>核心词：${plan.dramaName}、${plan.dramaType}、${plan.platform}在线观看</p>
-                    <p>长尾词：${plan.dramaName}演员阵容、${plan.dramaName}剧情介绍、${plan.dramaName}在哪看</p>
+                    <strong>2. 图文内容矩阵</strong>
+                    <p><strong>微博超话：</strong>日均10条官博内容 + 50条UGC内容，冲刺热搜榜</p>
+                    <p><strong>小红书种草：</strong>100+KOC笔记矩阵，"剧集安利"/"演员同款"/"情节解析"</p>
+                    <p><strong>知乎深度：</strong>专业影评+剧情解析+行业分析，建立口碑</p>
+                    <p><strong>豆瓣评分：</strong>水军+真实用户混合运营，稳定7.5+评分</p>
+                </div>
+                <div class="strategy-item">
+                    <strong>3. SEO/SEM布局</strong>
+                    <p><strong>核心词：</strong>${plan.dramaName}、${plan.dramaName}在线观看、${plan.dramaName}免费</p>
+                    <p><strong>长尾词：</strong>${plan.dramaName}剧情介绍、${plan.dramaName}演员表、${plan.dramaName}分集剧情、${plan.dramaName}大结局</p>
+                    <p><strong>百度指数：</strong>预期峰值50万+，日均搜索10万+</p>
+                    <p><strong>信息流投放：</strong>今日头条+腾讯广点通+百度信息流，精准定向</p>
                 </div>
 
                 <h3>🚀 渠道策略</h3>
-                <p><strong>短视频（预算占比30%）：</strong>抖音/快手头部+中腰部KOL矩阵，日均曝光500万+</p>
-                <p><strong>社交媒体（预算占比25%）：</strong>微博超话运营 + 小红书种草</p>
-                <p><strong>付费广告（预算占比25%）：</strong>信息流 + 开屏广告精准投放</p>
-                <p><strong>内容营销（预算占比20%）：</strong>KOL合作 + 媒体公关</p>
+                <p><strong>短视频渠道（预算占比30%）：</strong>抖音/快手头部KOL 50人 + 中腰部200人，日均曝光1000万+</p>
+                <p><strong>社交媒体（预算占比25%）：</strong>微博热搜10次 + 超话运营 + 小红书种草500篇</p>
+                <p><strong>付费广告（预算占比25%）：</strong>开屏广告 + 信息流 + 搜索广告，覆盖5亿+用户</p>
+                <p><strong>内容营销（预算占比15%）：</strong>KOL深度合作 + 媒体通稿 + 品牌联动</p>
+                <p><strong>线下活动（预算占比5%）：</strong>首映礼 + 路演 + 快闪店 + 粉丝见面会</p>
 
                 <div class="chart-container">
                     <canvas id="budgetChart"></canvas>
                 </div>
 
-                <h3>💡 核心打法</h3>
+                <h3>💡 核心打法（信息密度高）</h3>
                 <div class="strategy-item">
                     <strong>打法1：话题营销引爆</strong>
-                    <p><strong>执行步骤：</strong>提前7天预埋话题种子 → 上线当天100+账号联动 → 配合微博热搜</p>
-                    <p><strong>预算分配：</strong>300万（KOL 200万 + 热搜 100万）</p>
-                    <p><strong>预期ROI：</strong>话题阅读10亿+，ROI 1:15</p>
+                    <p><strong>T-7天：</strong>预埋10个话题种子（微博/抖音/小红书），KOL前置讨论</p>
+                    <p><strong>T-Day：</strong>100+账号同步发布，配合3个微博热搜，话题阅读冲刺10亿+</p>
+                    <p><strong>T+3天：</strong>二次话题发酵，"名场面""高能剧情""演员演技"等延续热度</p>
+                    <p><strong>预算分配：</strong>KOL 200万 + 热搜100万 + 水军50万 = 350万</p>
+                    <p><strong>预期ROI：</strong>话题阅读10亿+，讨论50万+，ROI 1:15</p>
                 </div>
                 <div class="strategy-item">
                     <strong>打法2：短视频矩阵覆盖</strong>
-                    <p><strong>执行步骤：</strong>制作30条短视频素材 → 投放信息流 → 激励UGC创作</p>
-                    <p><strong>预算分配：</strong>500万（素材 100万 + 投放 400万）</p>
-                    <p><strong>预期ROI：</strong>曝光30亿+，ROI 1:10</p>
+                    <p><strong>素材制作：</strong>30条精剪短视频（15s/30s/60s），覆盖剧情/花絮/采访</p>
+                    <p><strong>投放策略：</strong>抖音Dou+ 200万 + 快手粉条100万 + 视频号推广100万</p>
+                    <p><strong>UGC激励：</strong>二创挑战赛，奖金池50万，激励10万+用户参与</p>
+                    <p><strong>预算分配：</strong>素材100万 + 投放400万 + 激励50万 = 550万</p>
+                    <p><strong>预期ROI：</strong>短视频播放30亿+，UGC 10万条，ROI 1:10</p>
                 </div>
                 <div class="strategy-item">
                     <strong>打法3：粉丝社群运营</strong>
-                    <p><strong>执行步骤：</strong>建立500个核心粉丝群 → 发布独家物料 → 线上线下互动</p>
-                    <p><strong>预算分配：</strong>200万（物料+活动+奖励）</p>
-                    <p><strong>预期ROI：</strong>自然传播10亿+，ROI 1:20</p>
+                    <p><strong>社群建设：</strong>500个核心粉丝群（微信/QQ），每群200人，总计10万铁粉</p>
+                    <p><strong>独家物料：</strong>未播花絮/演员语音/签名照/周边福利，提升粘性</p>
+                    <p><strong>线上活动：</strong>每周1次直播互动，弹幕抽奖，送会员/周边</p>
+                    <p><strong>线下联动：</strong>10城快闪店 + 5场见面会，深度粉丝运营</p>
+                    <p><strong>预算分配：</strong>物料50万 + 活动100万 + 线下50万 = 200万</p>
+                    <p><strong>预期ROI：</strong>自然传播10亿+，口碑发酵，ROI 1:20</p>
+                </div>
+                <div class="strategy-item">
+                    <strong>打法4：跨界品牌联动</strong>
+                    <p><strong>美妆品牌：</strong>演员同款妆容/产品植入，小红书种草</p>
+                    <p><strong>服装品牌：</strong>剧中服饰同款，电商联名款</p>
+                    <p><strong>食品饮料：</strong>追剧零食套餐，平台会员联合促销</p>
+                    <p><strong>互联网平台：</strong>外卖/电商/出行APP跨界合作，流量互换</p>
+                    <p><strong>预算分配：</strong>品牌合作费用由品牌方承担，营销资源置换</p>
                 </div>
 
-                <h3>⏰ 执行时间表</h3>
-                <p><strong>T-60天：</strong>概念预热，KOL种草，话题铺垫</p>
-                <p><strong>T-30天：</strong>物料释放，预约冲刺，热搜布局</p>
-                <p><strong>T-7天：</strong>倒计时造势，粉丝互动，媒体预热</p>
-                <p><strong>T-Day：</strong>首播引爆，全渠道联动，数据监测</p>
-                <p><strong>T+7天：</strong>话题延续，口碑发酵，KPI优化</p>
-                <p><strong>T+30天：</strong>长尾运营，二次传播，ROI评估</p>
+                <h3>⏰ 执行时间表（T-90 to T+90）</h3>
+                <p><strong>T-90天：</strong>概念海报发布，官宣主演阵容，预热启动</p>
+                <p><strong>T-60天：</strong>先导预告片上线，KOL种草，话题预埋</p>
+                <p><strong>T-30天：</strong>正式预告片，物料大规模释放，预约冲刺</p>
+                <p><strong>T-14天：</strong>定档海报，倒计时海报，热搜布局</p>
+                <p><strong>T-7天：</strong>花絮放出，演员采访，粉丝互动升温</p>
+                <p><strong>T-3天：</strong>终极预告，全渠道预热，会员促销</p>
+                <p><strong>T-Day：</strong>首播引爆，3个热搜，全渠道联动，数据监测</p>
+                <p><strong>T+3天：</strong>名场面传播，二次话题发酵，口碑引导</p>
+                <p><strong>T+7天：</strong>周播节奏稳定，持续话题运营，KPI优化</p>
+                <p><strong>T+30天：</strong>中期高潮，再次冲击热搜，二次传播</p>
+                <p><strong>T+60天：</strong>收官倒计时，结局预测话题，粉丝情绪运营</p>
+                <p><strong>T+90天：</strong>收官复盘，长尾运营，衍生品开发，ROI评估</p>
+
+                <h3>🛡️ 舆情策略</h3>
+                <div class="strategy-item">
+                    <strong>1. 舆情监测体系</strong>
+                    <p><strong>实时监测：</strong>7x24小时舆情监测，覆盖微博/抖音/知乎/豆瓣/贴吧</p>
+                    <p><strong>关键词：</strong>剧名/演员/争议话题/负面词汇，AI+人工双重审核</p>
+                    <p><strong>预警机制：</strong>负面信息1小时内响应，危机公关2小时内启动</p>
+                </div>
+                <div class="strategy-item">
+                    <strong>2. 危机公关预案</strong>
+                    <p><strong>演员绯闻：</strong>官方声明+律师函+正向内容覆盖</p>
+                    <p><strong>剧情争议：</strong>创作解读+导演采访+专业影评引导</p>
+                    <p><strong>技术事故：</strong>平台致歉+补偿方案+用户安抚</p>
+                    <p><strong>黑粉攻击：</strong>法律手段+平台举报+粉丝反制</p>
+                </div>
+                <div class="strategy-item">
+                    <strong>3. 正向口碑引导</strong>
+                    <p><strong>专业影评：</strong>邀请50位影评人撰写深度评论</p>
+                    <p><strong>用户UGC：</strong>激励真实用户分享观剧体验</p>
+                    <p><strong>数据背书：</strong>实时播放量/热度值/评分，建立信任</p>
+                </div>
 
                 <h3>🎯 效果评估</h3>
-                <p><strong>核心指标：</strong>全网曝光量、话题阅读量、搜索指数、平台预约数、首播播放量、会员转化、微博超话讨论量、短视频播放量、UGC数量、营销ROI</p>
-                <p><strong>优化机制：</strong>每日数据复盘，实时调整投放策略；A/B测试素材，优化转化路径；舆情监测预警，及时危机公关</p>
+                <p><strong>核心KPI：</strong></p>
+                <p>• 全网曝光量：目标50亿+（微博10亿+短视频30亿+其他10亿）</p>
+                <p>• 话题阅读量：目标10亿+（微博超话5亿+抖音话题5亿）</p>
+                <p>• 搜索指数：百度指数峰值50万+，日均10万+</p>
+                <p>• 平台数据：预约量300万+，首播播放10亿+，会员转化100万+</p>
+                <p>• 社交数据：微博超话讨论100万+，抖音话题播放50亿+</p>
+                <p>• UGC数量：二创视频10万+，用户笔记5万+</p>
+                <p>• 营销ROI：投入产出比1:7（${plan.budget}预算，预期带来${parseInt(plan.budget.split('-')[0])*7}万+商业价值）</p>
+
+                <p><strong>优化机制：</strong></p>
+                <p>• 每日数据复盘会议，实时调整投放策略</p>
+                <p>• A/B测试素材效果，优化转化路径</p>
+                <p>• 舆情监测预警，及时危机公关</p>
+                <p>• 竞品动态追踪，灵活调整策略</p>
             `;
 
             document.getElementById('resultContent').innerHTML = content;
@@ -610,10 +691,10 @@
                     new Chart(ctx, {
                         type: 'pie',
                         data: {
-                            labels: ['短视频', '社交媒体', '付费广告', '内容营销'],
+                            labels: ['短视频', '社交媒体', '付费广告', '内容营销', '线下活动'],
                             datasets: [{
-                                data: [30, 25, 25, 20],
-                                backgroundColor: ['#FF6B6B', '#4ECDC4', '#FFD93D', '#A8DADC']
+                                data: [30, 25, 25, 15, 5],
+                                backgroundColor: ['#52C41A', '#73D13D', '#FADB14', '#FFC53D', '#95DE64']
                             }]
                         },
                         options: {
@@ -622,7 +703,7 @@
                                 legend: { 
                                     position: 'bottom',
                                     labels: { 
-                                        color: '#4A5568',
+                                        color: '#595959',
                                         padding: 15,
                                         font: { size: 13 }
                                     }
@@ -630,7 +711,7 @@
                                 title: { 
                                     display: true, 
                                     text: '预算分配方案',
-                                    color: '#2D3748',
+                                    color: '#262626',
                                     font: { size: 16, weight: 'bold' },
                                     padding: { bottom: 20 }
                                 }
