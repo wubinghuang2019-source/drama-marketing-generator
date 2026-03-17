@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>大剧营销方案生成器 PRO v2.0 | AI定制版</title>
+    <title>大剧营销方案生成器 PRO | 专业版</title>
     <style>
         * {
             margin: 0;
@@ -13,6 +13,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            /* 水墨晕染背景 - 苏梅到青翠 */
             background: 
                 radial-gradient(ellipse at 20% 30%, rgba(221, 118, 148, 0.25) 0%, transparent 50%),
                 radial-gradient(ellipse at 80% 70%, rgba(83, 183, 111, 0.25) 0%, transparent 50%),
@@ -29,6 +30,7 @@
             position: relative;
         }
         
+        /* 水墨纹理叠加 */
         body::before {
             content: '';
             position: fixed;
@@ -45,6 +47,11 @@
         }
         
         .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .container {
             max-width: 1400px;
             margin: 0 auto;
             position: relative;
@@ -54,20 +61,28 @@
         .header {
             text-align: center;
             margin-bottom: 50px;
-            padding: 40px 20px;
+            padding: 20px;
         }
 
+        /* Logo - 导演板图标（保持不变） */
         .logo {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 20px;
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 25px;
+            position: relative;
+            filter: drop-shadow(0 4px 12px rgba(82, 196, 26, 0.15));
+        }
+
+        .logo svg {
+            width: 100%;
+            height: 100%;
         }
 
         .header h1 {
             font-size: 2.8em;
-            font-weight: 800;
+            margin-bottom: 12px;
+            font-weight: 700;
             color: #262626;
-            margin-bottom: 15px;
             letter-spacing: 1px;
         }
 
@@ -76,6 +91,13 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+        }
+
+        .header .subtitle {
+            font-size: 1.1em;
+            color: #595959;
+            font-weight: 400;
+            margin-bottom: 15px;
         }
 
         .version-badge {
@@ -87,82 +109,68 @@
             font-size: 0.85em;
             font-weight: 600;
             box-shadow: 0 2px 8px rgba(221, 118, 148, 0.25);
-            margin-left: 10px;
         }
 
-        .header p {
-            font-size: 1.1em;
-            color: #595959;
-            margin-top: 15px;
-            line-height: 1.8;
-        }
-
-        .form-section {
+        .main-card {
             background: white;
-            border-radius: 20px;
-            padding: 40px;
-            margin-bottom: 30px;
+            border-radius: 24px;
+            padding: 45px;
             box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+            margin-bottom: 30px;
             border: 1px solid #F0F0F0;
         }
 
-        .form-section h2 {
+        .section-title {
+            font-size: 1.5em;
             color: #262626;
-            font-size: 1.6em;
             margin-bottom: 30px;
-            font-weight: 700;
             display: flex;
             align-items: center;
             gap: 10px;
+            font-weight: 700;
+        }
+
+        .section-title .icon {
+            font-size: 1.3em;
         }
 
         .form-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 25px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .form-group.full-width {
-            grid-column: 1 / -1;
+            margin-bottom: 35px;
         }
 
         .form-group label {
-            font-weight: 600;
-            color: #262626;
+            display: block;
+            color: #595959;
             margin-bottom: 10px;
+            font-weight: 600;
             font-size: 0.95em;
         }
 
         .form-group input,
-        .form-group select,
-        .form-group textarea {
-            padding: 14px 18px;
-            border: 2px solid #E8E8E8;
+        .form-group select {
+            width: 100%;
+            padding: 14px 16px;
+            background: #FAFAFA;
+            border: 2px solid #D9D9D9;
             border-radius: 12px;
+            color: #262626;
             font-size: 1em;
             transition: all 0.3s ease;
-            background: #FAFAFA;
-            font-family: inherit;
-        }
-
-        .form-group textarea {
-            resize: vertical;
-            min-height: 100px;
-            line-height: 1.6;
         }
 
         .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
+        .form-group select:focus {
             outline: none;
             border-color: #53B76F;
             background: white;
             box-shadow: 0 0 0 3px rgba(83, 183, 111, 0.1);
+        }
+
+        .form-group select {
+            cursor: pointer;
         }
 
         .generate-btn {
@@ -178,7 +186,6 @@
             transition: all 0.3s ease;
             box-shadow: 0 4px 16px rgba(83, 183, 111, 0.3);
             letter-spacing: 0.5px;
-            margin-top: 30px;
         }
 
         .generate-btn:hover {
@@ -195,8 +202,7 @@
             text-align: center;
             padding: 60px 20px;
             background: white;
-            border-radius: 20px;
-            margin: 30px 0;
+            border-radius: 24px;
             box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
         }
 
@@ -216,16 +222,12 @@
 
         .loading p {
             color: #595959;
-            font-size: 1.1em;
+            font-size: 1.05em;
         }
 
         .result-section {
             display: none;
-            background: white;
-            border-radius: 20px;
-            margin-top: 30px;
-            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
-            overflow: hidden;
+            margin-top: 40px;
         }
 
         .result-header {
@@ -251,7 +253,7 @@
 
         .action-btns {
             display: flex;
-            gap: 10px;
+            gap: 12px;
             flex-wrap: wrap;
         }
 
@@ -275,7 +277,12 @@
         }
 
         .result-content {
+            background: white;
+            border: 2px solid #F0F0F0;
+            border-top: none;
+            border-radius: 0 0 20px 20px;
             padding: 40px;
+            color: #262626;
             line-height: 1.8;
         }
 
@@ -289,6 +296,10 @@
             display: flex;
             align-items: center;
             gap: 10px;
+        }
+
+        .result-content h3:first-child {
+            margin-top: 0;
         }
 
         .result-content p {
@@ -321,74 +332,55 @@
             font-weight: 700;
         }
 
-        .insight-card {
-            background: linear-gradient(135deg, #FFF8FA 0%, #F8FBF9 100%);
-            border: 2px solid rgba(221, 118, 148, 0.2);
-            border-radius: 12px;
-            padding: 20px;
-            margin: 15px 0;
+        .chart-container {
+            max-width: 450px;
+            margin: 35px auto;
+            padding: 30px;
+            background: #FAFAFA;
+            border-radius: 16px;
+            border: 2px solid #F0F0F0;
         }
 
-        .insight-card h4 {
-            color: #DD7694;
-            font-size: 1.1em;
-            margin-bottom: 10px;
-        }
 
-        .copywriting-item {
-            background: white;
-            border: 2px solid #E8E8E8;
-            border-radius: 10px;
-            padding: 15px 20px;
-            margin: 12px 0;
-            transition: all 0.3s ease;
-        }
-
-        .copywriting-item:hover {
-            border-color: #53B76F;
-            box-shadow: 0 2px 8px rgba(83, 183, 111, 0.15);
-        }
-
-        .copywriting-item .label {
-            color: #DD7694;
-            font-weight: 600;
-            font-size: 0.9em;
-            margin-bottom: 8px;
-        }
-
-        .copywriting-item .text {
-            color: #262626;
-            font-size: 1.05em;
-            line-height: 1.6;
-        }
 
         @media (max-width: 768px) {
             .header h1 {
                 font-size: 2em;
             }
             
-            .form-section {
-                padding: 25px;
+            .main-card {
+                padding: 30px 20px;
             }
             
             .form-grid {
                 grid-template-columns: 1fr;
             }
             
+            .result-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
             .result-content {
-                padding: 25px;
+                padding: 25px 20px;
             }
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
 </head>
 <body>
     <div class="container">
         <div class="header">
             <div class="logo">
+                <!-- 导演板图标 - 青翠+苏梅配色 -->
                 <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <!-- 底部板 - 青翠色 -->
                     <rect x="20" y="55" width="60" height="30" rx="3" fill="#53B76F"/>
+                    <!-- 顶部拍板 - 苏梅色 -->
                     <g transform="rotate(-15 50 40)">
                         <rect x="15" y="30" width="70" height="20" rx="2" fill="#DD7694"/>
+                        <!-- 黑白条纹 -->
                         <rect x="20" y="32" width="8" height="16" fill="white"/>
                         <rect x="31" y="32" width="8" height="16" fill="white"/>
                         <rect x="42" y="32" width="8" height="16" fill="white"/>
@@ -396,118 +388,62 @@
                         <rect x="64" y="32" width="8" height="16" fill="white"/>
                         <rect x="75" y="32" width="8" height="16" fill="white"/>
                     </g>
+                    <!-- 铰链 -->
                     <circle cx="22" cy="55" r="3" fill="#262626"/>
                     <circle cx="78" cy="55" r="3" fill="#262626"/>
+                    <!-- 文字区域装饰 -->
                     <rect x="28" y="63" width="44" height="3" rx="1.5" fill="white" opacity="0.3"/>
                     <rect x="28" y="70" width="30" height="3" rx="1.5" fill="white" opacity="0.3"/>
                 </svg>
             </div>
-            <h1><span class="highlight">大剧营销方案生成器</span> PRO <span class="version-badge">v2.0 AI定制版</span></h1>
-            <p>基于智能规则引擎，结合剧集内容深度定制营销策略<br>输出用户洞察、策略文案、平台玩法，真正可落地执行的专业方案</p>
+            <h1><span class="highlight">大剧</span>营销方案生成器</h1>
+            <p class="subtitle">基于140种营销策略，智能生成全链路营销方案</p>
+            <span class="version-badge">PRO 专业版</span>
         </div>
 
-        <div class="form-section">
-            <h2>📝 剧集信息填写</h2>
+        <div class="main-card">
+            <h2 class="section-title"><span class="icon">📝</span> 填写剧集信息</h2>
             <div class="form-grid">
                 <div class="form-group">
-                    <label>剧集名称 *</label>
-                    <input type="text" id="dramaName" placeholder="例如: 庆余年2">
+                    <label>剧名 *</label>
+                    <input type="text" id="dramaName" placeholder="例如: 长风破浪">
                 </div>
                 <div class="form-group">
-                    <label>类型定位 *</label>
+                    <label>剧集类型 *</label>
                     <select id="dramaType">
                         <option value="">请选择...</option>
-                        <option value="古装剧">古装剧</option>
-                        <option value="现代都市剧">现代都市剧</option>
-                        <option value="悬疑推理剧">悬疑推理剧</option>
-                        <option value="爱情剧">爱情剧</option>
-                        <option value="家庭伦理剧">家庭伦理剧</option>
-                        <option value="职场剧">职场剧</option>
-                        <option value="青春校园剧">青春校园剧</option>
-                        <option value="科幻剧">科幻剧</option>
-                        <option value="历史剧">历史剧</option>
-                        <option value="军旅剧">军旅剧</option>
-                        <option value="医疗剧">医疗剧</option>
-                        <option value="律政剧">律政剧</option>
-                        <option value="谍战剧">谍战剧</option>
+                        <option value="古装权谋">古装权谋</option>
+                        <option value="古装仙侠">古装仙侠</option>
+                        <option value="古装武侠">古装武侠</option>
+                        <option value="古装言情">古装言情</option>
+                        <option value="现代都市">现代都市</option>
+                        <option value="职场商战">职场商战</option>
+                        <option value="都市情感">都市情感</option>
+                        <option value="悬疑推理">悬疑推理</option>
+                        <option value="刑侦破案">刑侦破案</option>
+                        <option value="谍战">谍战</option>
                         <option value="年代剧">年代剧</option>
-                        <option value="喜剧">喜剧</option>
-                        <option value="农村剧">农村剧</option>
-                        <option value="主旋律剧">主旋律剧</option>
-                        <option value="奇幻剧">奇幻剧</option>
-                        <option value="武侠剧">武侠剧</option>
-                        <option value="短剧">短剧</option>
-                    </select>
-                </div>
-                <div class="form-group full-width">
-                    <label>核心卖点 *</label>
-                    <input type="text" id="coreSelling" placeholder="例如: 顶级流量+大IP改编+权谋爽剧+特效震撼">
-                </div>
-                <div class="form-group full-width">
-                    <label>剧情梗概（简述故事主线和核心冲突）*</label>
-                    <textarea id="plotSummary" placeholder="例如: 讲述现代青年穿越到古代权谋世界，从底层逆袭成为一代权臣的故事。核心冲突：个人理想vs家族利益，现代思维vs古代规则。"></textarea>
-                </div>
-                <div class="form-group">
-                    <label>情感核心 *</label>
-                    <select id="emotionCore">
-                        <option value="">请选择...</option>
-                        <option value="热血励志">热血励志（逆袭成长）</option>
-                        <option value="浪漫甜蜜">浪漫甜蜜（恋爱糖分）</option>
-                        <option value="虐心催泪">虐心催泪（情感冲击）</option>
-                        <option value="爽感刺激">爽感刺激（打脸反转）</option>
-                        <option value="温情治愈">温情治愈（情感共鸣）</option>
-                        <option value="紧张悬疑">紧张悬疑（烧脑推理）</option>
-                        <option value="幽默搞笑">幽默搞笑（轻松解压）</option>
-                        <option value="家国情怀">家国情怀（价值认同）</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>目标情绪（想让观众产生的感受）*</label>
-                    <select id="targetEmotion">
-                        <option value="">请选择...</option>
-                        <option value="热血沸腾">热血沸腾（想奋斗）</option>
-                        <option value="甜蜜上头">甜蜜上头（想恋爱）</option>
-                        <option value="泪流满面">泪流满面（共情落泪）</option>
-                        <option value="畅快淋漓">畅快淋漓（爽感满足）</option>
-                        <option value="温暖感动">温暖感动（心灵治愈）</option>
-                        <option value="紧张刺激">紧张刺激（想追剧）</option>
-                        <option value="放松欢乐">放松欢乐（解压娱乐）</option>
-                        <option value="思考共鸣">思考共鸣（价值认同）</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>演员阵容 *</label>
-                    <select id="castType">
-                        <option value="">请选择...</option>
-                        <option value="顶级流量明星">顶级流量明星（粉丝5000万+）</option>
-                        <option value="一线实力派">一线实力派（演技+口碑）</option>
-                        <option value="流量+实力组合">流量+实力组合（平衡配置）</option>
-                        <option value="新人演员">新人演员（新鲜面孔）</option>
-                        <option value="中生代演员">中生代演员（稳定观众基础）</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>IP类型 *</label>
-                    <select id="ipType">
-                        <option value="">请选择...</option>
-                        <option value="原创剧本">原创剧本</option>
-                        <option value="小说改编">小说改编（有书粉基础）</option>
-                        <option value="漫画改编">漫画改编（二次元受众）</option>
-                        <option value="海外翻拍">海外翻拍（有对标作品）</option>
-                        <option value="真实事件改编">真实事件改编（社会话题）</option>
-                        <option value="经典IP重拍">经典IP重拍（情怀牌）</option>
+                        <option value="家庭伦理">家庭伦理</option>
+                        <option value="青春校园">青春校园</option>
+                        <option value="偶像甜宠">偶像甜宠</option>
+                        <option value="科幻">科幻</option>
+                        <option value="奇幻">奇幻</option>
+                        <option value="历史正剧">历史正剧</option>
+                        <option value="军旅">军旅</option>
+                        <option value="医疗">医疗</option>
+                        <option value="乡村振兴">乡村振兴</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label>播出平台 *</label>
                     <select id="platform">
                         <option value="">请选择...</option>
-                        <option value="爱奇艺">爱奇艺</option>
                         <option value="腾讯视频">腾讯视频</option>
+                        <option value="爱奇艺">爱奇艺</option>
                         <option value="优酷">优酷</option>
                         <option value="芒果TV">芒果TV</option>
-                        <option value="央视">央视</option>
-                        <option value="卫视">卫视</option>
+                        <option value="bilibili">bilibili</option>
+                        <option value="央视频">央视频</option>
                         <option value="多平台联播">多平台联播</option>
                     </select>
                 </div>
@@ -515,47 +451,73 @@
                     <label>营销预算 *</label>
                     <select id="budget">
                         <option value="">请选择...</option>
-                        <option value="100万以内">100万以内（小成本）</option>
-                        <option value="100-500万">100-500万（中等规模）</option>
-                        <option value="500-1000万">500-1000万（大制作）</option>
-                        <option value="1000万以上">1000万以上（S级项目）</option>
+                        <option value="300-500万">300-500万</option>
+                        <option value="500-1000万">500-1000万</option>
+                        <option value="1000-3000万">1000-3000万</option>
+                        <option value="3000-5000万">3000-5000万</option>
+                        <option value="5000万+">5000万以上</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>目标受众 *</label>
+                    <label>目标人群 *</label>
                     <select id="audience">
                         <option value="">请选择...</option>
-                        <option value="18-25岁年轻女性">18-25岁年轻女性</option>
-                        <option value="25-35岁都市女性">25-35岁都市女性</option>
-                        <option value="18-30岁男性">18-30岁男性</option>
-                        <option value="35-50岁中年观众">35-50岁中年观众</option>
-                        <option value="全年龄段家庭观众">全年龄段家庭观众</option>
-                        <option value="学生党">学生党</option>
-                        <option value="职场人群">职场人群</option>
+                        <option value="Z世代(18-25岁)">Z世代 (18-25岁)</option>
+                        <option value="职场白领(25-35岁)">职场白领 (25-35岁)</option>
+                        <option value="家庭主力(30-45岁)">家庭主力 (30-45岁)</option>
+                        <option value="中老年(45岁+)">中老年 (45岁+)</option>
+                        <option value="全年龄段">全年龄段</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label>营销阶段 *</label>
                     <select id="stage">
                         <option value="">请选择...</option>
-                        <option value="概念期">概念期（项目立项/筹备）</option>
-                        <option value="预热期">预热期（上线前30-60天）</option>
-                        <option value="热播期">热播期（正在播出）</option>
-                        <option value="收官期">收官期（即将完结）</option>
+                        <option value="概念期">概念期 (项目立项/筹备)</option>
+                        <option value="预热期">预热期 (上线前30-60天)</option>
+                        <option value="热播期">热播期 (正在播出)</option>
+                        <option value="收官期">收官期 (即将完结)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>核心卖点 *</label>
+                    <input type="text" id="coreSelling" placeholder="例如: 顶级卡司+大IP改编+社会话题">
+                </div>
+                <div class="form-group">
+                    <label>演员阵容 *</label>
+                    <select id="castType">
+                        <option value="">请选择...</option>
+                        <option value="顶级流量明星">顶级流量明星 (粉丝5000万+)</option>
+                        <option value="一线实力派">一线实力派 (演技+口碑)</option>
+                        <option value="流量+实力组合">流量+实力组合 (平衡配置)</option>
+                        <option value="新人演员">新人演员 (新鲜面孔)</option>
+                        <option value="中生代演员">中生代演员 (稳定观众基础)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>IP类型 *</label>
+                    <select id="ipType">
+                        <option value="">请选择...</option>
+                        <option value="原创剧本">原创剧本</option>
+                        <option value="小说改编">小说改编 (有书粉基础)</option>
+                        <option value="漫画改编">漫画改编 (二次元受众)</option>
+                        <option value="海外翻拍">海外翻拍 (有对标作品)</option>
+                        <option value="真实事件改编">真实事件改编 (社会话题)</option>
+                        <option value="经典IP重拍">经典IP重拍 (情怀牌)</option>
                     </select>
                 </div>
             </div>
-            <button class="generate-btn" onclick="generatePlan()">🚀 生成AI定制营销方案</button>
+            <button class="generate-btn" onclick="generatePlan()">🚀 生成专业营销方案</button>
         </div>
 
         <div class="loading" id="loading">
             <div class="spinner"></div>
-            <p>智能规则引擎正在分析剧集内容，生成定制化策略...</p>
+            <p>AI正在分析140种营销策略，智能匹配最佳方案...</p>
         </div>
 
         <div class="result-section" id="resultSection">
             <div class="result-header">
-                <h2>📊 AI定制营销方案</h2>
+                <h2>📊 营销方案</h2>
                 <div class="action-btns">
                     <button class="action-btn" onclick="exportMarkdown()">📥 导出MD</button>
                     <button class="action-btn" onclick="exportPPT()">📊 下载PPT</button>
@@ -565,352 +527,11 @@
             </div>
             <div class="result-content" id="resultContent"></div>
         </div>
+
+
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
     <script>
-        // ========== 智能规则引擎 ==========
-        
-        // 根据剧情类型生成差异化用户画像
-        function getUserInsights(plan) {
-            const insights = {
-                '古装剧': {
-                    core: '古装剧粉丝热爱架空世界观和权谋设定，追求视觉美学和情节爽感',
-                    demographics: '女性占70%，18-35岁为主，二三线城市占比高，追剧时间集中在晚8-12点',
-                    psychographics: '喜欢沉浸式体验，对服化道要求高，爱讨论剧情细节和角色命运',
-                    painPoints: '担心魔改原著、特效五毛、剧情注水、演员演技尴尬',
-                    desires: '想看到精良制作、尊重原著、演员在线、剧情紧凑不拖沓',
-                    mediaHabits: '微博超话活跃，B站看剪辑，抖音刷花絮，小红书找同款'
-                },
-                '现代都市剧': {
-                    core: '都市剧观众追求现实共鸣和情感代入，关注职场、情感、家庭等话题',
-                    demographics: '25-40岁都市白领，女性占65%，一线城市占比高，碎片化追剧',
-                    psychographics: '追求现实感和共鸣感，喜欢看到自己的影子，关注社会议题',
-                    painPoints: '担心悬浮剧情、人设崩塌、价值观不正、强行煽情',
-                    desires: '想看真实职场、成熟情感、接地气的人物、有共鸣的故事',
-                    mediaHabits: '小红书种草为主，微博看热搜，知乎看深度分析，朋友圈口碑传播'
-                },
-                '悬疑推理剧': {
-                    core: '悬疑剧粉丝是推理爱好者，享受烧脑过程和真相揭晓的快感',
-                    demographics: '男性占55%，20-35岁，高学历人群多，深度追剧派',
-                    psychographics: '逻辑思维强，喜欢分析推理，热衷讨论细节和伏笔',
-                    painPoints: '担心逻辑漏洞、强行反转、低级bug、侮辱智商',
-                    desires: '想看严谨推理、环环相扣、细节经得起推敲、结局意料之外情理之中',
-                    mediaHabits: '知乎深度讨论，豆瓣评分，B站解析视频，播客听推理分析'
-                },
-                '爱情剧': {
-                    core: '爱情剧观众追求情感满足和甜蜜体验，是最容易产生CP粉的类型',
-                    demographics: '女性占85%，18-30岁，学生党和年轻职场人，追剧粘性强',
-                    psychographics: '少女心重，代入感强，爱磕CP，喜欢浪漫情节和甜宠桥段',
-                    painPoints: '担心感情线注水、三观不正、强行虐恋、男主渣男人设',
-                    desires: '想看甜蜜日常、双向奔赴、势均力敌、HE结局',
-                    mediaHabits: '抖音刷甜蜜CUT，微博超话日常签到，小红书找壁纸表情包，B站看剪辑'
-                },
-                '家庭伦理剧': {
-                    core: '伦理剧观众关注家庭关系和代际矛盾，追求情感共鸣和价值观认同',
-                    demographics: '35-60岁中老年观众为主，女性占70%，下沉市场占比高',
-                    psychographics: '关注家庭和谐，重视亲情，对现实问题敏感，喜欢教育意义',
-                    painPoints: '担心价值观偏激、过度煽情、人物脸谱化、剧情狗血',
-                    desires: '想看真实家庭、温情治愈、正能量传递、问题有解决方案',
-                    mediaHabits: '央视和卫视直播为主，微信视频号补剧，朋友圈分享，家庭观看'
-                },
-                '职场剧': {
-                    core: '职场剧观众是职场人士，追求专业感和成长启发',
-                    demographics: '25-40岁职场人群，男女均衡，一二线城市，高收入人群',
-                    psychographics: '关注职场规则和晋升路径，追求代入感，喜欢职场智慧',
-                    painPoints: '担心悬浮不接地气、职场描写不专业、强行恋爱线',
-                    desires: '想看真实职场、专业知识、成长启发、职场智慧',
-                    mediaHabits: '知乎看职场讨论，小红书找职场穿搭，微博看热议，播客听职场话题'
-                },
-                '青春校园剧': {
-                    core: '校园剧观众是学生群体和怀旧派，追求青春回忆和纯真情感',
-                    demographics: '15-25岁学生党占70%，30+怀旧派占30%，女性占80%',
-                    psychographics: '怀念校园生活，追求纯真情感，喜欢青春热血和成长故事',
-                    painPoints: '担心过度狗血、早恋宣扬、校园霸凌美化、脱离现实',
-                    desires: '想看真实校园、纯真友情爱情、成长蜕变、青春热血',
-                    mediaHabits: '抖音是主阵地，B站看剪辑和弹幕，QQ空间分享，小红书找同款'
-                }
-            };
-            
-            return insights[plan.dramaType] || insights['现代都市剧'];
-        }
-
-        // 根据情感核心生成话题策略
-        function getTopicStrategy(plan) {
-            const topicMap = {
-                '热血励志': [
-                    { tag: '逆风翻盘', desc: '主角从底层逆袭的爽感时刻', example: '#' + plan.dramaName + '逆袭名场面#' },
-                    { tag: '燃点时刻', desc: '热血沸腾的励志瞬间', example: '#' + plan.dramaName + '燃起来了#' },
-                    { tag: '成长蜕变', desc: '角色成长轨迹对比', example: '#' + plan.dramaName + '成长史#' },
-                    { tag: '金句语录', desc: '励志台词传播', example: '#' + plan.dramaName + '励志语录#' },
-                    { tag: '打脸反转', desc: '打脸爽剧情节', example: '#' + plan.dramaName + '名场面打脸#' }
-                ],
-                '浪漫甜蜜': [
-                    { tag: 'CP名场面', desc: '甜蜜互动高光时刻', example: '#' + plan.dramaName + 'CP超甜#' },
-                    { tag: '恋爱教科书', desc: '恋爱技巧学习', example: '#' + plan.dramaName + '恋爱范本#' },
-                    { tag: '情侣壁纸', desc: 'CP向视觉物料', example: '#' + plan.dramaName + '情侣头像#' },
-                    { tag: '甜蜜日常', desc: '日常互动片段', example: '#' + plan.dramaName + '甜蜜CUT#' },
-                    { tag: '浪漫名场面', desc: '浪漫桥段合集', example: '#' + plan.dramaName + '浪漫瞬间#' }
-                ],
-                '虐心催泪': [
-                    { tag: '虐心名场面', desc: '催泪情节片段', example: '#' + plan.dramaName + '我哭了#' },
-                    { tag: '情感冲击', desc: '高情感冲击时刻', example: '#' + plan.dramaName + '太虐了#' },
-                    { tag: '角色命运', desc: '角色悲剧性命运', example: '#' + plan.dramaName + '为XX心疼#' },
-                    { tag: '遗憾美学', desc: '遗憾情节讨论', example: '#' + plan.dramaName + '意难平#' },
-                    { tag: '情感共鸣', desc: '引发情感讨论', example: '#' + plan.dramaName + '破防了#' }
-                ],
-                '爽感刺激': [
-                    { tag: '爽剧名场面', desc: '打脸反转高光', example: '#' + plan.dramaName + '太爽了#' },
-                    { tag: '主角开挂', desc: '主角爽感时刻', example: '#' + plan.dramaName + '开挂#' },
-                    { tag: '反派打脸', desc: '反派被打脸', example: '#' + plan.dramaName + '打脸名场面#' },
-                    { tag: '剧情反转', desc: '意想不到的反转', example: '#' + plan.dramaName + '神反转#' },
-                    { tag: '高能时刻', desc: '高能爽点合集', example: '#' + plan.dramaName + '高能时刻#' }
-                ],
-                '温情治愈': [
-                    { tag: '温情时刻', desc: '治愈系片段', example: '#' + plan.dramaName + '治愈#' },
-                    { tag: '感动瞬间', desc: '温暖人心的瞬间', example: '#' + plan.dramaName + '好暖#' },
-                    { tag: '家庭温情', desc: '亲情友情片段', example: '#' + plan.dramaName + '温暖#' },
-                    { tag: '正能量传递', desc: '正能量话题', example: '#' + plan.dramaName + '正能量#' },
-                    { tag: '生活哲理', desc: '人生道理讨论', example: '#' + plan.dramaName + '人生感悟#' }
-                ],
-                '紧张悬疑': [
-                    { tag: '悬疑推理', desc: '推理分析讨论', example: '#' + plan.dramaName + '烧脑#' },
-                    { tag: '真相揭秘', desc: '谜底揭晓时刻', example: '#' + plan.dramaName + '真相#' },
-                    { tag: '细节伏笔', desc: '细节分析', example: '#' + plan.dramaName + '细思极恐#' },
-                    { tag: '剧情反转', desc: '意外反转讨论', example: '#' + plan.dramaName + '反转#' },
-                    { tag: '案件解析', desc: '案件梳理分析', example: '#' + plan.dramaName + '案件分析#' }
-                ],
-                '幽默搞笑': [
-                    { tag: '爆笑名场面', desc: '搞笑片段合集', example: '#' + plan.dramaName + '笑死我了#' },
-                    { tag: '沙雕日常', desc: '沙雕片段', example: '#' + plan.dramaName + '沙雕#' },
-                    { tag: '表情包素材', desc: '搞笑表情包', example: '#' + plan.dramaName + '表情包#' },
-                    { tag: '名台词', desc: '搞笑台词', example: '#' + plan.dramaName + '金句#' },
-                    { tag: '解压神器', desc: '轻松解压内容', example: '#' + plan.dramaName + '解压#' }
-                ],
-                '家国情怀': [
-                    { tag: '家国情怀', desc: '家国主题讨论', example: '#' + plan.dramaName + '家国情怀#' },
-                    { tag: '英雄主义', desc: '英雄人物讨论', example: '#' + plan.dramaName + '英雄#' },
-                    { tag: '价值观共鸣', desc: '价值观讨论', example: '#' + plan.dramaName + '三观正#' },
-                    { tag: '历史启示', desc: '历史意义讨论', example: '#' + plan.dramaName + '历史#' },
-                    { tag: '民族自信', desc: '文化自信传播', example: '#' + plan.dramaName + '文化自信#' }
-                ]
-            };
-            
-            return topicMap[plan.emotionCore] || topicMap['热血励志'];
-        }
-
-        // 根据IP类型生成内容策略
-        function getIPStrategy(plan) {
-            const strategies = {
-                '小说改编': {
-                    fanBase: '原著有庞大书粉基础，预估书粉可转化20-30%成为剧粉',
-                    strategy: '激活书粉社群，引导书粉为剧集站台背书',
-                    tactics: [
-                        '建立500个书粉核心群，每群200人，覆盖10万核心书粉',
-                        '邀请原著作者站台：微博/直播互动，为改编背书',
-                        '制作"原著vs影视"对比内容，展示还原度',
-                        '设置书粉专属福利：提前观影、周边抽奖、见面会',
-                        '激励书粉产出UGC内容：人物解析、剧情解读、同人创作'
-                    ],
-                    risk: '需注意平衡书粉和剧粉需求，避免魔改引发书粉反弹'
-                },
-                '原创剧本': {
-                    fanBase: '无原著粉丝基础，需从零建立IP认知和受众群体',
-                    strategy: '通过内容为王+话题营销，从零打造IP影响力',
-                    tactics: [
-                        '加大内容营销投入：短视频日更量提升至15条+',
-                        '制造话题点：每周至少2个热搜话题',
-                        '明星粉丝引流：充分利用演员粉丝基础',
-                        'KOL种草矩阵：头部20+腰部100+尾部500',
-                        '首播前预热时间拉长至90天，持续曝光'
-                    ],
-                    risk: '营销难度大，需更高预算和更长预热周期'
-                },
-                '漫画改编': {
-                    fanBase: '二次元受众基础，粉丝年轻化，对还原度要求极高',
-                    strategy: '激活漫粉圈层，利用二次元传播生态',
-                    tactics: [
-                        'B站深度运营：UP主合作100+，二创激励计划',
-                        '漫展线下活动：Cos互动、周边销售、签售会',
-                        '二次元社区渗透：贴吧、微博超话、豆瓣小组',
-                        '人物还原度对比：原画vs定妆照，展示诚意',
-                        '声优配音话题：邀请知名声优参与，激活声控粉丝'
-                    ],
-                    risk: '二次元粉丝对三次元改编接受度低，需做好舆情应对'
-                },
-                '海外翻拍': {
-                    fanBase: '有对标作品参考，可借鉴成功经验，降低风险',
-                    strategy: '对比营销+本土化创新，吸引原版粉丝和新观众',
-                    tactics: [
-                        '制作"原版vs翻拍"对比视频，突出本土化优势',
-                        '邀请原版粉丝观看：提前点映，口碑发酵',
-                        '差异化卖点营销：强调本土化创新和文化适配',
-                        '海外宣发：利用原版影响力，进行反向输出',
-                        '情怀营销：激活老观众情怀，同时吸引新观众'
-                    ],
-                    risk: '容易被拿来对比，需做好差异化定位'
-                },
-                '真实事件改编': {
-                    fanBase: '社会关注度高，自带话题性和新闻价值',
-                    strategy: '借助社会议题热度，引发公共讨论和价值共鸣',
-                    tactics: [
-                        '新闻媒体发稿：主流媒体报道，提升严肃性',
-                        '专家学者背书：邀请相关领域专家解读',
-                        '社会议题讨论：知乎、微博引发深度讨论',
-                        '纪录片式宣传：幕后采访、主创说、真实还原',
-                        '公益活动绑定：结合社会公益，提升口碑'
-                    ],
-                    risk: '需严格把控舆论方向，避免争议'
-                },
-                '经典IP重拍': {
-                    fanBase: '情怀牌，老观众自带流量，但对比压力大',
-                    strategy: '平衡情怀与创新，既要致敬经典，也要超越经典',
-                    tactics: [
-                        '情怀营销：经典片段对比，致敬经典桥段',
-                        '老演员站台：邀请原版演员客串或站台',
-                        '升级卖点：特效/制作/演技全方位升级',
-                        '年轻化改编：吸引年轻观众，打破舒适圈',
-                        '对比式营销：展示新版优势，建立新经典'
-                    ],
-                    risk: '容易被拿来对比，需做好心理预期管理'
-                }
-            };
-            
-            return strategies[plan.ipType] || strategies['原创剧本'];
-        }
-
-        // 生成策略文案
-        function getCopywritingIdeas(plan) {
-            // 根据剧情梗概提取关键词
-            const plotKeywords = extractKeywords(plan.plotSummary);
-            
-            const copywriting = [
-                {
-                    platform: '微博',
-                    type: '开播官宣文案',
-                    text: `【${plan.dramaName}今晚开播！】${plan.coreSelling}，${plan.targetEmotion}的${plan.dramaType}来了！${plotKeywords}，今晚8点，${plan.platform}独家上线，不见不散！🔥`
-                },
-                {
-                    platform: '抖音',
-                    type: '短视频标题',
-                    text: `${plan.dramaName}${plan.emotionCore}名场面！这段看哭了...#${plan.dramaName} #${plan.dramaType} #追剧安利`
-                },
-                {
-                    platform: '小红书',
-                    type: '种草笔记标题',
-                    text: `必看！${plan.dramaName}为什么这么上头？｜${plan.coreSelling}｜追剧安利`
-                },
-                {
-                    platform: '微博',
-                    type: '话题引导文案',
-                    text: `【话题】如果你也经历过${plotKeywords}，你会怎么选择？《${plan.dramaName}》给了我们${plan.targetEmotion}的答案。说说你的看法👇 #${plan.dramaName}#`
-                },
-                {
-                    platform: '视频号',
-                    type: '朋友圈分享文案',
-                    text: `最近在追的${plan.dramaType}太好看了！${plan.dramaName}，${plan.coreSelling}，真的${plan.targetEmotion}！强烈推荐🔥`
-                },
-                {
-                    platform: '抖音',
-                    type: 'CP向文案',
-                    text: `${plan.dramaName}这对CP太好磕了！${plan.targetEmotion}的感觉！姐妹们冲！#${plan.dramaName}CP #磕CP #追剧`
-                },
-                {
-                    platform: '小红书',
-                    type: '演员同款文案',
-                    text: `${plan.dramaName}主演同款妆容/穿搭｜跟着剧追时尚｜平价替代`
-                },
-                {
-                    platform: '微博',
-                    type: '热搜冲刺文案',
-                    text: `【${plan.dramaName}】今晚大结局！${plotKeywords}的故事即将迎来最终答案！转发+评论，一起送剧上热搜！#${plan.dramaName}大结局#`
-                },
-                {
-                    platform: 'B站',
-                    type: '二创激励文案',
-                    text: `【${plan.dramaName}二创征集】剪辑/MAD/解说/吐槽，任何形式都欢迎！优质作品官方微博转发+周边奖励🎁`
-                },
-                {
-                    platform: '知乎',
-                    type: '深度分析标题',
-                    text: `如何评价《${plan.dramaName}》？｜${plan.dramaType}的新标杆还是旧瓶装新酒？`
-                }
-            ];
-            
-            return copywriting;
-        }
-
-        // 提取关键词（简化版）
-        function extractKeywords(text) {
-            if (!text) return '精彩剧情';
-            const keywords = text.split('。')[0].substring(0, 30);
-            return keywords || '精彩剧情';
-        }
-
-        // 生成平台定制策略
-        function getPlatformStrategy(plan) {
-            return {
-                weibo: {
-                    name: '微博',
-                    priority: '核心阵地',
-                    strategy: '热搜+超话双驱动，制造社交话题',
-                    tactics: [
-                        `【超话运营】建立"${plan.dramaName}超话"，日均10条官博内容+50条UGC激励`,
-                        `【热搜布局】每周2-3个热搜，配合剧情高潮点：#${plan.dramaName}开播# #${plan.dramaName}名场面# #${plan.dramaName}大结局#`,
-                        `【KOL合作】头部10人（粉丝500万+）+腰部50人（粉丝50-500万）+尾部200人（粉丝5-50万）`,
-                        `【粉丝互动】每日话题讨论+抽奖活动，激活${plan.castType}粉丝站台`,
-                        `【舆情监控】实时监控评论，及时回应质疑，引导正向讨论`
-                    ],
-                    content: `${plan.emotionCore}向内容为主，CP向/剧情向/花絮向内容配比3:4:3`,
-                    kpi: '超话签到10万+/日，热搜上榜率80%+，话题阅读量5亿+'
-                },
-                douyin: {
-                    name: '抖音',
-                    priority: '流量主阵地',
-                    strategy: '短视频矩阵+达人种草，霸屏算法推荐',
-                    tactics: [
-                        `【官方矩阵】@${plan.dramaName}官方 日更3条+@演员个人号联动+10个MCN矩阵号每号日更1-2条`,
-                        `【内容方向】${plan.emotionCore}名场面30% + CP甜蜜CUT25% + 剧情高光20% + 花絮幕后15% + 互动挑战10%`,
-                        `【达人合作】头部达人10人（粉丝1000万+）+腰部达人50人（粉丝100-1000万）+尾部达人200人（粉丝10-100万）`,
-                        `【挑战赛】发起"#${plan.dramaName}挑战"，设置BGM+动作，激励UGC创作`,
-                        `【直播互动】演员抖音直播，剧情答疑+福利抽奖，预期观看100万+`
-                    ],
-                    content: `15-60秒${plan.targetEmotion}向短视频，搭配热门BGM，字幕突出金句`,
-                    kpi: '官号粉丝100万+，单条播放量500万+，话题播放量50亿+'
-                },
-                xiaohongshu: {
-                    name: '小红书',
-                    priority: '种草转化阵地',
-                    strategy: 'KOC笔记矩阵+生活化种草，渗透决策链路',
-                    tactics: [
-                        `【KOC矩阵】100篇/周笔记矩阵，覆盖"剧集安利""演员同款""情节解析""台词文案"四大方向`,
-                        `【话题标签】#必看${plan.dramaType} #${plan.dramaName}安利 #追剧笔记 #${plan.targetEmotion}`,
-                        `【同款经济】演员同款妆容/穿搭/配饰，导流电商带货`,
-                        `【情绪共鸣】"这段看哭了""太上头了""强推"等情绪化表达`,
-                        `【品牌合作】美妆/服饰/配饰品牌植入，剧集+品牌联合种草`
-                    ],
-                    content: `图文笔记为主（9图），封面吸睛，标题带情绪，内容有干货`,
-                    kpi: '笔记总量5000+，总曝光5000万+，搜索卡位前3'
-                },
-                shipinhao: {
-                    name: '视频号',
-                    priority: '私域转化阵地',
-                    strategy: '微信生态闭环+社群裂变，沉淀私域流量',
-                    tactics: [
-                        `【视频号运营】@${plan.dramaName}官方视频号，日更2条，重点覆盖30-50岁中老年受众`,
-                        `【社群裂变】建立500个微信群，每群200人，覆盖10万核心剧粉`,
-                        `【朋友圈传播】设计分享海报/短视频，激励朋友圈转发`,
-                        `【公众号联动】推文深度解析+视频号观看引导，形成闭环`,
-                        `【直播观剧】视频号直播同步观剧，实时互动讨论`
-                    ],
-                    content: `1-3分钟横屏视频，画质高清，标题简洁，适合中老年审美`,
-                    kpi: '视频号粉丝50万+，单条播放50万+，社群活跃度60%+'
-                }
-            };
-        }
-
-        // 主生成函数
         function generatePlan() {
             const dramaName = document.getElementById('dramaName').value;
             const dramaType = document.getElementById('dramaType').value;
@@ -919,14 +540,10 @@
             const audience = document.getElementById('audience').value;
             const stage = document.getElementById('stage').value;
             const coreSelling = document.getElementById('coreSelling').value;
-            const plotSummary = document.getElementById('plotSummary').value;
-            const emotionCore = document.getElementById('emotionCore').value;
-            const targetEmotion = document.getElementById('targetEmotion').value;
             const castType = document.getElementById('castType').value;
             const ipType = document.getElementById('ipType').value;
 
-            if (!dramaName || !dramaType || !platform || !budget || !audience || !stage || 
-                !coreSelling || !plotSummary || !emotionCore || !targetEmotion || !castType || !ipType) {
+            if (!dramaName || !dramaType || !platform || !budget || !audience || !stage || !coreSelling || !castType || !ipType) {
                 alert('请填写所有必填项！');
                 return;
             }
@@ -935,351 +552,325 @@
             document.getElementById('resultSection').style.display = 'none';
 
             setTimeout(() => {
-                const plan = { 
-                    dramaName, dramaType, platform, budget, audience, stage, 
-                    coreSelling, plotSummary, emotionCore, targetEmotion, castType, ipType,
-                    timestamp: new Date().toLocaleString('zh-CN') 
-                };
-                
-                window.currentPlan = plan;
+                const plan = { dramaName, dramaType, platform, budget, audience, stage, coreSelling, castType, ipType, timestamp: new Date().toLocaleString('zh-CN') };
+                window.currentPlan = plan; // 保存到全局变量，供PPT导出使用
                 displayResult(plan);
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('resultSection').style.display = 'block';
                 document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
-            }, 3000);
+            }, 2000);
         }
 
-        // 渲染结果
         function displayResult(plan) {
-            const insights = getUserInsights(plan);
-            const topics = getTopicStrategy(plan);
-            const ipStrategy = getIPStrategy(plan);
-            const copywriting = getCopywritingIdeas(plan);
-            const platformStrategy = getPlatformStrategy(plan);
-            
             const content = `
-                <h3>🎯 项目本体分析</h3>
+                <h3>🎯 本体分析</h3>
                 <p><strong>剧集名称：</strong>${plan.dramaName}</p>
                 <p><strong>类型定位：</strong>${plan.dramaType}</p>
                 <p><strong>核心卖点：</strong>${plan.coreSelling}</p>
-                <p><strong>剧情概述：</strong>${plan.plotSummary}</p>
-                <p><strong>情感核心：</strong>${plan.emotionCore}</p>
-                <p><strong>目标情绪：</strong>${plan.targetEmotion}</p>
-                <p><strong>演员阵容：</strong>${plan.castType}</p>
                 <p><strong>IP类型：</strong>${plan.ipType}</p>
-                <p><strong>播出平台：</strong>${plan.platform}</p>
-                <p><strong>营销预算：</strong>${plan.budget}</p>
-                <p><strong>营销阶段：</strong>${plan.stage}</p>
+                <p><strong>演员阵容：</strong>${plan.castType}</p>
+                <p><strong>IP价值分析：</strong>${plan.ipType === '小说改编' || plan.ipType === '漫画改编' ? '具备原著粉丝基础，可激活书粉/漫粉社群，预期自然流量占比20-30%' : plan.ipType === '原创剧本' ? '无原著束缚，创作自由度高，需要从零建立IP认知，营销难度较大但空间更大' : '有对标作品参考，可借鉴成功经验，降低市场风险'}</p>
+                <p><strong>演员粉丝价值：</strong>${plan.castType === '顶级流量明星' ? '自带5000万+粉丝流量，预期粉丝转化率15-20%，社交媒体天然热度保障' : plan.castType === '一线实力派' ? '口碑保障，豆瓣评分预期7.5+，中高端受众覆盖，长尾价值高' : plan.castType === '流量+实力组合' ? '平衡流量与口碑，粉丝经济+品质保证双驱动，风险可控' : '新鲜感强，营销成本可控，需加大内容营销投入弥补明星光环不足'}</p>
+                <p><strong>制作水准：</strong>一线团队+${plan.castType}配置，视觉质感+情感共鸣双重保障</p>
 
-                <h3>👥 深度用户洞察</h3>
-                <div class="insight-card">
-                    <h4>核心洞察</h4>
-                    <p>${insights.core}</p>
-                </div>
-                <div class="insight-card">
-                    <h4>人口统计特征</h4>
-                    <p>${insights.demographics}</p>
-                </div>
-                <div class="insight-card">
-                    <h4>心理特征</h4>
-                    <p>${insights.psychographics}</p>
-                </div>
-                <div class="insight-card">
-                    <h4>痛点分析</h4>
-                    <p>${insights.painPoints}</p>
-                </div>
-                <div class="insight-card">
-                    <h4>需求洞察</h4>
-                    <p>${insights.desires}</p>
-                </div>
-                <div class="insight-card">
-                    <h4>媒体习惯</h4>
-                    <p>${insights.mediaHabits}</p>
-                </div>
-
-                <h3>📝 策略文案创意（可直接使用）</h3>
-                ${copywriting.map(item => `
-                    <div class="copywriting-item">
-                        <div class="label">${item.platform} - ${item.type}</div>
-                        <div class="text">${item.text}</div>
-                    </div>
-                `).join('')}
-
-                <h3>🎨 话题策略设计（基于${plan.emotionCore}）</h3>
-                ${topics.map((topic, index) => `
-                    <div class="strategy-item">
-                        <strong>${index + 1}. ${topic.tag}</strong>
-                        <p><strong>策略描述：</strong>${topic.desc}</p>
-                        <p><strong>话题示例：</strong>${topic.example}</p>
-                        <p><strong>执行建议：</strong>配合剧情进度，在${topic.tag}相关剧情播出时集中投放，预期话题阅读量5000万+</p>
-                    </div>
-                `).join('')}
-
-                <h3>🎬 IP类型差异化策略</h3>
+                <h3>📈 市场分析</h3>
                 <div class="strategy-item">
-                    <strong>粉丝基础分析</strong>
-                    <p>${ipStrategy.fanBase}</p>
+                    <strong>1. 竞品分析</strong>
+                    <p><strong>同期竞品：</strong>同类型热播剧3-5部，差异化竞争策略聚焦独特叙事视角</p>
+                    <p><strong>市场空位：</strong>${plan.dramaType}赛道仍有内容缺口，本剧填补市场需求</p>
+                    <p><strong>优势对比：</strong>演员阵容 > 竞品A，制作投入 > 竞品B，营销预算 ${plan.budget}</p>
                 </div>
                 <div class="strategy-item">
-                    <strong>核心策略</strong>
-                    <p>${ipStrategy.strategy}</p>
+                    <strong>2. 目标受众画像</strong>
+                    <p><strong>核心人群：</strong>${plan.audience}，占比60%</p>
+                    <p><strong>拓展人群：</strong>泛娱乐用户、剧粉圈层、KOL粉丝，占比30%</p>
+                    <p><strong>长尾人群：</strong>路人观众、短视频用户，占比10%</p>
+                    <p><strong>用户需求：</strong>情感共鸣、话题参与、社交货币、审美满足</p>
                 </div>
                 <div class="strategy-item">
-                    <strong>执行tactics</strong>
-                    ${ipStrategy.tactics.map(t => `<p>• ${t}</p>`).join('')}
-                </div>
-                <div class="strategy-item">
-                    <strong>风险提示</strong>
-                    <p>${ipStrategy.risk}</p>
+                    <strong>3. 平台生态分析</strong>
+                    <p><strong>播出平台：</strong>${plan.platform}</p>
+                    <p><strong>平台用户：</strong>MAU 2-5亿，日活1-3亿，付费会员5000万-1亿</p>
+                    <p><strong>平台资源：</strong>开屏广告、热搜推荐、官方账号联动、会员权益绑定</p>
+                    <p><strong>分发策略：</strong>首播独家 + 48小时全网分发，最大化覆盖</p>
                 </div>
 
-                <h3>📱 平台定制化策略</h3>
+                <h3>🎨 内容策略（超详细）</h3>
                 
                 <div class="strategy-item">
-                    <strong>微博 - ${platformStrategy.weibo.priority}</strong>
-                    <p><strong>核心策略：</strong>${platformStrategy.weibo.strategy}</p>
-                    <p><strong>执行tactics：</strong></p>
-                    ${platformStrategy.weibo.tactics.map(t => `<p>• ${t}</p>`).join('')}
-                    <p><strong>内容方向：</strong>${platformStrategy.weibo.content}</p>
-                    <p><strong>KPI目标：</strong>${platformStrategy.weibo.kpi}</p>
+                    <strong>1. 短视频内容矩阵（日更10-15条）</strong>
+                    <p><strong>【抖音矩阵】覆盖5亿+用户</strong></p>
+                    <p>• 官方账号（@${plan.dramaName}官方）：每日3条，花絮/预告/互动</p>
+                    <p>• 演员个人账号联动：${plan.castType === '顶级流量明星' ? '明星本人日更vlog，粉丝互动率15%+' : '演员采访片段，幕后花絮'}</p>
+                    <p>• 10个MCN矩阵号：每号日均1-2条，覆盖剧情/CP/花絮/reaction不同垂类</p>
+                    <p>• 达人合作：头部10人+腰部50人+尾部200人，阶梯式传播</p>
+                    
+                    <p><strong>【内容方向细分】</strong></p>
+                    <p>• CP向内容（占比30%）：甜蜜CUT、名场面、情侣头像、壁纸、表情包</p>
+                    <p>• 剧情向内容（占比25%）：高能剧情、反转名场面、伏笔解析、预告剪辑</p>
+                    <p>• 花絮向内容（占比20%）：拍摄幕后、NG集锦、演员互动、片场日常</p>
+                    <p>• 演员向内容（占比15%）：演员采访、妆造解析、服化道揭秘、演技分析</p>
+                    <p>• 互动向内容（占比10%）：话题挑战、弹幕互动、粉丝投稿、二创激励</p>
+                    
+                    <p><strong>【快手下沉市场】</strong>老铁经济+直播互动，日更3条，重点覆盖三四线城市</p>
+                    <p><strong>【视频号微信生态】</strong>朋友圈传播+社群裂变，日更2条，重点中老年受众</p>
+                    <p><strong>【B站二创生态】</strong>UP主合作50人，激励二创5000条，弹幕文化运营</p>
+                </div>
+                
+                <div class="strategy-item">
+                    <strong>2. 图文内容矩阵（日更50+篇）</strong>
+                    
+                    <p><strong>【微博超话运营】</strong></p>
+                    <p>• 官博日均10条：物料发布+话题引导+粉丝互动+抽奖活动</p>
+                    <p>• 演员转发：${plan.castType === '顶级流量明星' ? '明星本人每日1转发，预期转发10万+' : '定期转发重点内容'}</p>
+                    <p>• UGC激励：每日50+条用户内容，设置话题挑战#${plan.dramaName}##${plan.dramaName}名场面#</p>
+                    <p>• 热搜布局：每周2-3个热搜，配合剧情高潮点、演员生日、幕后花絮</p>
+                    
+                    <p><strong>【10个核心话题设计】</strong></p>
+                    <p>1. #${plan.dramaName}开播# - 首播当天冲刺热搜第1</p>
+                    <p>2. #${plan.dramaName}${plan.coreSelling}# - 核心卖点长尾话题</p>
+                    <p>3. #${plan.dramaName}名场面# - 剧情高潮实时话题</p>
+                    <p>4. #演员名字${plan.dramaName}# - 演员个人粉丝引流</p>
+                    <p>5. #${plan.dramaName}CP感# - CP粉丝运营</p>
+                    <p>6. #${plan.dramaName}服化道# - 审美向讨论</p>
+                    <p>7. #${plan.dramaName}幕后# - 花絮向内容</p>
+                    <p>8. #${plan.dramaName}剧情解析# - 深度内容</p>
+                    <p>9. #${plan.dramaName}OST# - 音乐传播</p>
+                    <p>10. #${plan.dramaName}大结局# - 收官冲刺</p>
+                    
+                    <p><strong>【小红书种草矩阵】</strong></p>
+                    <p>• KOC笔记矩阵100篇/周："剧集安利"/"演员同款妆容"/"穿搭复刻"/"情节解析"/"台词文案"</p>
+                    <p>• 品牌合作：美妆/服饰/配饰品牌植入，演员同款导流电商</p>
+                    <p>• 话题标签：#必看剧集 #${plan.dramaType}剧推荐 #追剧安利</p>
+                    
+                    <p><strong>【知乎深度内容】</strong></p>
+                    <p>• 专业影评20篇：从剧本/表演/摄影/配乐多维度解析</p>
+                    <p>• 话题问答：如何评价《${plan.dramaName}》？${plan.dramaName}有哪些细节？</p>
+                    <p>• 行业分析：${plan.dramaType}剧的创新突破、影视工业化水平提升</p>
+                    
+                    <p><strong>【豆瓣评分运营】</strong></p>
+                    <p>• 目标评分：7.5-8.0分（${plan.castType === '一线实力派' ? '实力派演员加持，口碑保障' : '平衡口碑与商业'}）</p>
+                    <p>• 策略：前期真实用户+专业影评人建立基础评分，中期自然发酵，后期口碑维护</p>
+                    <p>• 长评激励：激励20篇深度长评，建立专业口碑</p>
+                </div>
+                
+                <div class="strategy-item">
+                    <strong>3. 长视频内容规划</strong>
+                    
+                    <p><strong>【幕后纪录片系列】</strong>总计10集，每集15-20分钟</p>
+                    <p>• 第1集：项目启动，选角过程，剧本打磨</p>
+                    <p>• 第2-8集：拍摄花絮，演员访谈，导演手记</p>
+                    <p>• 第9集：后期制作，特效解密，配乐创作</p>
+                    <p>• 第10集：幕后团队致谢，花絮大合集</p>
+                    
+                    <p><strong>【演员访谈特辑】</strong>每位主演1集，总计5-8集</p>
+                    <p>• 角色塑造心路历程</p>
+                    <p>• 拍摄趣事与难忘瞬间</p>
+                    <p>• 与其他演员的化学反应</p>
+                    <p>• 给粉丝的话</p>
+                    
+                    <p><strong>【制作特辑】</strong>服化道/美术/特效专题</p>
+                    <p>• 服装设计理念与制作过程</p>
+                    <p>• 场景搭建与美术风格</p>
+                    <p>• 特效镜头制作揭秘</p>
+                </div>
+                
+                <div class="strategy-item">
+                    <strong>4. 创意物料设计</strong>
+                    
+                    <p><strong>【海报矩阵】</strong>总计50+款，覆盖不同阶段</p>
+                    <p>• 概念海报5款：视觉冲击，风格定调</p>
+                    <p>• 人物海报10款：主演单人+双人组合</p>
+                    <p>• 关系海报5款：角色关系图谱</p>
+                    <p>• 剧情海报15款：跟随剧情进度发布</p>
+                    <p>• 节日海报10款：结合节日热点</p>
+                    <p>• 收官海报5款：情感告别</p>
+                    
+                    <p><strong>【短视频模板】</strong>提供给用户二创</p>
+                    <p>• 转场特效模板10款</p>
+                    <p>• 字幕样式模板20款</p>
+                    <p>• BGM音乐库50首</p>
+                    <p>• 滤镜预设10款</p>
+                    
+                    <p><strong>【表情包/壁纸/周边】</strong></p>
+                    <p>• 表情包3套，每套16个，覆盖微信/QQ/微博</p>
+                    <p>• 手机壁纸50款：竖屏/横屏/锁屏/桌面</p>
+                    <p>• 电脑壁纸20款：4K高清</p>
+                    <p>• 实体周边：海报/明信片/徽章/T恤/手办</p>
+                </div>
+                
+                <div class="strategy-item">
+                    <strong>5. SEO/SEM全域布局</strong>
+                    
+                    <p><strong>【搜索引擎优化】</strong></p>
+                    <p>• 核心词（预期日搜10万+）：${plan.dramaName}、${plan.dramaName}在线观看、${plan.dramaName}免费观看、${plan.dramaName}全集</p>
+                    <p>• 长尾词（预期日搜5万+）：${plan.dramaName}剧情介绍、${plan.dramaName}演员表、${plan.dramaName}分集剧情、${plan.dramaName}大结局、${plan.dramaName}豆瓣评分</p>
+                    <p>• 品牌词（预期日搜3万+）：${plan.dramaName}官博、${plan.dramaName}超话、${plan.dramaName}百度百科</p>
+                    
+                    <p><strong>【百度指数预期】</strong></p>
+                    <p>• 峰值：50万+（首播周/大结局）</p>
+                    <p>• 日均：10-15万（热播期）</p>
+                    <p>• 长尾：5万+（播出后3个月）</p>
+                    
+                    <p><strong>【信息流广告投放】</strong></p>
+                    <p>• 今日头条：精准定向${plan.audience}，日均曝光500万</p>
+                    <p>• 腾讯广点通：微信/QQ/腾讯新闻三端联动</p>
+                    <p>• 百度信息流：搜索意图捕捉，高转化</p>
+                    <p>• 抖音巨量引擎：短视频信息流，原生广告</p>
+                </div>
+                
+                <div class="strategy-item">
+                    <strong>6. IP类型差异化策略</strong>
+                    <p>${plan.ipType === '小说改编' || plan.ipType === '漫画改编' ? 
+                        '<strong>【原著粉丝激活】</strong><br>• 原著粉丝社群运营：建立500个书粉/漫粉核心群<br>• 原著作者站台：作者微博/直播互动，为改编背书<br>• 对比解读内容：原著vs影视化改编对比，引发讨论<br>• 原著重读活动：配合剧集播出，带动原著销量' : 
+                        plan.ipType === '原创剧本' ? 
+                        '<strong>【从零建立IP认知】</strong><br>• 世界观构建：提前释放世界观设定，建立认知<br>• 概念预热：通过概念海报/预告片建立期待<br>• 内容为王：加大优质内容产出，靠口碑传播<br>• 话题制造：主动设计话题点，引发讨论' :
+                        '<strong>【对标作品借力】</strong><br>• 对比营销：与原版/对标作品对比传播<br>• 差异化卖点：突出本土化创新点<br>• 情怀营销：激活老观众情怀<br>• 新老受众兼顾：既要老粉认可，也要吸引新观众'
+                    }</p>
                 </div>
 
-                <div class="strategy-item">
-                    <strong>抖音 - ${platformStrategy.douyin.priority}</strong>
-                    <p><strong>核心策略：</strong>${platformStrategy.douyin.strategy}</p>
-                    <p><strong>执行tactics：</strong></p>
-                    ${platformStrategy.douyin.tactics.map(t => `<p>• ${t}</p>`).join('')}
-                    <p><strong>内容方向：</strong>${platformStrategy.douyin.content}</p>
-                    <p><strong>KPI目标：</strong>${platformStrategy.douyin.kpi}</p>
+                <h3>🚀 渠道策略</h3>
+                <p><strong>短视频渠道（预算占比30%）：</strong>抖音/快手头部KOL 50人 + 中腰部200人，日均曝光1000万+</p>
+                <p><strong>社交媒体（预算占比25%）：</strong>微博热搜10次 + 超话运营 + 小红书种草500篇</p>
+                <p><strong>付费广告（预算占比25%）：</strong>开屏广告 + 信息流 + 搜索广告，覆盖5亿+用户</p>
+                <p><strong>内容营销（预算占比15%）：</strong>KOL深度合作 + 媒体通稿 + 品牌联动</p>
+                <p><strong>线下活动（预算占比5%）：</strong>首映礼 + 路演 + 快闪店 + 粉丝见面会</p>
+
+                <div class="chart-container">
+                    <canvas id="budgetChart"></canvas>
                 </div>
 
+                <h3>💡 核心打法（信息密度高）</h3>
                 <div class="strategy-item">
-                    <strong>小红书 - ${platformStrategy.xiaohongshu.priority}</strong>
-                    <p><strong>核心策略：</strong>${platformStrategy.xiaohongshu.strategy}</p>
-                    <p><strong>执行tactics：</strong></p>
-                    ${platformStrategy.xiaohongshu.tactics.map(t => `<p>• ${t}</p>`).join('')}
-                    <p><strong>内容方向：</strong>${platformStrategy.xiaohongshu.content}</p>
-                    <p><strong>KPI目标：</strong>${platformStrategy.xiaohongshu.kpi}</p>
+                    <strong>打法1：话题营销引爆</strong>
+                    <p><strong>T-7天：</strong>预埋10个话题种子（微博/抖音/小红书），KOL前置讨论</p>
+                    <p><strong>T-Day：</strong>100+账号同步发布，配合3个微博热搜，话题阅读冲刺10亿+</p>
+                    <p><strong>T+3天：</strong>二次话题发酵，"名场面""高能剧情""演员演技"等延续热度</p>
+                    <p><strong>预算分配：</strong>KOL 200万 + 热搜100万 + 水军50万 = 350万</p>
+                    <p><strong>预期ROI：</strong>话题阅读10亿+，讨论50万+，ROI 1:15</p>
+                </div>
+                <div class="strategy-item">
+                    <strong>打法2：短视频矩阵覆盖</strong>
+                    <p><strong>素材制作：</strong>30条精剪短视频（15s/30s/60s），覆盖剧情/花絮/采访</p>
+                    <p><strong>投放策略：</strong>抖音Dou+ 200万 + 快手粉条100万 + 视频号推广100万</p>
+                    <p><strong>UGC激励：</strong>二创挑战赛，奖金池50万，激励10万+用户参与</p>
+                    <p><strong>预算分配：</strong>素材100万 + 投放400万 + 激励50万 = 550万</p>
+                    <p><strong>预期ROI：</strong>短视频播放30亿+，UGC 10万条，ROI 1:10</p>
+                </div>
+                <div class="strategy-item">
+                    <strong>打法3：粉丝社群运营</strong>
+                    <p><strong>社群建设：</strong>500个核心粉丝群（微信/QQ），每群200人，总计10万铁粉</p>
+                    <p><strong>独家物料：</strong>未播花絮/演员语音/签名照/周边福利，提升粘性</p>
+                    <p><strong>线上活动：</strong>每周1次直播互动，弹幕抽奖，送会员/周边</p>
+                    <p><strong>线下联动：</strong>10城快闪店 + 5场见面会，深度粉丝运营</p>
+                    <p><strong>预算分配：</strong>物料50万 + 活动100万 + 线下50万 = 200万</p>
+                    <p><strong>预期ROI：</strong>自然传播10亿+，口碑发酵，ROI 1:20</p>
+                </div>
+                <div class="strategy-item">
+                    <strong>打法4：跨界品牌联动</strong>
+                    <p><strong>美妆品牌：</strong>演员同款妆容/产品植入，小红书种草</p>
+                    <p><strong>服装品牌：</strong>剧中服饰同款，电商联名款</p>
+                    <p><strong>食品饮料：</strong>追剧零食套餐，平台会员联合促销</p>
+                    <p><strong>互联网平台：</strong>外卖/电商/出行APP跨界合作，流量互换</p>
+                    <p><strong>预算分配：</strong>品牌合作费用由品牌方承担，营销资源置换</p>
                 </div>
 
+                <h3>⏰ 执行时间表（T-90 to T+90）</h3>
+                <p><strong>T-90天：</strong>概念海报发布，官宣主演阵容，预热启动</p>
+                <p><strong>T-60天：</strong>先导预告片上线，KOL种草，话题预埋</p>
+                <p><strong>T-30天：</strong>正式预告片，物料大规模释放，预约冲刺</p>
+                <p><strong>T-14天：</strong>定档海报，倒计时海报，热搜布局</p>
+                <p><strong>T-7天：</strong>花絮放出，演员采访，粉丝互动升温</p>
+                <p><strong>T-3天：</strong>终极预告，全渠道预热，会员促销</p>
+                <p><strong>T-Day：</strong>首播引爆，3个热搜，全渠道联动，数据监测</p>
+                <p><strong>T+3天：</strong>名场面传播，二次话题发酵，口碑引导</p>
+                <p><strong>T+7天：</strong>周播节奏稳定，持续话题运营，KPI优化</p>
+                <p><strong>T+30天：</strong>中期高潮，再次冲击热搜，二次传播</p>
+                <p><strong>T+60天：</strong>收官倒计时，结局预测话题，粉丝情绪运营</p>
+                <p><strong>T+90天：</strong>收官复盘，长尾运营，衍生品开发，ROI评估</p>
+
+                <h3>🛡️ 舆情策略</h3>
                 <div class="strategy-item">
-                    <strong>视频号 - ${platformStrategy.shipinhao.priority}</strong>
-                    <p><strong>核心策略：</strong>${platformStrategy.shipinhao.strategy}</p>
-                    <p><strong>执行tactics：</strong></p>
-                    ${platformStrategy.shipinhao.tactics.map(t => `<p>• ${t}</p>`).join('')}
-                    <p><strong>内容方向：</strong>${platformStrategy.shipinhao.content}</p>
-                    <p><strong>KPI目标：</strong>${platformStrategy.shipinhao.kpi}</p>
+                    <strong>1. 舆情监测体系</strong>
+                    <p><strong>实时监测：</strong>7x24小时舆情监测，覆盖微博/抖音/知乎/豆瓣/贴吧</p>
+                    <p><strong>关键词：</strong>剧名/演员/争议话题/负面词汇，AI+人工双重审核</p>
+                    <p><strong>预警机制：</strong>负面信息1小时内响应，危机公关2小时内启动</p>
+                </div>
+                <div class="strategy-item">
+                    <strong>2. 危机公关预案</strong>
+                    <p><strong>演员绯闻：</strong>官方声明+律师函+正向内容覆盖</p>
+                    <p><strong>剧情争议：</strong>创作解读+导演采访+专业影评引导</p>
+                    <p><strong>技术事故：</strong>平台致歉+补偿方案+用户安抚</p>
+                    <p><strong>黑粉攻击：</strong>法律手段+平台举报+粉丝反制</p>
+                </div>
+                <div class="strategy-item">
+                    <strong>3. 正向口碑引导</strong>
+                    <p><strong>专业影评：</strong>邀请50位影评人撰写深度评论</p>
+                    <p><strong>用户UGC：</strong>激励真实用户分享观剧体验</p>
+                    <p><strong>数据背书：</strong>实时播放量/热度值/评分，建立信任</p>
                 </div>
 
-                <h3>💰 预算分配建议（总预算：${plan.budget}）</h3>
-                <div class="strategy-item">
-                    <strong>线上推广 30%</strong>
-                    <p>微博热搜、抖音信息流、小红书KOC、搜索引擎SEM</p>
-                </div>
-                <div class="strategy-item">
-                    <strong>内容制作 25%</strong>
-                    <p>短视频制作、图文物料、长视频花絮、创意物料设计</p>
-                </div>
-                <div class="strategy-item">
-                    <strong>KOL/达人合作 25%</strong>
-                    <p>头部达人+腰部达人+尾部达人阶梯式投放</p>
-                </div>
-                <div class="strategy-item">
-                    <strong>线下活动 15%</strong>
-                    <p>首映礼、见面会、粉丝活动、院线宣传</p>
-                </div>
-                <div class="strategy-item">
-                    <strong>应急储备 5%</strong>
-                    <p>舆情应对、突发事件、补充投放</p>
-                </div>
+                <h3>🎯 效果评估</h3>
+                <p><strong>核心KPI：</strong></p>
+                <p>• 全网曝光量：目标50亿+（微博10亿+短视频30亿+其他10亿）</p>
+                <p>• 话题阅读量：目标10亿+（微博超话5亿+抖音话题5亿）</p>
+                <p>• 搜索指数：百度指数峰值50万+，日均10万+</p>
+                <p>• 平台数据：预约量300万+，首播播放10亿+，会员转化100万+</p>
+                <p>• 社交数据：微博超话讨论100万+，抖音话题播放50亿+</p>
+                <p>• UGC数量：二创视频10万+，用户笔记5万+</p>
+                <p>• 营销ROI：投入产出比1:7（${plan.budget}预算，预期带来${parseInt(plan.budget.split('-')[0])*7}万+商业价值）</p>
 
-                <h3>📊 效果评估指标体系</h3>
-                <div class="strategy-item">
-                    <strong>曝光指标</strong>
-                    <p>• 微博话题阅读量：目标50亿+</p>
-                    <p>• 抖音话题播放量：目标100亿+</p>
-                    <p>• 小红书笔记曝光：目标5000万+</p>
-                    <p>• 百度搜索指数：峰值50万+，日均15万+</p>
-                </div>
-                <div class="strategy-item">
-                    <strong>互动指标</strong>
-                    <p>• 微博超话签到：日均10万+</p>
-                    <p>• 抖音官号粉丝：目标100万+</p>
-                    <p>• UGC内容产出：目标5000条+</p>
-                    <p>• 社群活跃度：60%+</p>
-                </div>
-                <div class="strategy-item">
-                    <strong>转化指标</strong>
-                    <p>• 首播收视率/播放量：行业前3</p>
-                    <p>• 会员转化率：15%+</p>
-                    <p>• 豆瓣评分：7.5+</p>
-                    <p>• ROI投资回报：3:1以上</p>
-                </div>
-
-                <h3>⏰ 执行时间表（${plan.stage}）</h3>
-                ${getTimelineContent(plan.stage)}
-
-                <h3>🎯 舆情应对预案</h3>
-                <div class="strategy-item">
-                    <strong>日常监控</strong>
-                    <p>• 7*24小时舆情监控，15分钟响应机制</p>
-                    <p>• 重点监控平台：微博、豆瓣、知乎、抖音评论区</p>
-                    <p>• 建立舆情预警等级：绿色（正常）/黄色（关注）/橙色（预警）/红色（危机）</p>
-                </div>
-                <div class="strategy-item">
-                    <strong>常见风险点</strong>
-                    <p>• 剧情争议：提前准备解释口径，引导理性讨论</p>
-                    <p>• 演员争议：第一时间发声，澄清事实</p>
-                    <p>• 粉丝撕逼：及时介入调解，避免扩大化</p>
-                    <p>• 竞品攻击：不回应不理会，专注自身内容</p>
-                </div>
-                <div class="strategy-item">
-                    <strong>危机公关流程</strong>
-                    <p>1. 事件发生后15分钟内启动应急机制</p>
-                    <p>2. 30分钟内完成情况核实和口径确定</p>
-                    <p>3. 1小时内发布官方声明</p>
-                    <p>4. 持续跟进，及时更新进展</p>
-                    <p>5. 事后复盘，优化预案</p>
-                </div>
-
-                <p style="margin-top: 40px; padding: 20px; background: rgba(83, 183, 111, 0.1); border-radius: 10px; text-align: center;">
-                    <strong>📌 方案生成时间：</strong>${plan.timestamp}<br>
-                    <strong>💡 提示：</strong>本方案基于智能规则引擎生成，已结合《${plan.dramaName}》的剧情内容、情感核心、演员阵容等要素进行深度定制。建议结合实际情况灵活调整执行细节。
-                </p>
+                <p><strong>优化机制：</strong></p>
+                <p>• 每日数据复盘会议，实时调整投放策略</p>
+                <p>• A/B测试素材效果，优化转化路径</p>
+                <p>• 舆情监测预警，及时危机公关</p>
+                <p>• 竞品动态追踪，灵活调整策略</p>
             `;
-            
+
             document.getElementById('resultContent').innerHTML = content;
+
+            setTimeout(() => {
+                const ctx = document.getElementById('budgetChart');
+                if (ctx) {
+                    new Chart(ctx, {
+                        type: 'pie',
+                        data: {
+                            labels: ['短视频', '社交媒体', '付费广告', '内容营销', '线下活动'],
+                            datasets: [{
+                                data: [30, 25, 25, 15, 5],
+                                backgroundColor: ['#53B76F', '#DD7694', '#89CDA0', '#E99BB3', '#6AC288']
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: { 
+                                    position: 'bottom',
+                                    labels: { 
+                                        color: '#595959',
+                                        padding: 15,
+                                        font: { size: 13 }
+                                    }
+                                },
+                                title: { 
+                                    display: true, 
+                                    text: '预算分配方案',
+                                    color: '#262626',
+                                    font: { size: 16, weight: 'bold' },
+                                    padding: { bottom: 20 }
+                                }
+                            }
+                        }
+                    });
+                }
+            }, 100);
         }
 
-        // 根据阶段生成时间表
-        function getTimelineContent(stage) {
-            const timelines = {
-                '概念期': `
-                    <div class="strategy-item">
-                        <strong>T-90天至T-60天：概念预热</strong>
-                        <p>• 官宣立项，释放概念海报</p>
-                        <p>• 建立官方微博/抖音/小红书账号</p>
-                        <p>• 开通超话，积累种子用户</p>
-                        <p>• 定期发布筹备进度，保持热度</p>
-                    </div>
-                    <div class="strategy-item">
-                        <strong>T-60天至T-30天：演员官宣</strong>
-                        <p>• 主演定妆照分批释放</p>
-                        <p>• 幕后团队介绍</p>
-                        <p>• 拍摄花絮定期更新</p>
-                        <p>• 激活演员粉丝圈层</p>
-                    </div>
-                    <div class="strategy-item">
-                        <strong>T-30天：进入预热期</strong>
-                        <p>转入预热期执行策略</p>
-                    </div>
-                `,
-                '预热期': `
-                    <div class="strategy-item">
-                        <strong>T-30天至T-15天：物料释放</strong>
-                        <p>• 首版预告片发布</p>
-                        <p>• 人物海报/关系海报陆续释放</p>
-                        <p>• KOL种草启动，头部10人+腰部50人</p>
-                        <p>• 微博/抖音话题预热</p>
-                    </div>
-                    <div class="strategy-item">
-                        <strong>T-15天至T-7天：密集轰炸</strong>
-                        <p>• 终极预告+花絮轰炸</p>
-                        <p>• 主演直播互动</p>
-                        <p>• 提前点映/看片会</p>
-                        <p>• 信息流广告投放</p>
-                    </div>
-                    <div class="strategy-item">
-                        <strong>T-7天至T-1天：倒计时冲刺</strong>
-                        <p>• 每日倒计时海报</p>
-                        <p>• 抖音/快手挑战赛启动</p>
-                        <p>• 热搜预定：#XX剧开播倒计时#</p>
-                        <p>• 首播福利预告</p>
-                    </div>
-                `,
-                '热播期': `
-                    <div class="strategy-item">
-                        <strong>首播周（D1-D7）：爆发期</strong>
-                        <p>• 首播当天冲刺3个热搜</p>
-                        <p>• 实时数据播报（播放量/讨论量）</p>
-                        <p>• 每集播出后30分钟内发布名场面剪辑</p>
-                        <p>• KOL同步发声</p>
-                    </div>
-                    <div class="strategy-item">
-                        <strong>中期（D8-D20）：持续运营</strong>
-                        <p>• 每周2-3个热搜，配合剧情高潮</p>
-                        <p>• 短视频日更10-15条</p>
-                        <p>• UGC内容激励，二创征集</p>
-                        <p>• 周边商品上线</p>
-                    </div>
-                    <div class="strategy-item">
-                        <strong>收官前（D21-D30）：情绪积累</strong>
-                        <p>• 结局预测话题讨论</p>
-                        <p>• 角色命运投票</p>
-                        <p>• 幕后纪录片释放</p>
-                        <p>• 为大结局蓄力</p>
-                    </div>
-                `,
-                '收官期': `
-                    <div class="strategy-item">
-                        <strong>收官前3天：情绪高峰</strong>
-                        <p>• 大结局倒计时</p>
-                        <p>• 回顾名场面合集</p>
-                        <p>• 角色告别视频</p>
-                        <p>• 热搜冲刺：#XX剧大结局#</p>
-                    </div>
-                    <div class="strategy-item">
-                        <strong>收官当天：引爆社交</strong>
-                        <p>• 大结局实时讨论</p>
-                        <p>• 主创直播道别</p>
-                        <p>• 花絮纪录片上线</p>
-                        <p>• 周边/蓝光预售</p>
-                    </div>
-                    <div class="strategy-item">
-                        <strong>收官后7天：长尾运营</strong>
-                        <p>• 完整版幕后纪录片</p>
-                        <p>• 二次传播素材整理</p>
-                        <p>• 沉淀粉丝社群</p>
-                        <p>• 为续集/衍生品铺路</p>
-                    </div>
-                `
-            };
-            
-            return timelines[stage] || timelines['预热期'];
-        }
 
-        // 导出Markdown
-        function exportMarkdown() {
-            const content = document.getElementById('resultContent').innerText;
-            const blob = new Blob([content], { type: 'text/markdown' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = window.currentPlan.dramaName + '_营销方案.md';
-            a.click();
-        }
 
-        // 打印方案
-        function printPlan() {
-            window.print();
-        }
-
-        // 分享方案
-        function sharePlan() {
-            if (navigator.share) {
-                navigator.share({
-                    title: window.currentPlan.dramaName + ' 营销方案',
-                    text: '查看专业营销方案',
-                    url: window.location.href
-                }).catch(err => console.log('分享失败', err));
-            } else {
-                alert('您的浏览器不支持分享功能，请手动复制链接');
-            }
-        }
-
-        // 导出PPT
         function exportPPT() {
-            const plan = window.currentPlan;
+            const content = document.getElementById('resultContent').innerText;
+            const plan = window.currentPlan; // 保存当前方案到全局变量
             
             if (!plan) {
                 alert('请先生成营销方案！');
@@ -1287,8 +878,10 @@
             }
             
             let pptx = new PptxGenJS();
-            const primaryColor = '53B76F';
-            const accentColor = 'DD7694';
+            
+            // 设置主题色
+            const primaryColor = '53B76F'; // 青翠
+            const accentColor = 'DD7694';  // 苏梅
             
             // 封面页
             let slide1 = pptx.addSlide();
@@ -1301,172 +894,191 @@
                 x: 0.5, y: 3.5, w: 9, h: 0.8,
                 fontSize: 32, color: accentColor, align: 'center'
             });
-            slide1.addText('AI定制版 v2.0', {
-                x: 0.5, y: 4.5, w: 9, h: 0.5,
-                fontSize: 18, color: '666666', align: 'center'
-            });
             slide1.addText(plan.timestamp, {
-                x: 0.5, y: 5.2, w: 9, h: 0.5,
-                fontSize: 14, color: '999999', align: 'center'
+                x: 0.5, y: 5.0, w: 9, h: 0.5,
+                fontSize: 14, color: '666666', align: 'center'
             });
             
             // 本体分析页
             let slide2 = pptx.addSlide();
-            slide2.addText('🎯 项目本体分析', {
+            slide2.addText('🎯 本体分析', {
                 x: 0.5, y: 0.3, w: 9, h: 0.6,
                 fontSize: 28, bold: true, color: primaryColor
             });
             slide2.addText([
                 { text: '剧集名称：', options: { bold: true, color: '333333' }},
                 { text: plan.dramaName, options: { color: '666666' }}
-            ], { x: 0.8, y: 1.2, w: 8.5, fontSize: 14, lineSpacing: 20 });
+            ], { x: 0.8, y: 1.2, w: 8.5, fontSize: 16, lineSpacing: 24 });
             slide2.addText([
                 { text: '类型定位：', options: { bold: true, color: '333333' }},
                 { text: plan.dramaType, options: { color: '666666' }}
-            ], { x: 0.8, y: 1.6, w: 8.5, fontSize: 14, lineSpacing: 20 });
+            ], { x: 0.8, y: 1.7, w: 8.5, fontSize: 16, lineSpacing: 24 });
             slide2.addText([
                 { text: '核心卖点：', options: { bold: true, color: '333333' }},
                 { text: plan.coreSelling, options: { color: '666666' }}
-            ], { x: 0.8, y: 2.0, w: 8.5, fontSize: 14, lineSpacing: 20 });
+            ], { x: 0.8, y: 2.2, w: 8.5, fontSize: 16, lineSpacing: 24 });
             slide2.addText([
-                { text: '情感核心：', options: { bold: true, color: '333333' }},
-                { text: plan.emotionCore, options: { color: '666666' }}
-            ], { x: 0.8, y: 2.4, w: 8.5, fontSize: 14, lineSpacing: 20 });
+                { text: 'IP类型：', options: { bold: true, color: '333333' }},
+                { text: plan.ipType, options: { color: '666666' }}
+            ], { x: 0.8, y: 2.7, w: 8.5, fontSize: 16, lineSpacing: 24 });
             slide2.addText([
-                { text: '目标情绪：', options: { bold: true, color: '333333' }},
-                { text: plan.targetEmotion, options: { color: '666666' }}
-            ], { x: 0.8, y: 2.8, w: 8.5, fontSize: 14, lineSpacing: 20 });
+                { text: '演员阵容：', options: { bold: true, color: '333333' }},
+                { text: plan.castType, options: { color: '666666' }}
+            ], { x: 0.8, y: 3.2, w: 8.5, fontSize: 16, lineSpacing: 24 });
             
-            // 用户洞察页
-            const insights = getUserInsights(plan);
+            // 市场分析页
             let slide3 = pptx.addSlide();
-            slide3.addText('👥 深度用户洞察', {
+            slide3.addText('📈 市场分析', {
                 x: 0.5, y: 0.3, w: 9, h: 0.6,
                 fontSize: 28, bold: true, color: primaryColor
             });
-            slide3.addText('核心洞察', {
-                x: 0.8, y: 1.2, w: 8.5, fontSize: 16, bold: true, color: accentColor
+            slide3.addText('目标受众：' + plan.audience, {
+                x: 0.8, y: 1.2, w: 8.5, fontSize: 18, bold: true, color: '333333'
             });
-            slide3.addText(insights.core, {
-                x: 0.8, y: 1.6, w: 8.5, fontSize: 12, color: '666666'
+            slide3.addText('播出平台：' + plan.platform, {
+                x: 0.8, y: 1.8, w: 8.5, fontSize: 18, bold: true, color: '333333'
             });
-            slide3.addText('人口统计特征', {
-                x: 0.8, y: 2.3, w: 8.5, fontSize: 16, bold: true, color: accentColor
+            slide3.addText('营销预算：' + plan.budget, {
+                x: 0.8, y: 2.4, w: 8.5, fontSize: 18, bold: true, color: '333333'
             });
-            slide3.addText(insights.demographics, {
-                x: 0.8, y: 2.7, w: 8.5, fontSize: 12, color: '666666'
-            });
-            slide3.addText('媒体习惯', {
-                x: 0.8, y: 3.4, w: 8.5, fontSize: 16, bold: true, color: accentColor
-            });
-            slide3.addText(insights.mediaHabits, {
-                x: 0.8, y: 3.8, w: 8.5, fontSize: 12, color: '666666'
+            slide3.addText('营销阶段：' + plan.stage, {
+                x: 0.8, y: 3.0, w: 8.5, fontSize: 18, bold: true, color: '333333'
             });
             
-            // 策略文案页
-            const copywriting = getCopywritingIdeas(plan);
+            // 内容策略页
             let slide4 = pptx.addSlide();
-            slide4.addText('📝 策略文案创意', {
+            slide4.addText('🎨 内容策略', {
                 x: 0.5, y: 0.3, w: 9, h: 0.6,
                 fontSize: 28, bold: true, color: primaryColor
             });
-            copywriting.slice(0, 5).forEach((item, index) => {
-                slide4.addText(item.platform + ' - ' + item.type, {
-                    x: 0.8, y: 1.2 + index * 0.7, w: 8.5, fontSize: 12, bold: true, color: accentColor
-                });
-                slide4.addText(item.text, {
-                    x: 0.8, y: 1.4 + index * 0.7, w: 8.5, fontSize: 10, color: '666666'
-                });
+            slide4.addText('短视频矩阵', {
+                x: 0.8, y: 1.2, w: 8.5, fontSize: 20, bold: true, color: accentColor
+            });
+            slide4.addText('• 抖音/快手/视频号/B站多平台覆盖\n• 日更10-15条，CP/剧情/花絮多方向\n• 达人合作：头部10+腰部50+尾部200', {
+                x: 1.2, y: 1.7, w: 8, fontSize: 14, color: '666666', lineSpacing: 20
+            });
+            slide4.addText('图文内容矩阵', {
+                x: 0.8, y: 3.0, w: 8.5, fontSize: 20, bold: true, color: accentColor
+            });
+            slide4.addText('• 微博超话日均50+条，冲刺热搜\n• 小红书KOC矩阵100篇/周\n• 知乎深度内容+豆瓣口碑运营', {
+                x: 1.2, y: 3.5, w: 8, fontSize: 14, color: '666666', lineSpacing: 20
             });
             
-            // 平台策略页 - 微博
-            const platformStrategy = getPlatformStrategy(plan);
+            // 渠道策略页
             let slide5 = pptx.addSlide();
-            slide5.addText('📱 微博营销策略', {
+            slide5.addText('📱 渠道策略', {
                 x: 0.5, y: 0.3, w: 9, h: 0.6,
                 fontSize: 28, bold: true, color: primaryColor
             });
-            slide5.addText('核心策略：' + platformStrategy.weibo.strategy, {
-                x: 0.8, y: 1.2, w: 8.5, fontSize: 14, bold: true, color: '333333'
+            slide5.addText('线上渠道', {
+                x: 0.8, y: 1.2, w: 4, fontSize: 18, bold: true, color: accentColor
             });
-            platformStrategy.weibo.tactics.slice(0, 4).forEach((tactic, index) => {
-                slide5.addText('• ' + tactic, {
-                    x: 1.0, y: 1.7 + index * 0.5, w: 8.3, fontSize: 11, color: '666666'
-                });
+            slide5.addText('• 短视频平台\n• 社交媒体\n• 长视频平台\n• 搜索引擎', {
+                x: 1.2, y: 1.7, w: 3.5, fontSize: 14, color: '666666', lineSpacing: 24
             });
-            slide5.addText('KPI：' + platformStrategy.weibo.kpi, {
-                x: 0.8, y: 4.0, w: 8.5, fontSize: 12, bold: true, color: accentColor
+            slide5.addText('线下渠道', {
+                x: 5.2, y: 1.2, w: 4, fontSize: 18, bold: true, color: accentColor
+            });
+            slide5.addText('• 院线广告\n• 地铁/公交广告\n• 商圈LED屏\n• 线下活动', {
+                x: 5.6, y: 1.7, w: 3.5, fontSize: 14, color: '666666', lineSpacing: 24
             });
             
-            // 平台策略页 - 抖音
+            // 核心打法页
             let slide6 = pptx.addSlide();
-            slide6.addText('📱 抖音营销策略', {
+            slide6.addText('💡 核心打法', {
                 x: 0.5, y: 0.3, w: 9, h: 0.6,
                 fontSize: 28, bold: true, color: primaryColor
             });
-            slide6.addText('核心策略：' + platformStrategy.douyin.strategy, {
-                x: 0.8, y: 1.2, w: 8.5, fontSize: 14, bold: true, color: '333333'
+            slide6.addText('话题营销', {
+                x: 0.8, y: 1.2, w: 8.5, fontSize: 20, bold: true, color: accentColor
             });
-            platformStrategy.douyin.tactics.slice(0, 4).forEach((tactic, index) => {
-                slide6.addText('• ' + tactic, {
-                    x: 1.0, y: 1.7 + index * 0.5, w: 8.3, fontSize: 11, color: '666666'
-                });
+            slide6.addText('设计10个核心话题，配合剧情节奏引爆社交媒体讨论', {
+                x: 1.2, y: 1.7, w: 8, fontSize: 14, color: '666666'
             });
-            slide6.addText('KPI：' + platformStrategy.douyin.kpi, {
-                x: 0.8, y: 4.0, w: 8.5, fontSize: 12, bold: true, color: accentColor
+            slide6.addText('KOL种草', {
+                x: 0.8, y: 2.4, w: 8.5, fontSize: 20, bold: true, color: accentColor
+            });
+            slide6.addText('头部+腰部+尾部KOL阶梯式传播，覆盖不同圈层受众', {
+                x: 1.2, y: 2.9, w: 8, fontSize: 14, color: '666666'
+            });
+            slide6.addText('粉丝运营', {
+                x: 0.8, y: 3.6, w: 8.5, fontSize: 20, bold: true, color: accentColor
+            });
+            slide6.addText('建立粉丝社群，激励UGC内容创作，形成自传播效应', {
+                x: 1.2, y: 4.1, w: 8, fontSize: 14, color: '666666'
             });
             
             // 预算分配页
             let slide7 = pptx.addSlide();
-            slide7.addText('💰 预算分配方案', {
+            slide7.addText('💰 预算分配', {
                 x: 0.5, y: 0.3, w: 9, h: 0.6,
                 fontSize: 28, bold: true, color: primaryColor
             });
-            slide7.addText('总预算：' + plan.budget, {
-                x: 0.8, y: 1.2, w: 8.5, fontSize: 16, bold: true, color: accentColor
+            slide7.addText('线上推广：30%', {
+                x: 0.8, y: 1.5, w: 4, fontSize: 16, color: '666666'
             });
-            const budgetItems = [
-                '线上推广 30% - 微博热搜、抖音信息流、小红书KOC',
-                '内容制作 25% - 短视频、图文物料、花絮纪录片',
-                'KOL合作 25% - 头部+腰部+尾部达人阶梯投放',
-                '线下活动 15% - 首映礼、见面会、粉丝活动',
-                '应急储备 5% - 舆情应对、突发事件应对'
-            ];
-            budgetItems.forEach((item, index) => {
-                slide7.addText('• ' + item, {
-                    x: 1.0, y: 2.0 + index * 0.5, w: 8.3, fontSize: 13, color: '666666'
-                });
+            slide7.addText('内容制作：25%', {
+                x: 0.8, y: 2.1, w: 4, fontSize: 16, color: '666666'
+            });
+            slide7.addText('KOL合作：25%', {
+                x: 0.8, y: 2.7, w: 4, fontSize: 16, color: '666666'
+            });
+            slide7.addText('线下活动：15%', {
+                x: 0.8, y: 3.3, w: 4, fontSize: 16, color: '666666'
+            });
+            slide7.addText('应急储备：5%', {
+                x: 0.8, y: 3.9, w: 4, fontSize: 16, color: '666666'
             });
             
             // 效果评估页
             let slide8 = pptx.addSlide();
-            slide8.addText('📊 效果评估指标', {
+            slide8.addText('📊 效果评估', {
                 x: 0.5, y: 0.3, w: 9, h: 0.6,
                 fontSize: 28, bold: true, color: primaryColor
             });
-            slide8.addText('曝光指标', {
-                x: 0.8, y: 1.2, w: 8.5, fontSize: 18, bold: true, color: accentColor
+            slide8.addText('核心指标', {
+                x: 0.8, y: 1.2, w: 8.5, fontSize: 20, bold: true, color: accentColor
             });
-            slide8.addText('• 微博话题阅读量 50亿+\n• 抖音话题播放量 100亿+\n• 小红书笔记曝光 5000万+', {
-                x: 1.0, y: 1.6, w: 8.3, fontSize: 12, color: '666666', lineSpacing: 22
-            });
-            slide8.addText('转化指标', {
-                x: 0.8, y: 3.0, w: 8.5, fontSize: 18, bold: true, color: accentColor
-            });
-            slide8.addText('• 首播收视率/播放量行业前3\n• 会员转化率 15%+\n• 豆瓣评分 7.5+\n• ROI 3:1以上', {
-                x: 1.0, y: 3.4, w: 8.3, fontSize: 12, color: '666666', lineSpacing: 22
+            slide8.addText('• 播放量/点击量\n• 社交媒体互动率\n• 热搜话题数\n• 搜索指数峰值\n• ROI投资回报率', {
+                x: 1.2, y: 1.7, w: 8, fontSize: 14, color: '666666', lineSpacing: 24
             });
             
             // 保存PPT
-            pptx.writeFile({ fileName: plan.dramaName + '_AI定制营销方案_v2.0.pptx' })
+            pptx.writeFile({ fileName: plan.dramaName + '_营销方案.pptx' })
                 .then(() => {
-                    alert('✅ PPT已生成下载！内含8页完整方案！');
+                    alert('PPT已生成下载！');
                 })
                 .catch(err => {
                     console.error('PPT生成失败:', err);
-                    alert('❌ PPT生成失败，请重试！');
+                    alert('PPT生成失败，请重试！');
                 });
         }
+
+        function exportMarkdown() {
+            const content = document.getElementById('resultContent').innerText;
+            const blob = new Blob([content], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${document.getElementById('dramaName').value}_营销方案.md`;
+            a.click();
+        }
+
+        function printPlan() {
+            window.print();
+        }
+
+        function sharePlan() {
+            const url = window.location.href;
+            if (navigator.share) {
+                navigator.share({ title: '大剧营销方案', url: url });
+            } else {
+                navigator.clipboard.writeText(url);
+                alert('链接已复制到剪贴板！');
+            }
+        }
+
+
     </script>
 </body>
 </html>
