@@ -1011,8 +1011,13 @@
             document.getElementById('resultSection').style.display = 'none';
 
             try {
+                // 智能检测后端地址
+                const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:'
+                    ? 'http://localhost:3000'
+                    : (window.BACKEND_URL || 'https://drama-marketing-api.onrender.com');
+
                 // 调用AI后端生成营销方案
-                const response = await fetch('http://localhost:3000/api/generate-drama-marketing', {
+                const response = await fetch(`${API_BASE_URL}/api/generate-drama-marketing`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -1024,7 +1029,7 @@
                 });
 
                 if (!response.ok) {
-                    throw new Error('生成失败，请稍后重试');
+                    throw new Error('后端服务暂时不可用，请稍后重试');
                 }
 
                 const data = await response.json();
