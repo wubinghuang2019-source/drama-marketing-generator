@@ -45,7 +45,7 @@
         }
         
         .container {
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
             position: relative;
             z-index: 1;
@@ -61,6 +61,24 @@
             width: 80px;
             height: 80px;
             margin: 0 auto 20px;
+            filter: drop-shadow(0 2px 12px rgba(221, 118, 148, 0.35)) drop-shadow(0 2px 20px rgba(83, 183, 111, 0.25));
+            animation: logoFloat 4s ease-in-out infinite;
+        }
+
+        @keyframes logoFloat {
+            0%, 100% {
+                transform: translateY(0) scale(1);
+                filter: drop-shadow(0 2px 12px rgba(221, 118, 148, 0.35)) drop-shadow(0 2px 20px rgba(83, 183, 111, 0.25));
+            }
+            50% {
+                transform: translateY(-5px) scale(1.03);
+                filter: drop-shadow(0 5px 18px rgba(221, 118, 148, 0.5)) drop-shadow(0 5px 28px rgba(83, 183, 111, 0.4));
+            }
+        }
+
+        .logo svg {
+            width: 100%;
+            height: 100%;
         }
 
         .header h1 {
@@ -135,16 +153,16 @@
             font-weight: 600;
             color: #262626;
             margin-bottom: 10px;
-            font-size: 0.95em;
+            font-size: 1.05em;
         }
 
         .form-group input,
         .form-group select,
         .form-group textarea {
-            padding: 14px 18px;
+            padding: 16px 20px;
             border: 2px solid #E8E8E8;
             border-radius: 12px;
-            font-size: 1em;
+            font-size: 1.05em;
             transition: all 0.3s ease;
             background: #FAFAFA;
             font-family: inherit;
@@ -152,7 +170,7 @@
 
         .form-group textarea {
             resize: vertical;
-            min-height: 100px;
+            min-height: 120px;
             line-height: 1.6;
         }
 
@@ -386,20 +404,78 @@
         <div class="header">
             <div class="logo">
                 <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="20" y="55" width="60" height="30" rx="3" fill="#53B76F"/>
+                    <!-- 底座 - 带颜色呼吸 -->
+                    <rect x="20" y="55" width="60" height="30" rx="3" fill="#53B76F">
+                        <animate attributeName="fill" values="#53B76F;#62c47f;#53B76F" dur="2.5s" repeatCount="indefinite"/>
+                    </rect>
+                    
+                    <!-- 导演板主体 - 带轻微晃动 -->
                     <g transform="rotate(-15 50 40)">
-                        <rect x="15" y="30" width="70" height="20" rx="2" fill="#DD7694"/>
-                        <rect x="20" y="32" width="8" height="16" fill="white"/>
-                        <rect x="31" y="32" width="8" height="16" fill="white"/>
-                        <rect x="42" y="32" width="8" height="16" fill="white"/>
-                        <rect x="53" y="32" width="8" height="16" fill="white"/>
-                        <rect x="64" y="32" width="8" height="16" fill="white"/>
-                        <rect x="75" y="32" width="8" height="16" fill="white"/>
+                        <animateTransform 
+                            attributeName="transform" 
+                            type="rotate" 
+                            values="-15 50 40;-13 50 40;-15 50 40" 
+                            dur="4s" 
+                            repeatCount="indefinite"/>
+                        
+                        <rect x="15" y="30" width="70" height="20" rx="2" fill="#DD7694">
+                            <animate attributeName="fill" values="#DD7694;#e886a4;#DD7694" dur="2.5s" repeatCount="indefinite"/>
+                        </rect>
+                        
+                        <!-- 黑白条纹 - 波浪闪烁 -->
+                        <rect x="20" y="32" width="8" height="16" fill="white">
+                            <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite" begin="0s"/>
+                        </rect>
+                        <rect x="31" y="32" width="8" height="16" fill="white">
+                            <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite" begin="0.3s"/>
+                        </rect>
+                        <rect x="42" y="32" width="8" height="16" fill="white">
+                            <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite" begin="0.6s"/>
+                        </rect>
+                        <rect x="53" y="32" width="8" height="16" fill="white">
+                            <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite" begin="0.9s"/>
+                        </rect>
+                        <rect x="64" y="32" width="8" height="16" fill="white">
+                            <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite" begin="1.2s"/>
+                        </rect>
+                        <rect x="75" y="32" width="8" height="16" fill="white">
+                            <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite" begin="1.5s"/>
+                        </rect>
                     </g>
-                    <circle cx="22" cy="55" r="3" fill="#262626"/>
-                    <circle cx="78" cy="55" r="3" fill="#262626"/>
-                    <rect x="28" y="63" width="44" height="3" rx="1.5" fill="white" opacity="0.3"/>
-                    <rect x="28" y="70" width="30" height="3" rx="1.5" fill="white" opacity="0.3"/>
+                    
+                    <!-- 螺丝钉 - 轻微脉冲 -->
+                    <circle cx="22" cy="55" r="3" fill="#262626">
+                        <animate attributeName="r" values="3;3.3;3" dur="2s" repeatCount="indefinite"/>
+                    </circle>
+                    <circle cx="78" cy="55" r="3" fill="#262626">
+                        <animate attributeName="r" values="3;3.3;3" dur="2s" repeatCount="indefinite"/>
+                    </circle>
+                    
+                    <!-- 底座纹理 - 呼吸 -->
+                    <rect x="28" y="63" width="44" height="3" rx="1.5" fill="white" opacity="0.3">
+                        <animate attributeName="opacity" values="0.3;0.7;0.3" dur="2.5s" repeatCount="indefinite"/>
+                    </rect>
+                    <rect x="28" y="70" width="30" height="3" rx="1.5" fill="white" opacity="0.3">
+                        <animate attributeName="opacity" values="0.3;0.7;0.3" dur="3s" repeatCount="indefinite"/>
+                    </rect>
+                    
+                    <!-- 装饰星星 - 柔和闪烁 -->
+                    <circle cx="15" cy="22" r="2" fill="#DD7694" opacity="0.7">
+                        <animate attributeName="opacity" values="0.7;0.2;0.7" dur="2s" repeatCount="indefinite"/>
+                        <animate attributeName="r" values="2;2.3;2" dur="2s" repeatCount="indefinite"/>
+                    </circle>
+                    <circle cx="85" cy="25" r="1.8" fill="#53B76F" opacity="0.6">
+                        <animate attributeName="opacity" values="0.6;0.15;0.6" dur="2.3s" repeatCount="indefinite"/>
+                        <animate attributeName="r" values="1.8;2.1;1.8" dur="2.3s" repeatCount="indefinite"/>
+                    </circle>
+                    <circle cx="13" cy="80" r="1.6" fill="#DD7694" opacity="0.65">
+                        <animate attributeName="opacity" values="0.65;0.15;0.65" dur="2.5s" repeatCount="indefinite"/>
+                        <animate attributeName="r" values="1.6;1.9;1.6" dur="2.5s" repeatCount="indefinite"/>
+                    </circle>
+                    <circle cx="87" cy="82" r="1.9" fill="#53B76F" opacity="0.7">
+                        <animate attributeName="opacity" values="0.7;0.2;0.7" dur="2.2s" repeatCount="indefinite"/>
+                        <animate attributeName="r" values="1.9;2.2;1.9" dur="2.2s" repeatCount="indefinite"/>
+                    </circle>
                 </svg>
             </div>
             <h1><span class="highlight">大剧营销方案生成器</span> PRO <span class="version-badge">v2.0 AI定制版</span></h1>
