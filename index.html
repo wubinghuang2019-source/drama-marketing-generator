@@ -987,7 +987,7 @@
         }
 
         // 主生成函数
-        function generatePlan() {
+        async function generatePlan() {
             const dramaName = document.getElementById('dramaName').value;
             const dramaType = document.getElementById('dramaType').value;
             const platform = document.getElementById('platform').value;
@@ -1010,22 +1010,63 @@
             document.getElementById('loading').style.display = 'block';
             document.getElementById('resultSection').style.display = 'none';
 
-            setTimeout(() => {
-                const plan = { 
-                    dramaName, dramaType, platform, budget, audience, stage, 
+            try {
+                // 调用AI后端生成营销方案
+                const response = await fetch('http://localhost:3000/api/generate-drama-marketing', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        dramaName, dramaType, platform, budget, audience, stage,
+                        coreSelling, plotSummary, emotionCore, targetEmotion, castType, ipType
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('生成失败，请稍后重试');
+                }
+
+                const data = await response.json();
+                
+                const plan = {
+                    dramaName, dramaType, platform, budget, audience, stage,
                     coreSelling, plotSummary, emotionCore, targetEmotion, castType, ipType,
-                    timestamp: new Date().toLocaleString('zh-CN') 
+                    timestamp: new Date().toLocaleString('zh-CN'),
+                    aiResult: data.result // AI生成的完整内容
                 };
                 
                 window.currentPlan = plan;
-                displayResult(plan);
+                displayAIResult(plan);
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('resultSection').style.display = 'block';
                 document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
-            }, 3000);
+            } catch (error) {
+                console.error('生成失败：', error);
+                alert('生成失败：' + error.message + '\\n\\n请确保后端服务正在运行');
+                document.getElementById('loading').style.display = 'none';
+            }
         }
 
-        // 渲染结果
+        // 渲染AI生成的结果
+        function displayAIResult(plan) {
+            const resultDiv = document.getElementById('result');
+            
+            // 直接显示AI生成的Markdown内容（转HTML）
+            const htmlContent = plan.aiResult
+                .replace(/\n\n/g, '</p><p>')
+                .replace(/\n/g, '<br>')
+                .replace(/^/, '<p>')
+                .replace(/$/, '</p>')
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/### (.*?)<br>/g, '<h3>$1</h3>')
+                .replace(/## (.*?)<br>/g, '<h2>$1</h2>')
+                .replace(/# (.*?)<br>/g, '<h1>$1</h1>');
+            
+            resultDiv.innerHTML = htmlContent;
+        }
+
+        // 渲染结果（保留原有模板生成功能）
         function displayResult(plan) {
             const insights = getUserInsights(plan);
             const topics = getTopicStrategy(plan);
