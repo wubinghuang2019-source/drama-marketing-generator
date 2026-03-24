@@ -1053,16 +1053,23 @@
                     : (window.BACKEND_URL || 'https://drama-marketing-api.onrender.com');
 
                 // 调用AI后端生成营销方案
-                const response = await fetch(`${API_BASE_URL}/api/generate-drama-marketing`, {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 120000); // 120秒超时
+                
+                const response = await fetch(`${API_BASE_URL}/api/generate-marketing-plan`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        dramaName, dramaType, platform, budget, audience, stage,
-                        coreSelling, plotSummary, emotionCore, targetEmotion, castType, ipType
-                    })
-                });
+                        dramaInfo: {
+                            dramaName, dramaType, platform, budget, audience, stage,
+                            coreSelling, plotSummary, emotionCore, targetEmotion, actors: castType, uniquePoint: ipType
+                        },
+                        planType: 'general'
+                    }),
+                    signal: controller.signal
+                }).finally(() => clearTimeout(timeoutId));
 
                 if (!response.ok) {
                     throw new Error('后端服务暂时不可用，请稍后重试');
@@ -1070,11 +1077,15 @@
 
                 const data = await response.json();
                 
+                if (!data.success) {
+                    throw new Error(data.error || '生成失败');
+                }
+                
                 const plan = {
                     dramaName, dramaType, platform, budget, audience, stage,
                     coreSelling, plotSummary, emotionCore, targetEmotion, castType, ipType,
                     timestamp: new Date().toLocaleString('zh-CN'),
-                    aiResult: data.result // AI生成的完整内容
+                    aiResult: data.plan // AI生成的完整内容
                 };
                 
                 window.currentPlan = plan;
@@ -1084,7 +1095,13 @@
                 document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
             } catch (error) {
                 console.error('生成失败：', error);
-                alert('生成失败：' + error.message + '\\n\\n请确保后端服务正在运行');
+                let errorMsg = error.message;
+                if (error.name === 'AbortError') {
+                    errorMsg = '请求超时，后端服务可能正在唤醒，请稍后重试';
+                } else if (errorMsg.includes('fetch')) {
+                    errorMsg = '无法连接到后端服务，请检查网络或稍后重试';
+                }
+                alert('生成失败：' + errorMsg);
                 document.getElementById('loading').style.display = 'none';
             }
         }
