@@ -601,13 +601,49 @@
                     <label>目标受众 *</label>
                     <select id="audience">
                         <option value="">请选择...</option>
-                        <option value="18-25岁年轻女性">18-25岁年轻女性</option>
-                        <option value="25-35岁都市女性">25-35岁都市女性</option>
-                        <option value="18-30岁男性">18-30岁男性</option>
-                        <option value="35-50岁中年观众">35-50岁中年观众</option>
-                        <option value="全年龄段家庭观众">全年龄段家庭观众</option>
-                        <option value="学生党">学生党</option>
-                        <option value="职场人群">职场人群</option>
+                        
+                        <!-- 性别维度 -->
+                        <optgroup label="🎯 性别维度">
+                            <option value="全女性观众">全女性观众（18-50岁女性）</option>
+                            <option value="全男性观众">全男性观众（18-50岁男性）</option>
+                            <option value="全年龄段观众">全年龄段观众（不分性别）</option>
+                        </optgroup>
+                        
+                        <!-- 女性细分 -->
+                        <optgroup label="👧 女性细分">
+                            <option value="18-25岁年轻女性">18-25岁年轻女性（Z世代）</option>
+                            <option value="25-30岁都市女性">25-30岁都市女性（职场新锐）</option>
+                            <option value="30-40岁成熟女性">30-40岁成熟女性（轻熟女）</option>
+                            <option value="40-50岁中年女性">40-50岁中年女性（家庭主力）</option>
+                            <option value="少女观众">少女观众（14-18岁）</option>
+                        </optgroup>
+                        
+                        <!-- 男性细分 -->
+                        <optgroup label="👨 男性细分">
+                            <option value="18-25岁年轻男性">18-25岁年轻男性（Z世代）</option>
+                            <option value="25-35岁都市男性">25-35岁都市男性（职场精英）</option>
+                            <option value="35-50岁中年男性">35-50岁中年男性（社会中坚）</option>
+                            <option value="少年观众">少年观众（14-18岁）</option>
+                        </optgroup>
+                        
+                        <!-- 场景/身份 -->
+                        <optgroup label="🎯 场景/身份">
+                            <option value="学生党">学生党（大学生、高中生）</option>
+                            <option value="职场人群">职场人群（白领、打工人）</option>
+                            <option value="宝妈群体">宝妈群体（育儿妈妈）</option>
+                            <option value="银发族">银发族（50岁以上）</option>
+                            <option value="家庭观众">家庭观众（全家一起看）</option>
+                        </optgroup>
+                        
+                        <!-- 圈层/兴趣 -->
+                        <optgroup label="🎨 圈层/兴趣">
+                            <option value="二次元群体">二次元群体（ACG爱好者）</option>
+                            <option value="国风爱好者">国风爱好者（汉服、传统文化）</option>
+                            <option value="悬疑推理粉">悬疑推理粉（烧脑剧爱好者）</option>
+                            <option value="耽美圈">耽美圈（CP粉、腐女）</option>
+                            <option value="追星族">追星族（明星粉丝）</option>
+                            <option value="剧粉群体">剧粉群体（重度追剧用户）</option>
+                        </optgroup>
                     </select>
                 </div>
                 <div class="form-group">
