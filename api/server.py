@@ -16,7 +16,7 @@ app = Flask(__name__)
 CORS(app)  # 允许跨域
 
 # 配置
-ALIYUN_API_KEY = "sk-52b66bbf97d9455ab5c65182adae57a5"
+ALIYUN_API_KEY = os.getenv("DASHSCOPE_API_KEY", "")
 ALIYUN_API_ENDPOINT = "https://dashscope.aliyuncs.com/compatible-mode/v1"
 MODEL_NAME = "qwen-max"
 PORT = int(os.getenv('PORT', 3000))
