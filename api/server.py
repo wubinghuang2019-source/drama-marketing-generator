@@ -287,6 +287,162 @@ def build_user_prompt(drama_info):
     return prompt
 
 
+@app.route('/api/generate-drama-marketing', methods=['POST'])
+def generate_drama_marketing():
+    """大剧版营销方案生成接口"""
+    try:
+        data = request.json
+        print(f"收到大剧版生成请求: {data.get('dramaName')}")
+        
+        # 构建prompt
+        system_prompt = """你是一位资深的电视剧营销策划专家，具备10年以上行业经验。
+你精通各类剧集的营销策略、全平台营销（微博、抖音、B站、小红书、视频号）。
+请基于用户提供的剧集信息，生成一份专业、创新、可执行的营销方案。"""
+        
+        user_prompt = f"""请为以下剧集生成营销方案：
+
+**剧集名称**：{data.get('dramaName')}
+**剧集类型**：{data.get('dramaType')}
+**播出平台**：{data.get('platform')}
+**预算范围**：{data.get('budget')}
+**目标受众**：{data.get('audience')}
+**营销阶段**：{data.get('stage')}
+**核心卖点**：{data.get('coreSelling')}
+**剧情概述**：{data.get('plotSummary')}
+**情感内核**：{data.get('emotionCore')}
+**目标情感**：{data.get('targetEmotion')}
+**演员类型**：{data.get('castType')}
+**IP类型**：{data.get('ipType')}
+
+请生成一份完整的营销方案，包括：
+1. 核心策略
+2. 分平台内容规划
+3. 关键营销节点
+4. 预算分配建议
+5. 风险预案
+
+使用Markdown格式，结构清晰，重点加粗。"""
+        
+        # 调用阿里云API
+        headers = {
+            'Authorization': f'Bearer {ALIYUN_API_KEY}',
+            'Content-Type': 'application/json'
+        }
+        
+        payload = {
+            'model': MODEL_NAME,
+            'messages': [
+                {'role': 'system', 'content': system_prompt},
+                {'role': 'user', 'content': user_prompt}
+            ],
+            'temperature': 0.7,
+            'max_tokens': 4000
+        }
+        
+        response = requests.post(
+            f'{ALIYUN_API_ENDPOINT}/chat/completions',
+            headers=headers,
+            json=payload,
+            timeout=60
+        )
+        
+        response.raise_for_status()
+        result = response.json()
+        generated_plan = result['choices'][0]['message']['content']
+        
+        print("生成成功!")
+        
+        return jsonify({
+            'success': True,
+            'result': generated_plan
+        })
+        
+    except Exception as e:
+        print(f"错误: {e}")
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+
+@app.route('/api/generate-male-drama-marketing', methods=['POST'])
+def generate_male_drama_marketing():
+    """男性向剧集营销方案生成接口"""
+    try:
+        data = request.json
+        print(f"收到男性版生成请求: {data.get('dramaName')}")
+        
+        # 构建prompt
+        system_prompt = """你是男性向内容营销专家，深刻理解男性观众心理和消费习惯。
+你精通硬核内容营销、B站、抖音、豆瓣等平台的男性向传播策略。
+请生成专业、有洞察力的男性向营销方案。"""
+        
+        user_prompt = f"""请为以下男性向剧集生成营销方案：
+
+**剧集名称**：{data.get('dramaName')}
+**剧集类型**：{data.get('dramaType')}
+**播出平台**：{data.get('platform')}
+**预算范围**：{data.get('budget')}
+**目标受众**：{data.get('audience')}
+**营销阶段**：{data.get('stage')}
+**核心卖点**：{data.get('coreSelling')}
+**剧情概述**：{data.get('plotSummary')}
+**情感内核**：{data.get('emotionCore')}
+**硬核元素**：{data.get('hardcoreElement')}
+**男性痛点**：{data.get('malePainPoint')}
+**成长主题**：{data.get('growthTheme')}
+
+请生成男性向营销方案，重点关注：
+1. 男性用户心理洞察
+2. B站、抖音、豆瓣等平台策略
+3. 硬核内容切入点
+4. UP主/KOL合作策略
+5. 口碑发酵路径
+
+使用Markdown格式，语言硬核专业。"""
+        
+        # 调用阿里云API
+        headers = {
+            'Authorization': f'Bearer {ALIYUN_API_KEY}',
+            'Content-Type': 'application/json'
+        }
+        
+        payload = {
+            'model': MODEL_NAME,
+            'messages': [
+                {'role': 'system', 'content': system_prompt},
+                {'role': 'user', 'content': user_prompt}
+            ],
+            'temperature': 0.7,
+            'max_tokens': 4000
+        }
+        
+        response = requests.post(
+            f'{ALIYUN_API_ENDPOINT}/chat/completions',
+            headers=headers,
+            json=payload,
+            timeout=60
+        )
+        
+        response.raise_for_status()
+        result = response.json()
+        generated_plan = result['choices'][0]['message']['content']
+        
+        print("生成成功!")
+        
+        return jsonify({
+            'success': True,
+            'result': generated_plan
+        })
+        
+    except Exception as e:
+        print(f"错误: {e}")
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+
 if __name__ == '__main__':
     print('=' * 60)
     print('🚀 营销方案生成器 API 服务启动成功！(Python 版)')
