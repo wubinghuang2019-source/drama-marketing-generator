@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 """
 营销方案生成器 API 服务 (Python 版本)
-基于阿里云百炼大模型
+基于阿里云百炼大模型 - 支持流式响应
 """
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, Response, stream_with_context
 from flask_cors import CORS
 import requests
 import os
@@ -28,13 +28,14 @@ def health_check():
     return jsonify({
         'status': 'ok',
         'message': 'Marketing API Server is running',
-        'timestamp': datetime.now().isoformat()
+        'timestamp': datetime.now().isoformat(),
+        'api_key_configured': bool(ALIYUN_API_KEY)
     })
 
 
 @app.route('/api/generate-marketing-plan', methods=['POST'])
 def generate_marketing_plan():
-    """营销方案生成接口"""
+    """营销方案生成接口 - 流式响应"""
     try:
         data = request.json
         drama_info = data.get('dramaInfo', {})
@@ -53,71 +54,89 @@ def generate_marketing_plan():
         system_prompt = get_system_prompt(plan_type)
         user_prompt = build_user_prompt(drama_info)
         
-        print("调用阿里云百炼 API...")
+        print("调用阿里云百炼 API (流式)...")
         
-        # 调用阿里云百炼 API
-        headers = {
-            'Authorization': f'Bearer {ALIYUN_API_KEY}',
-            'Content-Type': 'application/json'
-        }
+        def generate():
+            """流式生成器"""
+            try:
+                # 调用阿里云百炼 API - 流式
+                headers = {
+                    'Authorization': f'Bearer {ALIYUN_API_KEY}',
+                    'Content-Type': 'application/json'
+                }
+                
+                payload = {
+                    'model': MODEL_NAME,
+                    'messages': [
+                        {'role': 'system', 'content': system_prompt},
+                        {'role': 'user', 'content': user_prompt}
+                    ],
+                    'temperature': 0.7,
+                    'max_tokens': 4000,
+                    'stream': True  # 启用流式
+                }
+                
+                response = requests.post(
+                    f'{ALIYUN_API_ENDPOINT}/chat/completions',
+                    headers=headers,
+                    json=payload,
+                    stream=True,  # 流式接收
+                    timeout=120
+                )
+                
+                response.raise_for_status()
+                
+                # 逐块发送数据
+                for line in response.iter_lines():
+                    if line:
+                        line = line.decode('utf-8')
+                        if line.startswith('data: '):
+                            data_str = line[6:]  # 去掉 'data: ' 前缀
+                            if data_str.strip() == '[DONE]':
+                                yield f"data: [DONE]\n\n"
+                                break
+                            try:
+                                chunk = json.loads(data_str)
+                                if 'choices' in chunk and len(chunk['choices']) > 0:
+                                    delta = chunk['choices'][0].get('delta', {})
+                                    content = delta.get('content', '')
+                                    if content:
+                                        # 发送 SSE 格式数据
+                                        yield f"data: {json.dumps({'content': content}, ensure_ascii=False)}\n\n"
+                            except json.JSONDecodeError:
+                                continue
+                
+                print("流式生成完成!")
+                
+            except requests.exceptions.Timeout:
+                yield f"data: {json.dumps({'error': '请求超时，请重试'}, ensure_ascii=False)}\n\n"
+            except requests.exceptions.HTTPError as e:
+                error_msg = '生成失败，请稍后重试'
+                if e.response.status_code == 401:
+                    error_msg = 'API Key 无效，请检查配置'
+                elif e.response.status_code == 429:
+                    error_msg = 'API 调用频率超限，请稍后重试'
+                print(f"API 错误: {e}")
+                yield f"data: {json.dumps({'error': error_msg}, ensure_ascii=False)}\n\n"
+            except Exception as e:
+                import traceback
+                print(f"服务器错误: {e}")
+                traceback.print_exc()
+                yield f"data: {json.dumps({'error': '服务器内部错误', 'details': str(e)}, ensure_ascii=False)}\n\n"
         
-        payload = {
-            'model': MODEL_NAME,
-            'messages': [
-                {'role': 'system', 'content': system_prompt},
-                {'role': 'user', 'content': user_prompt}
-            ],
-            'temperature': 0.7,
-            'max_tokens': 4000,
-            'stream': False
-        }
-        
-        response = requests.post(
-            f'{ALIYUN_API_ENDPOINT}/chat/completions',
-            headers=headers,
-            json=payload,
-            timeout=60
+        return Response(
+            stream_with_context(generate()),
+            mimetype='text/event-stream',
+            headers={
+                'Cache-Control': 'no-cache',
+                'X-Accel-Buffering': 'no',
+                'Connection': 'keep-alive'
+            }
         )
-        
-        response.raise_for_status()
-        result = response.json()
-        
-        # 提取生成的内容
-        generated_plan = result['choices'][0]['message']['content']
-        usage = result['usage']
-        
-        print(f"生成成功! Tokens: {usage}")
-        
-        return jsonify({
-            'success': True,
-            'plan': generated_plan,
-            'tokens': usage,
-            'model': MODEL_NAME
-        })
-        
-    except requests.exceptions.Timeout:
-        return jsonify({
-            'success': False,
-            'error': '请求超时，请重试'
-        }), 500
-        
-    except requests.exceptions.HTTPError as e:
-        error_msg = '生成失败，请稍后重试'
-        if e.response.status_code == 401:
-            error_msg = 'API Key 无效，请检查配置'
-        elif e.response.status_code == 429:
-            error_msg = 'API 调用频率超限，请稍后重试'
-        
-        print(f"API 错误: {e}")
-        return jsonify({
-            'success': False,
-            'error': error_msg
-        }), e.response.status_code
         
     except Exception as e:
         import traceback
         print(f"服务器错误: {e}")
-        print("详细错误信息:")
         traceback.print_exc()
         return jsonify({
             'success': False,
@@ -229,26 +248,25 @@ def build_user_prompt(drama_info):
 - **播出平台**：{drama_info.get('platform', '未指定')}
 - **营销预算**：{drama_info.get('budget', '未指定')}
 - **当前阶段**：{drama_info.get('stage', '未指定')}
-- **目标受众**：{drama_info.get('audience', '未指定')}
-"""
+- **目标受众**：{drama_info.get('audience', '未指定')}"""
 
     # 添加可选信息
     if drama_info.get('actors'):
-        prompt += f"- **主演阵容**：{drama_info['actors']}\n"
+        prompt += f"\n- **主演阵容**：{drama_info['actors']}"
     if drama_info.get('uniquePoint'):
-        prompt += f"- **独特卖点**：{drama_info['uniquePoint']}\n"
+        prompt += f"\n- **独特卖点**：{drama_info['uniquePoint']}"
     if drama_info.get('coreSelling'):
-        prompt += f"- **核心卖点**：{drama_info['coreSelling']}\n"
+        prompt += f"\n- **核心卖点**：{drama_info['coreSelling']}"
     if drama_info.get('plotSummary'):
-        prompt += f"- **剧情概要**：{drama_info['plotSummary']}\n"
+        prompt += f"\n- **剧情概要**：{drama_info['plotSummary']}"
     if drama_info.get('hardcore'):
-        prompt += f"- **硬核程度**：{drama_info['hardcore']}\n"
+        prompt += f"\n- **硬核程度**：{drama_info['hardcore']}"
     if drama_info.get('audienceType'):
-        prompt += f"- **受众类型**：{drama_info['audienceType']}\n"
+        prompt += f"\n- **受众类型**：{drama_info['audienceType']}"
     if drama_info.get('hotTopic'):
-        prompt += f"- **可借势热点**：{drama_info['hotTopic']}\n"
+        prompt += f"\n- **可借势热点**：{drama_info['hotTopic']}"
     if drama_info.get('competitors'):
-        prompt += f"- **竞品剧集**：{drama_info['competitors']}\n"
+        prompt += f"\n- **竞品剧集**：{drama_info['competitors']}"
     
     prompt += """
 
@@ -287,9 +305,10 @@ def build_user_prompt(drama_info):
     return prompt
 
 
+# 保留旧接口兼容性（非流式，用于 fallback）
 @app.route('/api/generate-drama-marketing', methods=['POST'])
 def generate_drama_marketing():
-    """大剧版营销方案生成接口"""
+    """大剧版营销方案生成接口 - 流式响应"""
     try:
         data = request.json
         print(f"收到大剧版生成请求: {data.get('dramaName')}")
@@ -323,39 +342,59 @@ def generate_drama_marketing():
 
 使用Markdown格式，结构清晰，重点加粗。"""
         
-        # 调用阿里云API
-        headers = {
-            'Authorization': f'Bearer {ALIYUN_API_KEY}',
-            'Content-Type': 'application/json'
-        }
+        def generate():
+            headers = {
+                'Authorization': f'Bearer {ALIYUN_API_KEY}',
+                'Content-Type': 'application/json'
+            }
+            
+            payload = {
+                'model': MODEL_NAME,
+                'messages': [
+                    {'role': 'system', 'content': system_prompt},
+                    {'role': 'user', 'content': user_prompt}
+                ],
+                'temperature': 0.7,
+                'max_tokens': 4000,
+                'stream': True
+            }
+            
+            response = requests.post(
+                f'{ALIYUN_API_ENDPOINT}/chat/completions',
+                headers=headers,
+                json=payload,
+                stream=True,
+                timeout=120
+            )
+            
+            response.raise_for_status()
+            
+            for line in response.iter_lines():
+                if line:
+                    line = line.decode('utf-8')
+                    if line.startswith('data: '):
+                        data_str = line[6:]
+                        if data_str.strip() == '[DONE]':
+                            yield f"data: [DONE]\n\n"
+                            break
+                        try:
+                            chunk = json.loads(data_str)
+                            if 'choices' in chunk and len(chunk['choices']) > 0:
+                                delta = chunk['choices'][0].get('delta', {})
+                                content = delta.get('content', '')
+                                if content:
+                                    yield f"data: {json.dumps({'content': content}, ensure_ascii=False)}\n\n"
+                        except json.JSONDecodeError:
+                            continue
         
-        payload = {
-            'model': MODEL_NAME,
-            'messages': [
-                {'role': 'system', 'content': system_prompt},
-                {'role': 'user', 'content': user_prompt}
-            ],
-            'temperature': 0.7,
-            'max_tokens': 4000
-        }
-        
-        response = requests.post(
-            f'{ALIYUN_API_ENDPOINT}/chat/completions',
-            headers=headers,
-            json=payload,
-            timeout=60
+        return Response(
+            stream_with_context(generate()),
+            mimetype='text/event-stream',
+            headers={
+                'Cache-Control': 'no-cache',
+                'X-Accel-Buffering': 'no'
+            }
         )
-        
-        response.raise_for_status()
-        result = response.json()
-        generated_plan = result['choices'][0]['message']['content']
-        
-        print("生成成功!")
-        
-        return jsonify({
-            'success': True,
-            'result': generated_plan
-        })
         
     except Exception as e:
         print(f"错误: {e}")
@@ -367,7 +406,7 @@ def generate_drama_marketing():
 
 @app.route('/api/generate-male-drama-marketing', methods=['POST'])
 def generate_male_drama_marketing():
-    """男性向剧集营销方案生成接口"""
+    """男性向剧集营销方案生成接口 - 流式响应"""
     try:
         data = request.json
         print(f"收到男性版生成请求: {data.get('dramaName')}")
@@ -401,39 +440,59 @@ def generate_male_drama_marketing():
 
 使用Markdown格式，语言硬核专业。"""
         
-        # 调用阿里云API
-        headers = {
-            'Authorization': f'Bearer {ALIYUN_API_KEY}',
-            'Content-Type': 'application/json'
-        }
+        def generate():
+            headers = {
+                'Authorization': f'Bearer {ALIYUN_API_KEY}',
+                'Content-Type': 'application/json'
+            }
+            
+            payload = {
+                'model': MODEL_NAME,
+                'messages': [
+                    {'role': 'system', 'content': system_prompt},
+                    {'role': 'user', 'content': user_prompt}
+                ],
+                'temperature': 0.7,
+                'max_tokens': 4000,
+                'stream': True
+            }
+            
+            response = requests.post(
+                f'{ALIYUN_API_ENDPOINT}/chat/completions',
+                headers=headers,
+                json=payload,
+                stream=True,
+                timeout=120
+            )
+            
+            response.raise_for_status()
+            
+            for line in response.iter_lines():
+                if line:
+                    line = line.decode('utf-8')
+                    if line.startswith('data: '):
+                        data_str = line[6:]
+                        if data_str.strip() == '[DONE]':
+                            yield f"data: [DONE]\n\n"
+                            break
+                        try:
+                            chunk = json.loads(data_str)
+                            if 'choices' in chunk and len(chunk['choices']) > 0:
+                                delta = chunk['choices'][0].get('delta', {})
+                                content = delta.get('content', '')
+                                if content:
+                                    yield f"data: {json.dumps({'content': content}, ensure_ascii=False)}\n\n"
+                        except json.JSONDecodeError:
+                            continue
         
-        payload = {
-            'model': MODEL_NAME,
-            'messages': [
-                {'role': 'system', 'content': system_prompt},
-                {'role': 'user', 'content': user_prompt}
-            ],
-            'temperature': 0.7,
-            'max_tokens': 4000
-        }
-        
-        response = requests.post(
-            f'{ALIYUN_API_ENDPOINT}/chat/completions',
-            headers=headers,
-            json=payload,
-            timeout=60
+        return Response(
+            stream_with_context(generate()),
+            mimetype='text/event-stream',
+            headers={
+                'Cache-Control': 'no-cache',
+                'X-Accel-Buffering': 'no'
+            }
         )
-        
-        response.raise_for_status()
-        result = response.json()
-        generated_plan = result['choices'][0]['message']['content']
-        
-        print("生成成功!")
-        
-        return jsonify({
-            'success': True,
-            'result': generated_plan
-        })
         
     except Exception as e:
         print(f"错误: {e}")
@@ -445,13 +504,14 @@ def generate_male_drama_marketing():
 
 if __name__ == '__main__':
     print('=' * 60)
-    print('🚀 营销方案生成器 API 服务启动成功！(Python 版)')
+    print('🚀 营销方案生成器 API 服务启动成功！(Python 版 - 流式响应)')
     print('=' * 60)
     print(f'📍 服务地址: http://localhost:{PORT}')
     print(f'💚 健康检查: http://localhost:{PORT}/health')
     print(f'🤖 AI模型: {MODEL_NAME}')
     print(f'🔑 API Key: {"已配置 ✓" if ALIYUN_API_KEY else "未配置 ✗"}')
+    print(f'🌊 流式响应: 已启用')
     print('=' * 60)
     print('按 Ctrl+C 停止服务\n')
     
-    app.run(host='0.0.0.0', port=PORT, debug=False)
+    app.run(host='0.0.0.0', port=PORT, debug=False, threaded=True)

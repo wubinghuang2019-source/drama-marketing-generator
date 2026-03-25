@@ -1043,8 +1043,11 @@
                 return;
             }
 
+            // 显示加载状态和结果区域（实时显示）
             document.getElementById('loading').style.display = 'block';
-            document.getElementById('resultSection').style.display = 'none';
+            document.getElementById('resultSection').style.display = 'block';
+            document.getElementById('result').innerHTML = '<p style="color:#888;">🚀 AI 正在生成方案，请稍候...</p>';
+            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
 
             try {
                 // 智能检测后端地址
@@ -1052,10 +1055,7 @@
                     ? 'http://localhost:3000'
                     : (window.BACKEND_URL || 'https://drama-marketing-api.onrender.com');
 
-                // 调用AI后端生成营销方案
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 120000); // 120秒超时
-                
+                // 调用AI后端生成营销方案（流式响应）
                 const response = await fetch(`${API_BASE_URL}/api/generate-marketing-plan`, {
                     method: 'POST',
                     headers: {
@@ -1067,43 +1067,86 @@
                             coreSelling, plotSummary, emotionCore, targetEmotion, actors: castType, uniquePoint: ipType
                         },
                         planType: 'general'
-                    }),
-                    signal: controller.signal
-                }).finally(() => clearTimeout(timeoutId));
+                    })
+                });
 
                 if (!response.ok) {
                     throw new Error('后端服务暂时不可用，请稍后重试');
                 }
 
-                const data = await response.json();
+                // 读取流式响应
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let fullContent = '';
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    
+                    const chunk = decoder.decode(value, { stream: true });
+                    const lines = chunk.split('\n');
+                    
+                    for (const line of lines) {
+                        if (line.startsWith('data: ')) {
+                            const data = line.slice(6);
+                            if (data === '[DONE]') continue;
+                            
+                            try {
+                                const json = JSON.parse(data);
+                                if (json.content) {
+                                    fullContent += json.content;
+                                    // 实时更新显示
+                                    updateResultPreview(fullContent);
+                                }
+                                if (json.error) {
+                                    throw new Error(json.error);
+                                }
+                            } catch (e) {
+                                if (e.message && !e.message.includes('JSON')) {
+                                    throw e;
+                                }
+                            }
+                        }
+                    }
+                }
                 
-                if (!data.success) {
-                    throw new Error(data.error || '生成失败');
+                if (!fullContent) {
+                    throw new Error('生成内容为空，请重试');
                 }
                 
                 const plan = {
                     dramaName, dramaType, platform, budget, audience, stage,
                     coreSelling, plotSummary, emotionCore, targetEmotion, castType, ipType,
                     timestamp: new Date().toLocaleString('zh-CN'),
-                    aiResult: data.plan // AI生成的完整内容
+                    aiResult: fullContent
                 };
                 
                 window.currentPlan = plan;
                 displayAIResult(plan);
                 document.getElementById('loading').style.display = 'none';
-                document.getElementById('resultSection').style.display = 'block';
-                document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
             } catch (error) {
                 console.error('生成失败：', error);
-                let errorMsg = error.message;
-                if (error.name === 'AbortError') {
-                    errorMsg = '请求超时，后端服务可能正在唤醒，请稍后重试';
-                } else if (errorMsg.includes('fetch')) {
+                let errorMsg = error.message || '未知错误';
+                if (errorMsg.includes('fetch') || errorMsg.includes('network')) {
                     errorMsg = '无法连接到后端服务，请检查网络或稍后重试';
                 }
-                alert('生成失败：' + errorMsg);
+                document.getElementById('result').innerHTML = `<p style="color:#e74c3c;">❌ 生成失败：${errorMsg}</p>`;
                 document.getElementById('loading').style.display = 'none';
             }
+        }
+        
+        // 实时更新结果预览
+        function updateResultPreview(content) {
+            const resultDiv = document.getElementById('result');
+            // 简单的 Markdown 转 HTML
+            const htmlContent = content
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/### (.*?)(\n|$)/g, '<h3>$1</h3>')
+                .replace(/## (.*?)(\n|$)/g, '<h2>$1</h2>')
+                .replace(/# (.*?)(\n|$)/g, '<h1>$1</h1>')
+                .replace(/\n\n/g, '</p><p>')
+                .replace(/\n/g, '<br>');
+            resultDiv.innerHTML = '<p>' + htmlContent + '</p>';
         }
 
         // 渲染AI生成的结果
