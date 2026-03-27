@@ -1036,7 +1036,7 @@
                     currentController.abort();
                     currentController = null;
                     document.getElementById('loading').style.display = 'none';
-                    const resultDiv = document.getElementById('result');
+                    const resultDiv = document.getElementById('resultContent');
                     if (resultDiv) {
                         resultDiv.innerHTML = '<p style="color:#f39c12;">⚠️ 已取消生成</p>';
                     }
@@ -1075,7 +1075,7 @@
             // 显示加载状态和结果区域（实时显示）
             document.getElementById('loading').style.display = 'block';
             document.getElementById('resultSection').style.display = 'block';
-            document.getElementById('result').innerHTML = '<p style="color:#888;">🚀 AI 正在生成方案，请稍候...</p>';
+            document.getElementById('resultContent').innerHTML = '<p style="color:#888;">🚀 AI 正在生成方案，请稍候...</p>';
             document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
 
             try {
@@ -1187,14 +1187,18 @@
                 } else if (errorMsg.includes('超时') || errorMsg.includes('timeout')) {
                     errorMsg = '⏱️ ' + errorMsg + '\n\n💡 提示：AI 生成需要时间，如果多次超时，请尝试简化输入内容';
                 }
-                document.getElementById('result').innerHTML = `<p style="color:#e74c3c;">❌ 生成失败：${errorMsg}</p>`;
+                document.getElementById('resultContent').innerHTML = `<p style="color:#e74c3c;">❌ 生成失败：${errorMsg}</p>`;
                 document.getElementById('loading').style.display = 'none';
             }
         }
         
         // 实时更新结果预览
         function updateResultPreview(content) {
-            const resultDiv = document.getElementById('result');
+            const resultDiv = document.getElementById('resultContent');
+            if (!resultDiv) {
+                console.error('resultContent元素不存在!');
+                return;
+            }
             // 简单的 Markdown 转 HTML
             const htmlContent = content
                 .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
@@ -1204,11 +1208,12 @@
                 .replace(/\n\n/g, '</p><p>')
                 .replace(/\n/g, '<br>');
             resultDiv.innerHTML = '<p>' + htmlContent + '</p>';
+            console.log('已更新内容,长度:', content.length);
         }
 
         // 渲染AI生成的结果
         function displayAIResult(plan) {
-            const resultDiv = document.getElementById('result');
+            const resultDiv = document.getElementById('resultContent');
             
             // 直接显示AI生成的Markdown内容（转HTML）
             const htmlContent = plan.aiResult
