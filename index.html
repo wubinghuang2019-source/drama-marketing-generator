@@ -1030,11 +1030,24 @@
 
         // 取消生成
         function cancelGeneration() {
+            console.log('取消按钮被点击, currentController:', currentController);
             if (currentController) {
-                currentController.abort();
-                currentController = null;
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('result').innerHTML = '<p style="color:#f39c12;">⚠️ 已取消生成</p>';
+                try {
+                    currentController.abort();
+                    currentController = null;
+                    document.getElementById('loading').style.display = 'none';
+                    const resultDiv = document.getElementById('result');
+                    if (resultDiv) {
+                        resultDiv.innerHTML = '<p style="color:#f39c12;">⚠️ 已取消生成</p>';
+                    }
+                    alert('已取消生成');
+                } catch (e) {
+                    console.error('取消失败:', e);
+                    alert('取消失败: ' + e.message);
+                }
+            } else {
+                console.log('没有正在进行的请求');
+                alert('当前没有正在进行的生成任务');
             }
         }
 
