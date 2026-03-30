@@ -1348,7 +1348,15 @@
         function addSectionControls() {
             const h2Elements = document.querySelectorAll('#resultContent h2');
             
+            console.log(`找到 ${h2Elements.length} 个H2标题,准备添加操作按钮`);
+            
             h2Elements.forEach((h2, index) => {
+                // 防止重复添加按钮
+                if (h2.querySelector('.section-control-btn')) {
+                    console.log(`章节 ${index} 已有按钮,跳过`);
+                    return;
+                }
+                
                 // 给每个章节添加唯一ID
                 const sectionId = `section-${index}`;
                 h2.setAttribute('data-section-id', sectionId);
@@ -1356,10 +1364,12 @@
                 h2.style.display = 'flex';
                 h2.style.justifyContent = 'space-between';
                 h2.style.alignItems = 'center';
+                h2.style.flexWrap = 'wrap';  // 防止按钮换行
                 
                 // 创建操作按钮容器
                 const controlsDiv = document.createElement('div');
-                controlsDiv.style.cssText = 'display: flex; gap: 8px; font-size: 14px;';
+                controlsDiv.className = 'section-controls-container';
+                controlsDiv.style.cssText = 'display: flex; gap: 8px; font-size: 14px; flex-shrink: 0;';
                 
                 // 编辑按钮
                 const editBtn = document.createElement('button');
@@ -1384,6 +1394,8 @@
                 controlsDiv.appendChild(deleteBtn);
                 
                 h2.appendChild(controlsDiv);
+                
+                console.log(`✅ 为章节 ${index} 添加了操作按钮`);
             });
         }
         

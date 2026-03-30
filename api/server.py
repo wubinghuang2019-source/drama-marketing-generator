@@ -151,6 +151,7 @@ def generate_marketing_plan():
         
         # 🔍 自动搜索补充剧集信息
         search_results = {}
+        drama_name = drama_info.get('dramaName')
         if TAVILY_API_KEY and drama_name:
             search_results = search_drama_info(drama_name)
             if search_results:
