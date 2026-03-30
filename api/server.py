@@ -11,12 +11,7 @@ import requests
 import os
 import json
 from datetime import datetime
-try:
-    from tavily import TavilyClient
-    TAVILY_AVAILABLE = True
-except ImportError:
-    TAVILY_AVAILABLE = False
-    print("⚠️ tavily-python未安装,搜索功能将被禁用")
+# Tavily搜索使用requests直接调用API,无需额外依赖
 
 
 app = Flask(__name__)
@@ -30,16 +25,17 @@ PORT = int(os.getenv('PORT', 3000))
 
 # Tavily搜索配置
 TAVILY_API_KEY = os.getenv("TAVILY_API_KEY", "")
-tavily_client = TavilyClient(api_key=TAVILY_API_KEY) if (TAVILY_AVAILABLE and TAVILY_API_KEY) else None
+TAVILY_API_URL = "https://api.tavily.com/search"
+
 
 
 
 
 
 def search_drama_info(drama_name):
-    """搜索剧集真实信息"""
-    if not tavily_client:
-        print("⚠️ Tavily API未配置,跳过搜索")
+    """搜索剧集真实信息 - 使用HTTP直接调用Tavily API"""
+    if not TAVILY_API_KEY:
+        print("⚠️ Tavily API Key未配置,跳过搜索")
         return {}
     
     try:
@@ -49,31 +45,19 @@ def search_drama_info(drama_name):
         # 搜索1: 基础信息(豆瓣评分、演员、剧情)
         print("  - 搜索基础信息...")
         basic_query = f"{drama_name} 豆瓣评分 主演 剧情简介"
-        basic_search = tavily_client.search(
-            query=basic_query,
-            max_results=3,
-            search_depth="basic"
-        )
+        basic_search = tavily_search(basic_query)
         results['basic'] = extract_search_content(basic_search)
         
         # 搜索2: 角色信息
         print("  - 搜索角色信息...")
         character_query = f"{drama_name} 主要角色 人物介绍 角色名"
-        character_search = tavily_client.search(
-            query=character_query,
-            max_results=3,
-            search_depth="basic"
-        )
+        character_search = tavily_search(character_query)
         results['characters'] = extract_search_content(character_search)
         
         # 搜索3: 竞品案例
         print("  - 搜索竞品案例...")
         similar_query = f"{drama_name} 同类型剧集推荐 相似剧"
-        similar_search = tavily_client.search(
-            query=similar_query,
-            max_results=3,
-            search_depth="basic"
-        )
+        similar_search = tavily_search(similar_query)
         results['similar'] = extract_search_content(similar_search)
         
         print(f"✅ 搜索完成! 获取到 {len([v for v in results.values() if v])} 类有效信息")
@@ -83,6 +67,26 @@ def search_drama_info(drama_name):
         print(f"❌ 搜索失败: {e}")
         import traceback
         traceback.print_exc()
+        return {}
+
+
+def tavily_search(query):
+    """调用Tavily API进行搜索"""
+    try:
+        response = requests.post(
+            TAVILY_API_URL,
+            json={
+                "api_key": TAVILY_API_KEY,
+                "query": query,
+                "max_results": 3,
+                "search_depth": "basic"
+            },
+            timeout=10
+        )
+        response.raise_for_status()
+        return response.json()
+    except Exception as e:
+        print(f"Tavily搜索请求失败: {e}")
         return {}
 
 
@@ -132,7 +136,7 @@ def generate_marketing_plan():
         
         # 🔍 自动搜索补充剧集信息
         search_results = {}
-        if tavily_client and drama_name:
+        if TAVILY_API_KEY and drama_name:
             search_results = search_drama_info(drama_name)
             if search_results:
                 drama_info['search_results'] = search_results
