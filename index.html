@@ -319,6 +319,53 @@
             font-weight: 600;
         }
 
+        /* 表格样式 */
+        .result-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .result-content table thead {
+            background: linear-gradient(135deg, #53B76F 0%, #48A965 100%);
+        }
+
+        .result-content table thead th {
+            color: #fff;
+            font-weight: 600;
+            padding: 15px;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        .result-content table tbody tr {
+            border-bottom: 1px solid #f0f0f0;
+            transition: background 0.2s;
+        }
+
+        .result-content table tbody tr:hover {
+            background: rgba(83, 183, 111, 0.05);
+        }
+
+        .result-content table tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        .result-content table tbody td {
+            padding: 12px 15px;
+            color: #595959;
+            font-size: 14px;
+        }
+
+        .result-content table tbody td:first-child {
+            font-weight: 600;
+            color: #262626;
+        }
+
         .strategy-item {
             background: linear-gradient(135deg, 
                 rgba(221, 118, 148, 0.08) 0%, 
@@ -684,6 +731,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script>
         // ========== 智能规则引擎 ==========
         
@@ -1199,15 +1247,25 @@
                 console.error('resultContent元素不存在!');
                 return;
             }
-            // 简单的 Markdown 转 HTML
-            const htmlContent = content
-                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                .replace(/### (.*?)(\n|$)/g, '<h3>$1</h3>')
-                .replace(/## (.*?)(\n|$)/g, '<h2>$1</h2>')
-                .replace(/# (.*?)(\n|$)/g, '<h1>$1</h1>')
-                .replace(/\n\n/g, '</p><p>')
-                .replace(/\n/g, '<br>');
-            resultDiv.innerHTML = '<p>' + htmlContent + '</p>';
+            // 使用 marked.js 渲染 Markdown(支持表格)
+            if (typeof marked !== 'undefined') {
+                marked.setOptions({
+                    gfm: true,  // 启用GitHub风格Markdown(包括表格)
+                    breaks: true,
+                    sanitize: false
+                });
+                resultDiv.innerHTML = marked.parse(content);
+            } else {
+                // Fallback: 简单渲染
+                const htmlContent = content
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                    .replace(/### (.*?)(\n|$)/g, '<h3>$1</h3>')
+                    .replace(/## (.*?)(\n|$)/g, '<h2>$1</h2>')
+                    .replace(/# (.*?)(\n|$)/g, '<h1>$1</h1>')
+                    .replace(/\n\n/g, '</p><p>')
+                    .replace(/\n/g, '<br>');
+                resultDiv.innerHTML = '<p>' + htmlContent + '</p>';
+            }
             console.log('已更新内容,长度:', content.length);
         }
 
@@ -1215,18 +1273,27 @@
         function displayAIResult(plan) {
             const resultDiv = document.getElementById('resultContent');
             
-            // 直接显示AI生成的Markdown内容（转HTML）
-            const htmlContent = plan.aiResult
-                .replace(/\n\n/g, '</p><p>')
-                .replace(/\n/g, '<br>')
-                .replace(/^/, '<p>')
-                .replace(/$/, '</p>')
-                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                .replace(/### (.*?)<br>/g, '<h3>$1</h3>')
-                .replace(/## (.*?)<br>/g, '<h2>$1</h2>')
-                .replace(/# (.*?)<br>/g, '<h1>$1</h1>');
-            
-            resultDiv.innerHTML = htmlContent;
+            // 使用 marked.js 渲染 Markdown(支持表格)
+            if (typeof marked !== 'undefined') {
+                marked.setOptions({
+                    gfm: true,  // 启用GitHub风格Markdown(包括表格)
+                    breaks: true,
+                    sanitize: false
+                });
+                resultDiv.innerHTML = marked.parse(plan.aiResult);
+            } else {
+                // Fallback: 简单渲染
+                const htmlContent = plan.aiResult
+                    .replace(/\n\n/g, '</p><p>')
+                    .replace(/\n/g, '<br>')
+                    .replace(/^/, '<p>')
+                    .replace(/$/, '</p>')
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                    .replace(/### (.*?)<br>/g, '<h3>$1</h3>')
+                    .replace(/## (.*?)<br>/g, '<h2>$1</h2>')
+                    .replace(/# (.*?)<br>/g, '<h1>$1</h1>');
+                resultDiv.innerHTML = htmlContent;
+            }
         }
 
         // 渲染结果（保留原有模板生成功能）
@@ -1557,11 +1624,37 @@
             }
         }
 
-        // 导出PPT
+        // 解析AI生成的Markdown为PPT结构
+        function parseMarkdownForPPT(markdown) {
+            const sections = [];
+            const lines = markdown.split('\n');
+            let currentSection = null;
+            
+            for (let line of lines) {
+                // 二级标题 - 新章节
+                if (line.startsWith('## ')) {
+                    if (currentSection) sections.push(currentSection);
+                    currentSection = {
+                        title: line.replace(/^## /, '').trim(),
+                        content: []
+                    };
+                }
+                // 三级标题或内容
+                else if (currentSection) {
+                    if (line.trim()) {
+                        currentSection.content.push(line);
+                    }
+                }
+            }
+            if (currentSection) sections.push(currentSection);
+            return sections;
+        }
+
+        // 导出PPT (使用AI生成的真实内容)
         function exportPPT() {
             const plan = window.currentPlan;
             
-            if (!plan) {
+            if (!plan || !plan.aiResult) {
                 alert('请先生成营销方案！');
                 return;
             }
@@ -1577,170 +1670,55 @@
                 x: 0.5, y: 2.0, w: 9, h: 1.5,
                 fontSize: 44, bold: true, color: primaryColor, align: 'center'
             });
-            slide1.addText(plan.dramaName, {
+            slide1.addText(plan.dramaName || '剧集名称', {
                 x: 0.5, y: 3.5, w: 9, h: 0.8,
                 fontSize: 32, color: accentColor, align: 'center'
             });
-            slide1.addText('AI定制版 v2.0', {
+            slide1.addText('AI定制版 v3.0 (含真实搜索数据)', {
                 x: 0.5, y: 4.5, w: 9, h: 0.5,
                 fontSize: 18, color: '666666', align: 'center'
             });
-            slide1.addText(plan.timestamp, {
+            slide1.addText(plan.timestamp || new Date().toLocaleString('zh-CN'), {
                 x: 0.5, y: 5.2, w: 9, h: 0.5,
                 fontSize: 14, color: '999999', align: 'center'
             });
             
-            // 本体分析页
-            let slide2 = pptx.addSlide();
-            slide2.addText('🎯 项目本体分析', {
-                x: 0.5, y: 0.3, w: 9, h: 0.6,
-                fontSize: 28, bold: true, color: primaryColor
-            });
-            slide2.addText([
-                { text: '剧集名称：', options: { bold: true, color: '333333' }},
-                { text: plan.dramaName, options: { color: '666666' }}
-            ], { x: 0.8, y: 1.2, w: 8.5, fontSize: 14, lineSpacing: 20 });
-            slide2.addText([
-                { text: '类型定位：', options: { bold: true, color: '333333' }},
-                { text: plan.dramaType, options: { color: '666666' }}
-            ], { x: 0.8, y: 1.6, w: 8.5, fontSize: 14, lineSpacing: 20 });
-            slide2.addText([
-                { text: '核心卖点：', options: { bold: true, color: '333333' }},
-                { text: plan.coreSelling, options: { color: '666666' }}
-            ], { x: 0.8, y: 2.0, w: 8.5, fontSize: 14, lineSpacing: 20 });
-            slide2.addText([
-                { text: '情感核心：', options: { bold: true, color: '333333' }},
-                { text: plan.emotionCore, options: { color: '666666' }}
-            ], { x: 0.8, y: 2.4, w: 8.5, fontSize: 14, lineSpacing: 20 });
-            slide2.addText([
-                { text: '目标情绪：', options: { bold: true, color: '333333' }},
-                { text: plan.targetEmotion, options: { color: '666666' }}
-            ], { x: 0.8, y: 2.8, w: 8.5, fontSize: 14, lineSpacing: 20 });
+            // 解析AI生成的Markdown并转换为PPT
+            const sections = parseMarkdownForPPT(plan.aiResult);
+            console.log(`解析到 ${sections.length} 个章节`);
             
-            // 用户洞察页
-            const insights = getUserInsights(plan);
-            let slide3 = pptx.addSlide();
-            slide3.addText('👥 深度用户洞察', {
-                x: 0.5, y: 0.3, w: 9, h: 0.6,
-                fontSize: 28, bold: true, color: primaryColor
-            });
-            slide3.addText('核心洞察', {
-                x: 0.8, y: 1.2, w: 8.5, fontSize: 16, bold: true, color: accentColor
-            });
-            slide3.addText(insights.core, {
-                x: 0.8, y: 1.6, w: 8.5, fontSize: 12, color: '666666'
-            });
-            slide3.addText('人口统计特征', {
-                x: 0.8, y: 2.3, w: 8.5, fontSize: 16, bold: true, color: accentColor
-            });
-            slide3.addText(insights.demographics, {
-                x: 0.8, y: 2.7, w: 8.5, fontSize: 12, color: '666666'
-            });
-            slide3.addText('媒体习惯', {
-                x: 0.8, y: 3.4, w: 8.5, fontSize: 16, bold: true, color: accentColor
-            });
-            slide3.addText(insights.mediaHabits, {
-                x: 0.8, y: 3.8, w: 8.5, fontSize: 12, color: '666666'
-            });
-            
-            // 策略文案页
-            const copywriting = getCopywritingIdeas(plan);
-            let slide4 = pptx.addSlide();
-            slide4.addText('📝 策略文案创意', {
-                x: 0.5, y: 0.3, w: 9, h: 0.6,
-                fontSize: 28, bold: true, color: primaryColor
-            });
-            copywriting.slice(0, 5).forEach((item, index) => {
-                slide4.addText(item.platform + ' - ' + item.type, {
-                    x: 0.8, y: 1.2 + index * 0.7, w: 8.5, fontSize: 12, bold: true, color: accentColor
+            // 为每个章节生成一页PPT
+            sections.slice(0, 15).forEach((section, index) => {  // 最多15页内容
+                let slide = pptx.addSlide();
+                slide.background = { color: 'FFFFFF' };
+                
+                // 标题
+                slide.addText(section.title, {
+                    x: 0.5, y: 0.3, w: 9, h: 0.6,
+                    fontSize: 24, bold: true, color: primaryColor
                 });
-                slide4.addText(item.text, {
-                    x: 0.8, y: 1.4 + index * 0.7, w: 8.5, fontSize: 10, color: '666666'
+                
+                // 内容(清理Markdown格式符号)
+                let contentText = section.content
+                    .join('\n')
+                    .replace(/\*\*/g, '')  // 移除加粗
+                    .replace(/###/g, '▸')  // 三级标题转bullet
+                    .replace(/\|/g, ' ')   // 移除表格竖线
+                    .substring(0, 800);    // 限制长度
+                
+                slide.addText(contentText, {
+                    x: 0.7, y: 1.2, w: 8.6, h: 4.5,
+                    fontSize: 11, color: '333333', valign: 'top',
+                    lineSpacing: 18
                 });
-            });
-            
-            // 平台策略页 - 微博
-            const platformStrategy = getPlatformStrategy(plan);
-            let slide5 = pptx.addSlide();
-            slide5.addText('📱 微博营销策略', {
-                x: 0.5, y: 0.3, w: 9, h: 0.6,
-                fontSize: 28, bold: true, color: primaryColor
-            });
-            slide5.addText('核心策略：' + platformStrategy.weibo.strategy, {
-                x: 0.8, y: 1.2, w: 8.5, fontSize: 14, bold: true, color: '333333'
-            });
-            platformStrategy.weibo.tactics.slice(0, 4).forEach((tactic, index) => {
-                slide5.addText('• ' + tactic, {
-                    x: 1.0, y: 1.7 + index * 0.5, w: 8.3, fontSize: 11, color: '666666'
-                });
-            });
-            slide5.addText('KPI：' + platformStrategy.weibo.kpi, {
-                x: 0.8, y: 4.0, w: 8.5, fontSize: 12, bold: true, color: accentColor
-            });
-            
-            // 平台策略页 - 抖音
-            let slide6 = pptx.addSlide();
-            slide6.addText('📱 抖音营销策略', {
-                x: 0.5, y: 0.3, w: 9, h: 0.6,
-                fontSize: 28, bold: true, color: primaryColor
-            });
-            slide6.addText('核心策略：' + platformStrategy.douyin.strategy, {
-                x: 0.8, y: 1.2, w: 8.5, fontSize: 14, bold: true, color: '333333'
-            });
-            platformStrategy.douyin.tactics.slice(0, 4).forEach((tactic, index) => {
-                slide6.addText('• ' + tactic, {
-                    x: 1.0, y: 1.7 + index * 0.5, w: 8.3, fontSize: 11, color: '666666'
-                });
-            });
-            slide6.addText('KPI：' + platformStrategy.douyin.kpi, {
-                x: 0.8, y: 4.0, w: 8.5, fontSize: 12, bold: true, color: accentColor
-            });
-            
-            // 预算分配页
-            let slide7 = pptx.addSlide();
-            slide7.addText('💰 预算分配方案', {
-                x: 0.5, y: 0.3, w: 9, h: 0.6,
-                fontSize: 28, bold: true, color: primaryColor
-            });
-            slide7.addText('总预算：' + plan.budget, {
-                x: 0.8, y: 1.2, w: 8.5, fontSize: 16, bold: true, color: accentColor
-            });
-            const budgetItems = [
-                '线上推广 30% - 微博热搜、抖音信息流、小红书KOC',
-                '内容制作 25% - 短视频、图文物料、花絮纪录片',
-                'KOL合作 25% - 头部+腰部+尾部达人阶梯投放',
-                '线下活动 15% - 首映礼、见面会、粉丝活动',
-                '应急储备 5% - 舆情应对、突发事件应对'
-            ];
-            budgetItems.forEach((item, index) => {
-                slide7.addText('• ' + item, {
-                    x: 1.0, y: 2.0 + index * 0.5, w: 8.3, fontSize: 13, color: '666666'
-                });
-            });
-            
-            // 效果评估页
-            let slide8 = pptx.addSlide();
-            slide8.addText('📊 效果评估指标', {
-                x: 0.5, y: 0.3, w: 9, h: 0.6,
-                fontSize: 28, bold: true, color: primaryColor
-            });
-            slide8.addText('曝光指标', {
-                x: 0.8, y: 1.2, w: 8.5, fontSize: 18, bold: true, color: accentColor
-            });
-            slide8.addText('• 微博话题阅读量 50亿+\n• 抖音话题播放量 100亿+\n• 小红书笔记曝光 5000万+', {
-                x: 1.0, y: 1.6, w: 8.3, fontSize: 12, color: '666666', lineSpacing: 22
-            });
-            slide8.addText('转化指标', {
-                x: 0.8, y: 3.0, w: 8.5, fontSize: 18, bold: true, color: accentColor
-            });
-            slide8.addText('• 首播收视率/播放量行业前3\n• 会员转化率 15%+\n• 豆瓣评分 7.5+\n• ROI 3:1以上', {
-                x: 1.0, y: 3.4, w: 8.3, fontSize: 12, color: '666666', lineSpacing: 22
             });
             
             // 保存PPT
+            pptx.writeFile({ fileName: (plan.dramaName || '剧集') + '_AI营销方案_v3.0.pptx' })
             pptx.writeFile({ fileName: plan.dramaName + '_AI定制营销方案_v2.0.pptx' })
                 .then(() => {
-                    alert('✅ PPT已生成下载！内含8页完整方案！');
+                    const pageCount = sections.length > 15 ? 15 : sections.length;
+                    alert(`✅ PPT已生成下载！包含${pageCount + 1}页内容(基于AI真实生成方案)`);
                 })
                 .catch(err => {
                     console.error('PPT生成失败:', err);
