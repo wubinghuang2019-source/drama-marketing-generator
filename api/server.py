@@ -164,7 +164,7 @@ def generate_marketing_plan():
                         {'role': 'user', 'content': user_prompt}
                     ],
                     'temperature': 0.7,
-                    'max_tokens': 4000,
+                    'max_tokens': 8000,
                     'stream': True  # 启用流式
                 }
                 
@@ -600,7 +600,7 @@ def generate_drama_marketing():
                     {'role': 'user', 'content': user_prompt}
                 ],
                 'temperature': 0.7,
-                'max_tokens': 4000,
+                'max_tokens': 8000,
                 'stream': True
             }
             
@@ -698,7 +698,7 @@ def generate_male_drama_marketing():
                     {'role': 'user', 'content': user_prompt}
                 ],
                 'temperature': 0.7,
-                'max_tokens': 4000,
+                'max_tokens': 8000,
                 'stream': True
             }
             
