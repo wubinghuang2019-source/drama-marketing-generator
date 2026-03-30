@@ -11,6 +11,13 @@ import requests
 import os
 import json
 from datetime import datetime
+try:
+    from tavily import TavilyClient
+    TAVILY_AVAILABLE = True
+except ImportError:
+    TAVILY_AVAILABLE = False
+    print("⚠️ tavily-python未安装,搜索功能将被禁用")
+
 
 app = Flask(__name__)
 CORS(app)  # 允许跨域
@@ -20,6 +27,79 @@ ALIYUN_API_KEY = os.getenv("DASHSCOPE_API_KEY", "")
 ALIYUN_API_ENDPOINT = "https://dashscope.aliyuncs.com/compatible-mode/v1"
 MODEL_NAME = "qwen-max"
 PORT = int(os.getenv('PORT', 3000))
+
+# Tavily搜索配置
+TAVILY_API_KEY = os.getenv("TAVILY_API_KEY", "")
+tavily_client = TavilyClient(api_key=TAVILY_API_KEY) if (TAVILY_AVAILABLE and TAVILY_API_KEY) else None
+
+
+
+
+
+def search_drama_info(drama_name):
+    """搜索剧集真实信息"""
+    if not tavily_client:
+        print("⚠️ Tavily API未配置,跳过搜索")
+        return {}
+    
+    try:
+        print(f"🔍 开始搜索剧集信息: {drama_name}")
+        results = {}
+        
+        # 搜索1: 基础信息(豆瓣评分、演员、剧情)
+        print("  - 搜索基础信息...")
+        basic_query = f"{drama_name} 豆瓣评分 主演 剧情简介"
+        basic_search = tavily_client.search(
+            query=basic_query,
+            max_results=3,
+            search_depth="basic"
+        )
+        results['basic'] = extract_search_content(basic_search)
+        
+        # 搜索2: 角色信息
+        print("  - 搜索角色信息...")
+        character_query = f"{drama_name} 主要角色 人物介绍 角色名"
+        character_search = tavily_client.search(
+            query=character_query,
+            max_results=3,
+            search_depth="basic"
+        )
+        results['characters'] = extract_search_content(character_search)
+        
+        # 搜索3: 竞品案例
+        print("  - 搜索竞品案例...")
+        similar_query = f"{drama_name} 同类型剧集推荐 相似剧"
+        similar_search = tavily_client.search(
+            query=similar_query,
+            max_results=3,
+            search_depth="basic"
+        )
+        results['similar'] = extract_search_content(similar_search)
+        
+        print(f"✅ 搜索完成! 获取到 {len([v for v in results.values() if v])} 类有效信息")
+        return results
+        
+    except Exception as e:
+        print(f"❌ 搜索失败: {e}")
+        import traceback
+        traceback.print_exc()
+        return {}
+
+
+def extract_search_content(search_result):
+    """提取搜索结果内容"""
+    if not search_result or 'results' not in search_result:
+        return ""
+    
+    contents = []
+    for item in search_result['results'][:3]:  # 只取前3条
+        content = item.get('content', '')
+        if content:
+            contents.append(content)
+    
+    combined = '\n\n'.join(contents)
+    # 限制长度,避免token过多
+    return combined[:1500] if len(combined) > 1500 else combined
 
 
 @app.route('/health', methods=['GET'])
@@ -49,6 +129,14 @@ def generate_marketing_plan():
             }), 400
         
         print(f"收到生成请求: {drama_info.get('dramaName')} - {plan_type}")
+        
+        # 🔍 自动搜索补充剧集信息
+        search_results = {}
+        if tavily_client and drama_name:
+            search_results = search_drama_info(drama_name)
+            if search_results:
+                drama_info['search_results'] = search_results
+        
         
         # 构建 Prompt
         system_prompt = get_system_prompt(plan_type)
@@ -405,6 +493,22 @@ def build_user_prompt(drama_info):
     if drama_info.get('competitors'):
         prompt += f"\n- **竞品剧集**：{drama_info['competitors']}"
     
+    # 🔍 添加搜索到的真实信息
+    if drama_info.get('search_results'):
+        search_results = drama_info['search_results']
+        prompt += "\n\n## 🔍 搜索到的剧集真实信息\n"
+        prompt += "**重要:** 以下为互联网搜索到的真实信息,请优先使用这些信息,特别是角色名、剧情细节和竞品案例。\n\n"
+        
+        if search_results.get('basic'):
+            prompt += f"**【基础信息】**\n{search_results['basic']}\n\n"
+        
+        if search_results.get('characters'):
+            prompt += f"**【角色信息】**\n{search_results['characters']}\n\n"
+        
+        if search_results.get('similar'):
+            prompt += f"**【同类竞品】**\n{search_results['similar']}\n\n"
+    
+
     prompt += """
 
 ---
