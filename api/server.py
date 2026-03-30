@@ -747,6 +747,127 @@ def generate_male_drama_marketing():
         }), 500
 
 
+@app.route('/api/regenerate-section', methods=['POST'])
+def regenerate_section():
+    """重新生成特定章节 - 保留全局上下文"""
+    try:
+        data = request.json
+        drama_info = data.get('dramaInfo', {})
+        section_title = data.get('sectionTitle', '')
+        full_plan_context = data.get('fullPlanContext', '')  # 完整方案上下文
+        
+        if not drama_info or not section_title:
+            return jsonify({
+                'success': False,
+                'error': '缺少必填参数：dramaInfo 或 sectionTitle'
+            }), 400
+        
+        print(f"🔄 重新生成章节请求: {drama_info.get('dramaName')} - {section_title}")
+        
+        # 构建Prompt - 包含全局上下文
+        system_prompt = get_system_prompt('general')
+        
+        user_prompt = f"""我正在为剧集《{drama_info.get('dramaName')}》制作营销方案。
+
+## 剧集基本信息
+- 剧集名称：{drama_info.get('dramaName')}
+- 剧集类型：{drama_info.get('dramaType', '未指定')}
+- 目标受众：{drama_info.get('audience', '未指定')}
+
+## 已有方案概要（保持一致性参考）
+{full_plan_context[:2000] if full_plan_context else '（首次生成）'}
+
+---
+
+## 🎯 任务要求
+
+请**只生成**以下章节的内容：
+
+**{section_title}**
+
+要求：
+1. 内容要与已有方案的整体策略保持一致
+2. 如果其他章节提到了相关数据，请保持数据一致性
+3. 使用Markdown格式
+4. 内容详细、可执行
+5. 包含具体案例和数据
+
+请开始生成该章节内容："""
+
+        def generate():
+            """流式生成器"""
+            try:
+                headers = {
+                    'Authorization': f'Bearer {ALIYUN_API_KEY}',
+                    'Content-Type': 'application/json'
+                }
+                
+                payload = {
+                    'model': MODEL_NAME,
+                    'messages': [
+                        {'role': 'system', 'content': system_prompt},
+                        {'role': 'user', 'content': user_prompt}
+                    ],
+                    'temperature': 0.7,
+                    'max_tokens': 4000,  # 单个章节4000足够
+                    'stream': True
+                }
+                
+                response = requests.post(
+                    f'{ALIYUN_API_ENDPOINT}/chat/completions',
+                    headers=headers,
+                    json=payload,
+                    stream=True,
+                    timeout=120
+                )
+                
+                response.raise_for_status()
+                
+                for line in response.iter_lines():
+                    if line:
+                        line = line.decode('utf-8')
+                        if line.startswith('data: '):
+                            data_str = line[6:]
+                            if data_str.strip() == '[DONE]':
+                                yield f"data: [DONE]\n\n"
+                                break
+                            try:
+                                chunk = json.loads(data_str)
+                                if 'choices' in chunk and len(chunk['choices']) > 0:
+                                    delta = chunk['choices'][0].get('delta', {})
+                                    content = delta.get('content', '')
+                                    if content:
+                                        yield f"data: {json.dumps({'content': content}, ensure_ascii=False)}\n\n"
+                            except json.JSONDecodeError:
+                                continue
+                
+                print("✅ 章节重新生成完成!")
+                
+            except Exception as e:
+                print(f"章节生成错误: {e}")
+                import traceback
+                traceback.print_exc()
+                yield f"data: {json.dumps({'error': '生成失败', 'details': str(e)}, ensure_ascii=False)}\n\n"
+        
+        return Response(
+            stream_with_context(generate()),
+            mimetype='text/event-stream',
+            headers={
+                'Cache-Control': 'no-cache',
+                'X-Accel-Buffering': 'no'
+            }
+        )
+        
+    except Exception as e:
+        print(f"接口错误: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+
 if __name__ == '__main__':
     print('=' * 60)
     print('🚀 营销方案生成器 API 服务启动成功！(Python 版 - 流式响应)')

@@ -366,6 +366,51 @@
             color: #262626;
         }
 
+        /* 章节操作按钮样式 */
+        .section-control-btn {
+            padding: 4px 10px;
+            font-size: 12px;
+            border: 1px solid #d9d9d9;
+            background: #fff;
+            color: #595959;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .section-control-btn:hover {
+            border-color: #53B76F;
+            color: #53B76F;
+            background: rgba(83, 183, 111, 0.05);
+        }
+
+        .section-control-btn-danger:hover {
+            border-color: #e74c3c;
+            color: #e74c3c;
+            background: rgba(231, 76, 60, 0.05);
+        }
+
+        /* 编辑模式样式 */
+        .section-editing {
+            background: #fffbe6;
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px dashed #ffd666;
+        }
+
+        .section-editing textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 12px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 14px;
+            line-height: 1.6;
+            resize: vertical;
+        }
+
         .strategy-item {
             background: linear-gradient(135deg, 
                 rgba(221, 118, 148, 0.08) 0%, 
@@ -1294,6 +1339,284 @@
                     .replace(/# (.*?)<br>/g, '<h1>$1</h1>');
                 resultDiv.innerHTML = htmlContent;
             }
+            
+            // 为每个章节添加操作按钮(编辑/删除/重新生成)
+            addSectionControls();
+        }
+        
+        // 为每个二级标题添加操作按钮
+        function addSectionControls() {
+            const h2Elements = document.querySelectorAll('#resultContent h2');
+            
+            h2Elements.forEach((h2, index) => {
+                // 给每个章节添加唯一ID
+                const sectionId = `section-${index}`;
+                h2.setAttribute('data-section-id', sectionId);
+                h2.style.position = 'relative';
+                h2.style.display = 'flex';
+                h2.style.justifyContent = 'space-between';
+                h2.style.alignItems = 'center';
+                
+                // 创建操作按钮容器
+                const controlsDiv = document.createElement('div');
+                controlsDiv.style.cssText = 'display: flex; gap: 8px; font-size: 14px;';
+                
+                // 编辑按钮
+                const editBtn = document.createElement('button');
+                editBtn.innerHTML = '✏️ 编辑';
+                editBtn.className = 'section-control-btn';
+                editBtn.onclick = () => editSection(sectionId, h2);
+                
+                // 重新生成按钮
+                const regenBtn = document.createElement('button');
+                regenBtn.innerHTML = '🔄 重新生成';
+                regenBtn.className = 'section-control-btn';
+                regenBtn.onclick = () => regenerateSection(sectionId, h2);
+                
+                // 删除按钮
+                const deleteBtn = document.createElement('button');
+                deleteBtn.innerHTML = '🗑️ 删除';
+                deleteBtn.className = 'section-control-btn section-control-btn-danger';
+                deleteBtn.onclick = () => deleteSection(sectionId, h2);
+                
+                controlsDiv.appendChild(editBtn);
+                controlsDiv.appendChild(regenBtn);
+                controlsDiv.appendChild(deleteBtn);
+                
+                h2.appendChild(controlsDiv);
+            });
+        }
+        
+        // 获取章节内容(从H2到下一个H2之间的所有内容)
+        function getSectionContent(h2Element) {
+            let content = '';
+            let currentElement = h2Element.nextElementSibling;
+            
+            while (currentElement && currentElement.tagName !== 'H2') {
+                content += currentElement.outerHTML || '';
+                currentElement = currentElement.nextElementSibling;
+            }
+            
+            return content;
+        }
+        
+        // 1. 编辑章节
+        function editSection(sectionId, h2Element) {
+            console.log(`编辑章节: ${sectionId}`);
+            
+            // 获取章节内容
+            const sectionContent = getSectionContent(h2Element);
+            const sectionTitle = h2Element.textContent.split('\n')[0].trim();
+            
+            // 创建编辑容器
+            const editContainer = document.createElement('div');
+            editContainer.className = 'section-editing';
+            editContainer.innerHTML = `
+                <h3 style="margin-top:0">编辑章节: ${sectionTitle}</h3>
+                <textarea id="edit-textarea-${sectionId}">${h2Element.outerHTML + sectionContent}</textarea>
+                <div style="margin-top: 12px; display: flex; gap: 8px;">
+                    <button onclick="saveSectionEdit('${sectionId}')" style="padding: 8px 20px; background: #53B76F; color: #fff; border: none; border-radius: 4px; cursor: pointer;">💾 保存</button>
+                    <button onclick="cancelSectionEdit('${sectionId}')" style="padding: 8px 20px; background: #fff; color: #595959; border: 1px solid #d9d9d9; border-radius: 4px; cursor: pointer;">❌ 取消</button>
+                </div>
+            `;
+            
+            // 隐藏原内容,显示编辑器
+            let currentElement = h2Element;
+            while (currentElement && currentElement.tagName !== 'H2' || currentElement === h2Element) {
+                if (currentElement.nextElementSibling && currentElement.nextElementSibling.tagName === 'H2') break;
+                currentElement.style.display = 'none';
+                if (currentElement === h2Element) {
+                    h2Element.insertAdjacentElement('afterend', editContainer);
+                }
+                currentElement = currentElement.nextElementSibling;
+            }
+        }
+        
+        // 保存编辑
+        window.saveSectionEdit = function(sectionId) {
+            const textarea = document.getElementById(`edit-textarea-${sectionId}`);
+            const newHTML = textarea.value;
+            
+            // 创建临时容器解析HTML
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = newHTML;
+            
+            // 找到编辑容器并替换
+            const editContainer = document.querySelector('.section-editing');
+            const h2 = document.querySelector(`[data-section-id="${sectionId}"]`);
+            
+            // 显示原内容并更新
+            let currentElement = h2;
+            while (currentElement && (currentElement.tagName !== 'H2' || currentElement === h2)) {
+                currentElement.style.display = '';
+                if (currentElement.nextElementSibling && currentElement.nextElementSibling.tagName === 'H2') break;
+                currentElement = currentElement.nextElementSibling;
+            }
+            
+            // 替换内容
+            editContainer.insertAdjacentHTML('beforebegin', newHTML);
+            editContainer.remove();
+            
+            // 移除旧内容
+            let oldElement = h2.nextElementSibling;
+            while (oldElement && oldElement.tagName !== 'H2' && oldElement !== editContainer) {
+                const next = oldElement.nextElementSibling;
+                oldElement.remove();
+                oldElement = next;
+            }
+            h2.remove();
+            
+            // 更新window.currentPlan
+            updateCurrentPlanFromDOM();
+            
+            // 重新添加控制按钮
+            addSectionControls();
+            
+            alert('✅ 章节已更新!');
+        };
+        
+        // 取消编辑
+        window.cancelSectionEdit = function(sectionId) {
+            const editContainer = document.querySelector('.section-editing');
+            const h2 = document.querySelector(`[data-section-id="${sectionId}"]`);
+            
+            // 显示原内容
+            let currentElement = h2;
+            while (currentElement && (currentElement.tagName !== 'H2' || currentElement === h2)) {
+                currentElement.style.display = '';
+                if (currentElement.nextElementSibling && currentElement.nextElementSibling.tagName === 'H2') break;
+                currentElement = currentElement.nextElementSibling;
+            }
+            
+            editContainer.remove();
+        };
+        
+        // 2. 重新生成章节
+        async function regenerateSection(sectionId, h2Element) {
+            const sectionTitle = h2Element.textContent.split('\n')[0].trim().replace(/^##\s*/, '');
+            
+            if (!confirm(`确定要重新生成章节"${sectionTitle}"吗?\n\n将根据全局上下文生成新内容,保持与其他章节的一致性。`)) {
+                return;
+            }
+            
+            console.log(`重新生成章节: ${sectionTitle}`);
+            
+            // 显示加载状态
+            const loadingDiv = document.createElement('div');
+            loadingDiv.style.cssText = 'padding: 20px; text-align: center; background: #f0f9f3; border-radius: 8px; margin: 10px 0;';
+            loadingDiv.innerHTML = `<p>🔄 正在重新生成章节"${sectionTitle}"...<br><span style="font-size:12px;color:#999;">根据全局上下文生成中，请稍候</span></p>`;
+            h2Element.insertAdjacentElement('afterend', loadingDiv);
+            
+            try {
+                // 获取全局上下文(完整方案的前2000字符)
+                const fullPlanContext = window.currentPlan.aiResult;
+                
+                // 调用重新生成接口
+                const response = await fetch(`${API_BASE_URL}/api/regenerate-section`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        dramaInfo: {
+                            dramaName: window.currentPlan.dramaName,
+                            dramaType: window.currentPlan.dramaType,
+                            audience: window.currentPlan.audience
+                        },
+                        sectionTitle: sectionTitle,
+                        fullPlanContext: fullPlanContext
+                    })
+                });
+                
+                if (!response.ok) throw new Error('生成失败');
+                
+                // 流式读取
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let newSectionContent = '';
+                
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    
+                    const chunk = decoder.decode(value);
+                    const lines = chunk.split('\n');
+                    
+                    for (let line of lines) {
+                        if (line.startsWith('data: ')) {
+                            const data = line.slice(6);
+                            if (data === '[DONE]') break;
+                            
+                            try {
+                                const parsed = JSON.parse(data);
+                                if (parsed.content) {
+                                    newSectionContent += parsed.content;
+                                    loadingDiv.innerHTML = `<p>🔄 生成中... (${newSectionContent.length}字)</p>`;
+                                }
+                            } catch (e) {}
+                        }
+                    }
+                }
+                
+                // 替换章节内容
+                loadingDiv.remove();
+                
+                // 删除旧内容
+                let oldElement = h2Element.nextElementSibling;
+                while (oldElement && oldElement.tagName !== 'H2') {
+                    const next = oldElement.nextElementSibling;
+                    oldElement.remove();
+                    oldElement = next;
+                }
+                
+                // 插入新内容
+                const newHTML = marked.parse(newSectionContent);
+                h2Element.insertAdjacentHTML('afterend', newHTML);
+                
+                // 更新window.currentPlan
+                updateCurrentPlanFromDOM();
+                
+                // 重新添加控制按钮
+                addSectionControls();
+                
+                alert('✅ 章节已重新生成!');
+                
+            } catch (error) {
+                console.error('重新生成失败:', error);
+                loadingDiv.innerHTML = `<p style="color:#e74c3c;">❌ 生成失败: ${error.message}</p>`;
+                setTimeout(() => loadingDiv.remove(), 3000);
+            }
+        }
+        
+        // 3. 删除章节
+        function deleteSection(sectionId, h2Element) {
+            const sectionTitle = h2Element.textContent.split('\n')[0].trim();
+            
+            if (!confirm(`确定要删除章节"${sectionTitle}"吗?\n\n删除后可以通过"重新生成完整方案"恢复。`)) {
+                return;
+            }
+            
+            console.log(`删除章节: ${sectionId}`);
+            
+            // 删除H2及其后续内容(直到下一个H2)
+            let currentElement = h2Element.nextElementSibling;
+            while (currentElement && currentElement.tagName !== 'H2') {
+                const next = currentElement.nextElementSibling;
+                currentElement.remove();
+                currentElement = next;
+            }
+            h2Element.remove();
+            
+            // 更新window.currentPlan
+            updateCurrentPlanFromDOM();
+            
+            alert('✅ 章节已删除!');
+        }
+        
+        // 从DOM更新window.currentPlan.aiResult
+        function updateCurrentPlanFromDOM() {
+            const resultDiv = document.getElementById('resultContent');
+            // 简单处理: 保存HTML,下次导出时会用到
+            window.currentPlan.aiResult = resultDiv.innerText;  // 纯文本
+            window.currentPlan.aiResultHTML = resultDiv.innerHTML;  // HTML版本
         }
 
         // 渲染结果（保留原有模板生成功能）
