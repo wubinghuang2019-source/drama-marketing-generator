@@ -45,22 +45,36 @@ def search_drama_info(drama_name):
         # 搜索1: 基础信息(豆瓣评分、演员、剧情)
         print("  - 搜索基础信息...")
         basic_query = f"{drama_name} 豆瓣评分 主演 剧情简介"
-        basic_search = tavily_search(basic_query)
-        results['basic'] = extract_search_content(basic_search)
+        basic_search = tavily_search(basic_query, max_results=5)
+        results['basic'] = extract_search_content(basic_search, max_length=3000)
         
-        # 搜索2: 角色信息
+        # 搜索2: 演员信息(重要!用户关注演员)
+        print("  - 搜索演员信息...")
+        actor_query = f"{drama_name} 演员表 主演是谁 扮演者"
+        actor_search = tavily_search(actor_query, max_results=5)
+        results['actors'] = extract_search_content(actor_search, max_length=2000)
+        
+        # 搜索3: 角色信息
         print("  - 搜索角色信息...")
-        character_query = f"{drama_name} 主要角色 人物介绍 角色名"
-        character_search = tavily_search(character_query)
-        results['characters'] = extract_search_content(character_search)
+        character_query = f"{drama_name} 主要角色 人物关系 角色介绍"
+        character_search = tavily_search(character_query, max_results=5)
+        results['characters'] = extract_search_content(character_search, max_length=2000)
         
-        # 搜索3: 竞品案例
+        # 搜索4: 剧情详情
+        print("  - 搜索剧情详情...")
+        plot_query = f"{drama_name} 剧情介绍 故事梗概 分集剧情"
+        plot_search = tavily_search(plot_query, max_results=4)
+        results['plot'] = extract_search_content(plot_search, max_length=2000)
+        
+        # 搜索5: 竞品案例
         print("  - 搜索竞品案例...")
-        similar_query = f"{drama_name} 同类型剧集推荐 相似剧"
-        similar_search = tavily_search(similar_query)
-        results['similar'] = extract_search_content(similar_search)
+        similar_query = f"{drama_name} 同类型剧集 相似剧推荐"
+        similar_search = tavily_search(similar_query, max_results=3)
+        results['similar'] = extract_search_content(similar_search, max_length=1500)
         
-        print(f"✅ 搜索完成! 获取到 {len([v for v in results.values() if v])} 类有效信息")
+        # 统计有效结果
+        valid_results = [k for k, v in results.items() if v]
+        print(f"✅ 搜索完成! 获取到 {len(valid_results)} 类有效信息: {', '.join(valid_results)}")
         return results
         
     except Exception as e:
@@ -70,7 +84,7 @@ def search_drama_info(drama_name):
         return {}
 
 
-def tavily_search(query):
+def tavily_search(query, max_results=3):
     """调用Tavily API进行搜索"""
     try:
         response = requests.post(
@@ -78,10 +92,11 @@ def tavily_search(query):
             json={
                 "api_key": TAVILY_API_KEY,
                 "query": query,
-                "max_results": 3,
-                "search_depth": "basic"
+                "max_results": max_results,
+                "search_depth": "basic",
+                "include_domains": ["douban.com", "baike.baidu.com", "zh.wikipedia.org"]  # 优先权威来源
             },
-            timeout=10
+            timeout=15
         )
         response.raise_for_status()
         return response.json()
@@ -90,20 +105,20 @@ def tavily_search(query):
         return {}
 
 
-def extract_search_content(search_result):
+def extract_search_content(search_result, max_length=1500):
     """提取搜索结果内容"""
     if not search_result or 'results' not in search_result:
         return ""
     
     contents = []
-    for item in search_result['results'][:3]:  # 只取前3条
+    for item in search_result['results']:
         content = item.get('content', '')
         if content:
             contents.append(content)
     
     combined = '\n\n'.join(contents)
     # 限制长度,避免token过多
-    return combined[:1500] if len(combined) > 1500 else combined
+    return combined[:max_length] if len(combined) > max_length else combined
 
 
 @app.route('/health', methods=['GET'])
@@ -501,16 +516,28 @@ def build_user_prompt(drama_info):
     if drama_info.get('search_results'):
         search_results = drama_info['search_results']
         prompt += "\n\n## 🔍 搜索到的剧集真实信息\n"
-        prompt += "**重要:** 以下为互联网搜索到的真实信息,请优先使用这些信息,特别是角色名、剧情细节和竞品案例。\n\n"
+        prompt += """**❗️ 极度重要 - 必须严格遵守:**
+1. 以下信息来自互联网真实数据,是本次方案的**核心依据**
+2. **必须直接使用**搜索到的演员名、角色名、剧情梗概
+3. **禁止编造**或修改任何角色名、演员名、剧情细节
+4. 如果搜索信息与用户输入冲突,**以搜索信息为准**
+
+"""
         
         if search_results.get('basic'):
-            prompt += f"**【基础信息】**\n{search_results['basic']}\n\n"
+            prompt += f"**【基础信息 - 必读】**\n{search_results['basic']}\n\n"
+        
+        if search_results.get('actors'):
+            prompt += f"**【演员表 - 必须使用】**\n{search_results['actors']}\n\n"
         
         if search_results.get('characters'):
-            prompt += f"**【角色信息】**\n{search_results['characters']}\n\n"
+            prompt += f"**【角色信息 - 必须使用】**\n{search_results['characters']}\n\n"
+        
+        if search_results.get('plot'):
+            prompt += f"**【剧情详情 - 必须参考】**\n{search_results['plot']}\n\n"
         
         if search_results.get('similar'):
-            prompt += f"**【同类竞品】**\n{search_results['similar']}\n\n"
+            prompt += f"**【同类竞品 - 参考】**\n{search_results['similar']}\n\n"
     
 
     prompt += """
