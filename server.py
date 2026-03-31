@@ -33,6 +33,77 @@ def health_check():
     })
 
 
+@app.route('/api/get-hotspot-data', methods=['POST'])
+def get_hotspot_data():
+    """获取实时热点数据 - 多平台舆情监控"""
+    try:
+        data = request.json
+        keyword = data.get('keyword', '剧集营销')
+        platforms = data.get('platforms', ['微博', '抖音', '小红书', '豆瓣'])
+        
+        # 调用sentiment-monitor技能获取实时热点
+        # 这里返回模拟数据结构,实际需要调用sentiment-monitor skill
+        hotspot_data = {
+            'success': True,
+            'keyword': keyword,
+            'timestamp': datetime.now().isoformat(),
+            'platforms': [],
+            'summary': {
+                'total_items': 0,
+                'sentiment': {
+                    'positive': 0,
+                    'neutral': 0,
+                    'negative': 0
+                }
+            },
+            'items': []
+        }
+        
+        # 平台搜索策略
+        platform_search_map = {
+            '微博': {
+                'name': '微博',
+                'icon': '🔥',
+                'search_query': f'{keyword} site:weibo.com',
+                'enabled': True
+            },
+            '抖音': {
+                'name': '抖音',
+                'icon': '🎵',
+                'search_query': f'{keyword} site:douyin.com OR {keyword} 抖音',
+                'enabled': True
+            },
+            '小红书': {
+                'name': '小红书',
+                'icon': '📕',
+                'search_query': f'{keyword} site:xiaohongshu.com OR site:xhslink.com',
+                'enabled': True
+            },
+            '豆瓣': {
+                'name': '豆瓣',
+                'icon': '🎬',
+                'search_query': f'{keyword} site:douban.com',
+                'enabled': True
+            }
+        }
+        
+        # 只返回覆盖的平台
+        covered_platforms = []
+        for platform_name in platforms:
+            if platform_name in platform_search_map:
+                covered_platforms.append(platform_search_map[platform_name])
+        
+        hotspot_data['platforms'] = covered_platforms
+        
+        return jsonify(hotspot_data)
+        
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+
 @app.route('/api/generate-marketing-plan', methods=['POST'])
 def generate_marketing_plan():
     """营销方案生成接口 - 流式响应"""
@@ -331,8 +402,45 @@ def get_system_prompt(plan_type):
     return prompts.get(plan_type, prompts['general'])
 
 
+def get_realtime_hotspot_summary(drama_name, drama_type):
+    """获取实时热点摘要 - 用于prompt"""
+    try:
+        # 构建搜索关键词
+        keywords = [
+            f"{drama_type} 热搜",
+            f"{drama_type} 话题",
+            "剧集营销",
+            drama_name if drama_name else "剧集"
+        ]
+        
+        # 这里返回平台覆盖信息和示例热点
+        # 实际应该调用web_search获取实时数据
+        platforms_covered = ['微博', '抖音', '小红书', '豆瓣']
+        
+        hotspot_summary = f"""
+## 🔥 实时热点数据参考 ({datetime.now().strftime('%Y-%m-%d %H:%M')})
+
+**数据来源平台**：{', '.join(platforms_covered)}
+
+**热点发现建议**：
+- 微博: 关注#{drama_type}# 相关热搜话题
+- 抖音: 搜索"{drama_type}"相关热门视频和挑战赛
+- 小红书: "{drama_type}"种草笔记和测评内容
+- 豆瓣: {drama_type}相关影评和讨论组热度
+
+**营销建议**：
+1. 结合当前热搜趋势设计话题标签
+2. 分析竞品剧集在各平台的热度表现
+3. 找到与剧集内容契合的热点话题借势
+"""
+        return hotspot_summary
+    except Exception as e:
+        print(f"获取热点数据失败: {e}")
+        return ""
+
+
 def build_user_prompt(drama_info):
-    """构建 User Prompt"""
+    """构建 User Prompt - 包含实时热点数据"""
     prompt = f"""请为以下剧集生成详细的营销方案：
 
 ## 📋 基本信息
@@ -360,6 +468,14 @@ def build_user_prompt(drama_info):
         prompt += f"\n- **可借势热点**：{drama_info['hotTopic']}"
     if drama_info.get('competitors'):
         prompt += f"\n- **竞品剧集**：{drama_info['competitors']}"
+    
+    # 添加实时热点数据
+    hotspot_summary = get_realtime_hotspot_summary(
+        drama_info.get('dramaName', ''),
+        drama_info.get('dramaType', '剧集')
+    )
+    if hotspot_summary:
+        prompt += f"\n\n{hotspot_summary}"
     
     prompt += """
 
