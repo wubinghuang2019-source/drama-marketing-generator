@@ -403,44 +403,35 @@ def get_system_prompt(plan_type):
 
 
 def get_realtime_hotspot_summary(drama_name, drama_type):
-    """获取实时热点摘要 - 调用真实数据"""
+    """获取实时热点摘要 - 用于prompt"""
     try:
-        import subprocess
-        import json as json_lib
+        # 构建搜索关键词
+        keywords = [
+            f"{drama_type} 热搜",
+            f"{drama_type} 话题",
+            "剧集营销",
+            drama_name if drama_name else "剧集"
+        ]
         
-        # 使用web_search获取实时热搜(通过调用Box AI的search功能)
-        # 这里我们使用简化方案:返回提示AI去生成"实时热点追踪"章节
+        # 这里返回平台覆盖信息和示例热点
+        # 实际应该调用web_search获取实时数据
+        platforms_covered = ['微博', '抖音', '小红书', '豆瓣']
         
         hotspot_summary = f"""
-## 📌 重要提示：实时热点追踪要求
+## 🔥 实时热点数据参考 ({datetime.now().strftime('%Y-%m-%d %H:%M')})
 
-**必须包含"实时热点追踪"章节**，该章节需要包含以下内容：
+**数据来源平台**：{', '.join(platforms_covered)}
 
-### 微博热搜（必须）
-请列出当前微博热搜榜前10条，格式：
-- #排名 话题标题 热度值 标签(热/新/综合等)
-例如：
-#1 某某话题 117.6万 热
-#2 某某事件 85.5万 新
+**热点发现建议**：
+- 微博: 关注#{drama_type}# 相关热搜话题
+- 抖音: 搜索"{drama_type}"相关热门视频和挑战赛
+- 小红书: "{drama_type}"种草笔记和测评内容
+- 豆瓣: {drama_type}相关影评和讨论组热度
 
-### 抖音热榜（必须）
-请列出抖音当前热门话题/挑战赛，格式：
-- #排名 话题名称 播放量/参与度
-
-### 小红书热门（必须）  
-请列出小红书当前热门笔记类型/话题
-
-### 豆瓣热门话题（必须）
-请列出豆瓣当前热门讨论话题
-
-### 热点借势建议
-基于以上实时热搜，分析哪些热点可以与《{drama_name}》({drama_type})结合借势。
-
-**注意**：
-1. "实时热点追踪"必须是独立的一级章节(##)
-2. 必须包含4个平台的真实热点数据
-3. 数据格式要清晰,包含排名、标题、热度值
-4. 最后给出针对本剧的借势建议
+**营销建议**：
+1. 结合当前热搜趋势设计话题标签
+2. 分析竞品剧集在各平台的热度表现
+3. 找到与剧集内容契合的热点话题借势
 """
         return hotspot_summary
     except Exception as e:
