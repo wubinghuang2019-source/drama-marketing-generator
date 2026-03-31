@@ -765,6 +765,7 @@
                 <h2>📊 AI定制营销方案</h2>
                 <div class="action-btns">
                     <button class="action-btn" onclick="exportMarkdown()">📥 导出MD</button>
+                    <button class="action-btn" onclick="exportWord()">📄 下载Word</button>
                     <button class="action-btn" onclick="exportPPT()">📊 下载PPT</button>
                     <button class="action-btn" onclick="printPlan()">🖨️ 打印</button>
                     <button class="action-btn" onclick="sharePlan()">🔗 分享</button>
@@ -776,6 +777,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script>
         // ========== 智能规则引擎 ==========
@@ -2146,6 +2148,214 @@
             a.href = url;
             a.download = window.currentPlan.dramaName + '_营销方案.md';
             a.click();
+        }
+
+        // 导出Word文档
+        async function exportWord() {
+            const plan = window.currentPlan;
+            
+            if (!plan || !plan.aiResult) {
+                alert('请先生成营销方案！');
+                return;
+            }
+
+            try {
+                const { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType, 
+                        Header, Footer, PageNumber, PageBreak, LevelFormat } = docx;
+
+                // 解析Markdown
+                const sections = parseMarkdownForWord(plan.aiResult);
+                console.log(`准备生成Word文档,包含 ${sections.length} 个章节`);
+
+                // 构建文档内容
+                const docChildren = [
+                    // 封面
+                    new Paragraph({
+                        heading: HeadingLevel.TITLE,
+                        children: [new TextRun({ text: "剧集营销方案", size: 56, bold: true, color: "53B76F" })]
+                    }),
+                    new Paragraph({
+                        alignment: AlignmentType.CENTER,
+                        spacing: { before: 120, after: 240 },
+                        children: [new TextRun({
+                            text: plan.dramaName || "剧集名称",
+                            size: 40,
+                            color: "DD7694",
+                            bold: true
+                        })]
+                    }),
+                    new Paragraph({
+                        alignment: AlignmentType.CENTER,
+                        spacing: { after: 240 },
+                        children: [new TextRun({
+                            text: "AI 定制版",
+                            size: 24,
+                            color: "999999"
+                        })]
+                    }),
+                    new Paragraph({
+                        alignment: AlignmentType.CENTER,
+                        spacing: { after: 1200 },
+                        children: [new TextRun({
+                            text: plan.timestamp || new Date().toLocaleString('zh-CN'),
+                            size: 20,
+                            color: "CCCCCC"
+                        })]
+                    }),
+                    new Paragraph({ children: [new PageBreak()] })
+                ];
+
+                // 添加章节内容
+                sections.forEach((section, index) => {
+                    // 章节标题(H1,新页开始)
+                    if (index > 0) {
+                        docChildren.push(new Paragraph({ children: [new PageBreak()] }));
+                    }
+                    docChildren.push(new Paragraph({
+                        heading: HeadingLevel.HEADING_1,
+                        children: [new TextRun({ text: section.title, size: 36, bold: true, color: "53B76F" })]
+                    }));
+
+                    // 章节内容
+                    section.content.forEach(line => {
+                        if (!line.trim()) return;
+
+                        // H3标题
+                        if (line.startsWith('### ')) {
+                            docChildren.push(new Paragraph({
+                                heading: HeadingLevel.HEADING_2,
+                                children: [new TextRun({ 
+                                    text: line.replace(/^###\s*/, ''), 
+                                    size: 28, 
+                                    bold: true, 
+                                    color: "DD7694" 
+                                })]
+                            }));
+                        }
+                        // H4标题
+                        else if (line.startsWith('#### ')) {
+                            docChildren.push(new Paragraph({
+                                heading: HeadingLevel.HEADING_3,
+                                children: [new TextRun({ 
+                                    text: line.replace(/^####\s*/, ''), 
+                                    size: 24, 
+                                    bold: true 
+                                })]
+                            }));
+                        }
+                        // 列表项
+                        else if (line.match(/^[-*•]\s/)) {
+                            docChildren.push(new Paragraph({
+                                bullet: { level: 0 },
+                                children: [new TextRun(line.replace(/^[-*•]\s/, '').replace(/\*\*/g, ''))]
+                            }));
+                        }
+                        // 数字列表
+                        else if (line.match(/^\d+\.\s/)) {
+                            docChildren.push(new Paragraph({
+                                numbering: { reference: "numbered-list", level: 0 },
+                                children: [new TextRun(line.replace(/^\d+\.\s/, '').replace(/\*\*/g, ''))]
+                            }));
+                        }
+                        // 表格(显示为代码)
+                        else if (line.includes('|')) {
+                            docChildren.push(new Paragraph({
+                                children: [new TextRun({ text: line, font: "Courier New", size: 20 })]
+                            }));
+                        }
+                        // 普通段落
+                        else {
+                            docChildren.push(new Paragraph({
+                                children: [new TextRun(line.replace(/\*\*/g, ''))]
+                            }));
+                        }
+                    });
+                });
+
+                // 创建文档
+                const doc = new Document({
+                    sections: [{
+                        properties: {
+                            page: {
+                                margin: { top: 1440, right: 1440, bottom: 1440, left: 1440 }
+                            }
+                        },
+                        headers: {
+                            default: new Header({
+                                children: [new Paragraph({
+                                    alignment: AlignmentType.RIGHT,
+                                    children: [new TextRun({
+                                        text: plan.dramaName || "剧集营销方案",
+                                        size: 20,
+                                        color: "999999"
+                                    })]
+                                })]
+                            })
+                        },
+                        footers: {
+                            default: new Footer({
+                                children: [new Paragraph({
+                                    alignment: AlignmentType.CENTER,
+                                    children: [
+                                        new TextRun({ text: "第 ", size: 20, color: "999999" }),
+                                        new TextRun({ children: [PageNumber.CURRENT], size: 20, color: "999999" }),
+                                        new TextRun({ text: " 页 | 共 ", size: 20, color: "999999" }),
+                                        new TextRun({ children: [PageNumber.TOTAL_PAGES], size: 20, color: "999999" }),
+                                        new TextRun({ text: " 页", size: 20, color: "999999" })
+                                    ]
+                                })]
+                            })
+                        },
+                        children: docChildren
+                    }]
+                });
+
+                // 生成并下载
+                const blob = await Packer.toBlob(doc);
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = (plan.dramaName || '剧集') + '_营销方案.docx';
+                a.click();
+                URL.revokeObjectURL(url);
+
+                alert(`✅ Word文档已生成下载！\n\n• 包含 ${sections.length} 个章节\n• 格式: 专业排版,带页眉页脚`);
+
+            } catch (error) {
+                console.error('Word生成失败:', error);
+                alert('❌ Word生成失败: ' + error.message);
+            }
+        }
+
+        // 解析Markdown为Word结构
+        function parseMarkdownForWord(markdown) {
+            const sections = [];
+            const lines = markdown.split('\n');
+            let currentSection = null;
+
+            for (let line of lines) {
+                // H2 - 新章节
+                if (line.startsWith('## ')) {
+                    if (currentSection) {
+                        sections.push(currentSection);
+                    }
+                    currentSection = {
+                        title: line.replace(/^##\s*/, '').trim(),
+                        content: []
+                    };
+                }
+                // 章节内容
+                else if (currentSection && line.trim()) {
+                    currentSection.content.push(line);
+                }
+            }
+
+            // 最后一个章节
+            if (currentSection) {
+                sections.push(currentSection);
+            }
+
+            return sections;
         }
 
         // 打印方案
