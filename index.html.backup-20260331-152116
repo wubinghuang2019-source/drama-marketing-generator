@@ -1,0 +1,2163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大剧营销方案生成器 PRO v2.0 | AI定制版</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            background: 
+                radial-gradient(ellipse at 20% 30%, rgba(221, 118, 148, 0.25) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 70%, rgba(83, 183, 111, 0.25) 0%, transparent 50%),
+                linear-gradient(180deg, 
+                    #FFF8FA 0%, 
+                    #FFF5F7 20%,
+                    #F8FBF9 50%,
+                    #F0F9F3 80%,
+                    #EBF7EE 100%
+                );
+            min-height: 100vh;
+            padding: 30px 20px;
+            color: #262626;
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 15% 25%, rgba(221, 118, 148, 0.12) 0%, transparent 25%),
+                radial-gradient(circle at 85% 75%, rgba(83, 183, 111, 0.12) 0%, transparent 25%),
+                radial-gradient(circle at 50% 50%, rgba(221, 118, 148, 0.06) 0%, transparent 40%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 40px 20px;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            filter: drop-shadow(0 2px 12px rgba(221, 118, 148, 0.35)) drop-shadow(0 2px 20px rgba(83, 183, 111, 0.25));
+            animation: logoFloat 4s ease-in-out infinite;
+        }
+
+        @keyframes logoFloat {
+            0%, 100% {
+                transform: translateY(0) scale(1);
+                filter: drop-shadow(0 2px 12px rgba(221, 118, 148, 0.35)) drop-shadow(0 2px 20px rgba(83, 183, 111, 0.25));
+            }
+            50% {
+                transform: translateY(-5px) scale(1.03);
+                filter: drop-shadow(0 5px 18px rgba(221, 118, 148, 0.5)) drop-shadow(0 5px 28px rgba(83, 183, 111, 0.4));
+            }
+        }
+
+        .logo svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .header h1 {
+            font-size: 2.8em;
+            font-weight: 800;
+            color: #262626;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .header h1 .highlight {
+            background: linear-gradient(135deg, #53B76F 0%, #3D9F5A 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .version-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #DD7694 0%, #C9627D 100%);
+            color: white;
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(221, 118, 148, 0.25);
+            margin-left: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            color: #595959;
+            margin-top: 15px;
+            line-height: 1.8;
+        }
+
+        .form-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+            border: 1px solid #F0F0F0;
+        }
+
+        .form-section h2 {
+            color: #262626;
+            font-size: 1.6em;
+            margin-bottom: 30px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: #262626;
+            margin-bottom: 10px;
+            font-size: 1.05em;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 16px 20px;
+            border: 2px solid #E8E8E8;
+            border-radius: 12px;
+            font-size: 1.05em;
+            transition: all 0.3s ease;
+            background: #FAFAFA;
+            font-family: inherit;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+            line-height: 1.6;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #53B76F;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(83, 183, 111, 0.1);
+        }
+
+        .generate-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #53B76F 0%, #3D9F5A 100%);
+            border: none;
+            border-radius: 14px;
+            color: white;
+            font-size: 1.15em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 16px rgba(83, 183, 111, 0.3);
+            letter-spacing: 0.5px;
+            margin-top: 30px;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(83, 183, 111, 0.4);
+        }
+
+        .generate-btn:active {
+            transform: translateY(0);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 20px;
+            margin: 30px 0;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #E6F4EB;
+            border-top-color: #53B76F;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading p {
+            color: #595959;
+            font-size: 1.1em;
+        }
+
+        .result-section {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            margin-top: 30px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+        }
+
+        .result-header {
+            background: linear-gradient(135deg, 
+                rgba(221, 118, 148, 0.12) 0%, 
+                rgba(83, 183, 111, 0.12) 100%
+            );
+            border: 2px solid rgba(83, 183, 111, 0.3);
+            border-radius: 20px 20px 0 0;
+            padding: 25px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .result-header h2 {
+            color: #53B76F;
+            font-size: 1.8em;
+            font-weight: 700;
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 10px 20px;
+            background: white;
+            border: 2px solid #53B76F;
+            border-radius: 10px;
+            color: #53B76F;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background: #53B76F;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(83, 183, 111, 0.25);
+        }
+
+        .result-content {
+            padding: 40px;
+            line-height: 1.8;
+        }
+
+        .result-content h3 {
+            color: #53B76F;
+            font-size: 1.5em;
+            margin: 35px 0 20px 0;
+            padding-bottom: 12px;
+            border-bottom: 3px solid rgba(221, 118, 148, 0.3);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .result-content p {
+            margin: 12px 0;
+            color: #595959;
+        }
+
+        .result-content strong {
+            color: #262626;
+            font-weight: 600;
+        }
+
+        /* 表格样式 */
+        .result-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .result-content table thead {
+            background: linear-gradient(135deg, #53B76F 0%, #48A965 100%);
+        }
+
+        .result-content table thead th {
+            color: #fff;
+            font-weight: 600;
+            padding: 15px;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        .result-content table tbody tr {
+            border-bottom: 1px solid #f0f0f0;
+            transition: background 0.2s;
+        }
+
+        .result-content table tbody tr:hover {
+            background: rgba(83, 183, 111, 0.05);
+        }
+
+        .result-content table tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        .result-content table tbody td {
+            padding: 12px 15px;
+            color: #595959;
+            font-size: 14px;
+        }
+
+        .result-content table tbody td:first-child {
+            font-weight: 600;
+            color: #262626;
+        }
+
+        /* 章节操作按钮样式 */
+        .section-control-btn {
+            padding: 4px 10px;
+            font-size: 12px;
+            border: 1px solid #d9d9d9;
+            background: #fff;
+            color: #595959;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .section-control-btn:hover {
+            border-color: #53B76F;
+            color: #53B76F;
+            background: rgba(83, 183, 111, 0.05);
+        }
+
+        .section-control-btn-danger:hover {
+            border-color: #e74c3c;
+            color: #e74c3c;
+            background: rgba(231, 76, 60, 0.05);
+        }
+
+        /* 编辑模式样式 */
+        .section-editing {
+            background: #fffbe6;
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px dashed #ffd666;
+        }
+
+        .section-editing textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 12px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 14px;
+            line-height: 1.6;
+            resize: vertical;
+        }
+
+        .strategy-item {
+            background: linear-gradient(135deg, 
+                rgba(221, 118, 148, 0.08) 0%, 
+                rgba(83, 183, 111, 0.08) 100%
+            );
+            border-left: 4px solid #53B76F;
+            padding: 20px 25px;
+            margin: 20px 0;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .strategy-item strong {
+            color: #53B76F;
+            font-size: 1.15em;
+            display: block;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .insight-card {
+            background: linear-gradient(135deg, #FFF8FA 0%, #F8FBF9 100%);
+            border: 2px solid rgba(221, 118, 148, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .insight-card h4 {
+            color: #DD7694;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+
+        .copywriting-item {
+            background: white;
+            border: 2px solid #E8E8E8;
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin: 12px 0;
+            transition: all 0.3s ease;
+        }
+
+        .copywriting-item:hover {
+            border-color: #53B76F;
+            box-shadow: 0 2px 8px rgba(83, 183, 111, 0.15);
+        }
+
+        .copywriting-item .label {
+            color: #DD7694;
+            font-weight: 600;
+            font-size: 0.9em;
+            margin-bottom: 8px;
+        }
+
+        .copywriting-item .text {
+            color: #262626;
+            font-size: 1.05em;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .form-section {
+                padding: 25px;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .result-content {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <!-- 底座 - 带颜色呼吸 -->
+                    <rect x="20" y="55" width="60" height="30" rx="3" fill="#53B76F">
+                        <animate attributeName="fill" values="#53B76F;#62c47f;#53B76F" dur="2.5s" repeatCount="indefinite"/>
+                    </rect>
+                    
+                    <!-- 导演板主体 - 带轻微晃动 -->
+                    <g transform="rotate(-15 50 40)">
+                        <animateTransform 
+                            attributeName="transform" 
+                            type="rotate" 
+                            values="-15 50 40;-13 50 40;-15 50 40" 
+                            dur="4s" 
+                            repeatCount="indefinite"/>
+                        
+                        <rect x="15" y="30" width="70" height="20" rx="2" fill="#DD7694">
+                            <animate attributeName="fill" values="#DD7694;#e886a4;#DD7694" dur="2.5s" repeatCount="indefinite"/>
+                        </rect>
+                        
+                        <!-- 黑白条纹 - 波浪闪烁 -->
+                        <rect x="20" y="32" width="8" height="16" fill="white">
+                            <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite" begin="0s"/>
+                        </rect>
+                        <rect x="31" y="32" width="8" height="16" fill="white">
+                            <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite" begin="0.3s"/>
+                        </rect>
+                        <rect x="42" y="32" width="8" height="16" fill="white">
+                            <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite" begin="0.6s"/>
+                        </rect>
+                        <rect x="53" y="32" width="8" height="16" fill="white">
+                            <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite" begin="0.9s"/>
+                        </rect>
+                        <rect x="64" y="32" width="8" height="16" fill="white">
+                            <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite" begin="1.2s"/>
+                        </rect>
+                        <rect x="75" y="32" width="8" height="16" fill="white">
+                            <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite" begin="1.5s"/>
+                        </rect>
+                    </g>
+                    
+                    <!-- 螺丝钉 - 轻微脉冲 -->
+                    <circle cx="22" cy="55" r="3" fill="#262626">
+                        <animate attributeName="r" values="3;3.3;3" dur="2s" repeatCount="indefinite"/>
+                    </circle>
+                    <circle cx="78" cy="55" r="3" fill="#262626">
+                        <animate attributeName="r" values="3;3.3;3" dur="2s" repeatCount="indefinite"/>
+                    </circle>
+                    
+                    <!-- 底座纹理 - 呼吸 -->
+                    <rect x="28" y="63" width="44" height="3" rx="1.5" fill="white" opacity="0.3">
+                        <animate attributeName="opacity" values="0.3;0.7;0.3" dur="2.5s" repeatCount="indefinite"/>
+                    </rect>
+                    <rect x="28" y="70" width="30" height="3" rx="1.5" fill="white" opacity="0.3">
+                        <animate attributeName="opacity" values="0.3;0.7;0.3" dur="3s" repeatCount="indefinite"/>
+                    </rect>
+                    
+                    <!-- 装饰星星 - 柔和闪烁 -->
+                    <circle cx="15" cy="22" r="2" fill="#DD7694" opacity="0.7">
+                        <animate attributeName="opacity" values="0.7;0.2;0.7" dur="2s" repeatCount="indefinite"/>
+                        <animate attributeName="r" values="2;2.3;2" dur="2s" repeatCount="indefinite"/>
+                    </circle>
+                    <circle cx="85" cy="25" r="1.8" fill="#53B76F" opacity="0.6">
+                        <animate attributeName="opacity" values="0.6;0.15;0.6" dur="2.3s" repeatCount="indefinite"/>
+                        <animate attributeName="r" values="1.8;2.1;1.8" dur="2.3s" repeatCount="indefinite"/>
+                    </circle>
+                    <circle cx="13" cy="80" r="1.6" fill="#DD7694" opacity="0.65">
+                        <animate attributeName="opacity" values="0.65;0.15;0.65" dur="2.5s" repeatCount="indefinite"/>
+                        <animate attributeName="r" values="1.6;1.9;1.6" dur="2.5s" repeatCount="indefinite"/>
+                    </circle>
+                    <circle cx="87" cy="82" r="1.9" fill="#53B76F" opacity="0.7">
+                        <animate attributeName="opacity" values="0.7;0.2;0.7" dur="2.2s" repeatCount="indefinite"/>
+                        <animate attributeName="r" values="1.9;2.2;1.9" dur="2.2s" repeatCount="indefinite"/>
+                    </circle>
+                </svg>
+            </div>
+            <h1><span class="highlight">大剧营销方案生成器</span> PRO <span class="version-badge">v2.0 AI定制版</span></h1>
+            <p>基于智能规则引擎，结合剧集内容深度定制营销策略<br>输出用户洞察、策略文案、平台玩法，真正可落地执行的专业方案</p>
+        </div>
+
+        <div class="form-section">
+            <h2>📝 剧集信息填写</h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>剧集名称 *</label>
+                    <input type="text" id="dramaName" placeholder="例如: 庆余年2">
+                </div>
+                <div class="form-group">
+                    <label>类型定位 *</label>
+                    <select id="dramaType">
+                        <option value="">请选择...</option>
+                        <option value="古装剧">古装剧</option>
+                        <option value="现代都市剧">现代都市剧</option>
+                        <option value="悬疑推理剧">悬疑推理剧</option>
+                        <option value="爱情剧">爱情剧</option>
+                        <option value="家庭伦理剧">家庭伦理剧</option>
+                        <option value="职场剧">职场剧</option>
+                        <option value="青春校园剧">青春校园剧</option>
+                        <option value="科幻剧">科幻剧</option>
+                        <option value="历史剧">历史剧</option>
+                        <option value="军旅剧">军旅剧</option>
+                        <option value="医疗剧">医疗剧</option>
+                        <option value="律政剧">律政剧</option>
+                        <option value="谍战剧">谍战剧</option>
+                        <option value="年代剧">年代剧</option>
+                        <option value="喜剧">喜剧</option>
+                        <option value="农村剧">农村剧</option>
+                        <option value="主旋律剧">主旋律剧</option>
+                        <option value="奇幻剧">奇幻剧</option>
+                        <option value="武侠剧">武侠剧</option>
+                        <option value="短剧">短剧</option>
+                    </select>
+                </div>
+                <div class="form-group full-width">
+                    <label>核心卖点 *</label>
+                    <input type="text" id="coreSelling" placeholder="例如: 顶级流量+大IP改编+权谋爽剧+特效震撼">
+                </div>
+                <div class="form-group full-width">
+                    <label>剧情梗概（简述故事主线和核心冲突）*</label>
+                    <textarea id="plotSummary" placeholder="例如: 讲述现代青年穿越到古代权谋世界，从底层逆袭成为一代权臣的故事。核心冲突：个人理想vs家族利益，现代思维vs古代规则。"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>情感核心 *</label>
+                    <select id="emotionCore">
+                        <option value="">请选择...</option>
+                        <option value="热血励志（逆袭成长）">热血励志（逆袭成长）</option>
+                        <option value="浪漫甜蜜（恋爱糖分）">浪漫甜蜜（恋爱糖分）</option>
+                        <option value="虐心催泪（情感冲击）">虐心催泪（情感冲击）</option>
+                        <option value="爽感刺激（打脸反转）">爽感刺激（打脸反转）</option>
+                        <option value="温情治愈（情感共鸣）">温情治愈（情感共鸣）</option>
+                        <option value="紧张悬疑（烧脑推理）">紧张悬疑（烧脑推理）</option>
+                        <option value="幽默搞笑（轻松解压）">幽默搞笑（轻松解压）</option>
+                        <option value="家国情怀（价值认同）">家国情怀（价值认同）</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>目标情绪（想让观众产生的感受）*</label>
+                    <select id="targetEmotion">
+                        <option value="">请选择...</option>
+                        <option value="热血沸腾（想奋斗）">热血沸腾（想奋斗）</option>
+                        <option value="甜蜜上头（想恋爱）">甜蜜上头（想恋爱）</option>
+                        <option value="泪流满面（共情落泪）">泪流满面（共情落泪）</option>
+                        <option value="畅快淋漓（爽感满足）">畅快淋漓（爽感满足）</option>
+                        <option value="温暖感动（心灵治愈）">温暖感动（心灵治愈）</option>
+                        <option value="紧张刺激（想追剧）">紧张刺激（想追剧）</option>
+                        <option value="放松欢乐（解压娱乐）">放松欢乐（解压娱乐）</option>
+                        <option value="思考共鸣（价值认同）">思考共鸣（价值认同）</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>演员阵容 *</label>
+                    <select id="castType">
+                        <option value="">请选择...</option>
+                        <option value="顶级流量明星（粉丝5000万+）">顶级流量明星（粉丝5000万+）</option>
+                        <option value="一线实力派（演技+口碑）">一线实力派（演技+口碑）</option>
+                        <option value="流量+实力组合（平衡配置）">流量+实力组合（平衡配置）</option>
+                        <option value="新人演员（新鲜面孔）">新人演员（新鲜面孔）</option>
+                        <option value="中生代演员（稳定观众基础）">中生代演员（稳定观众基础）</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>IP类型 *</label>
+                    <select id="ipType">
+                        <option value="">请选择...</option>
+                        <option value="原创剧本">原创剧本</option>
+                        <option value="小说改编（有书粉基础）">小说改编（有书粉基础）</option>
+                        <option value="漫画改编（二次元受众）">漫画改编（二次元受众）</option>
+                        <option value="海外翻拍（有对标作品）">海外翻拍（有对标作品）</option>
+                        <option value="真实事件改编（社会话题）">真实事件改编（社会话题）</option>
+                        <option value="经典IP重拍（情怀牌）">经典IP重拍（情怀牌）</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>播出平台 *</label>
+                    <select id="platform">
+                        <option value="">请选择...</option>
+                        <option value="爱奇艺">爱奇艺</option>
+                        <option value="腾讯视频">腾讯视频</option>
+                        <option value="优酷">优酷</option>
+                        <option value="芒果TV">芒果TV</option>
+                        <option value="央视">央视</option>
+                        <option value="卫视">卫视</option>
+                        <option value="多平台联播">多平台联播</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>营销预算 *</label>
+                    <select id="budget">
+                        <option value="">请选择...</option>
+                        <option value="100万以内（小成本）">100万以内（小成本）</option>
+                        <option value="100-500万（中等规模）">100-500万（中等规模）</option>
+                        <option value="500-1000万（大制作）">500-1000万（大制作）</option>
+                        <option value="1000万以上（S级项目）">1000万以上（S级项目）</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>目标受众 *</label>
+                    <select id="audience">
+                        <option value="">请选择...</option>
+                        
+                        <!-- 性别维度 -->
+                        <optgroup label="🎯 性别维度">
+                            <option value="全女性观众（18-50岁女性）">全女性观众（18-50岁女性）</option>
+                            <option value="全男性观众（18-50岁男性）">全男性观众（18-50岁男性）</option>
+                            <option value="全年龄段观众（不分性别）">全年龄段观众（不分性别）</option>
+                        </optgroup>
+                        
+                        <!-- 女性细分 -->
+                        <optgroup label="👧 女性细分">
+                            <option value="18-25岁年轻女性（Z世代）">18-25岁年轻女性（Z世代）</option>
+                            <option value="25-30岁都市女性（职场新锐）">25-30岁都市女性（职场新锐）</option>
+                            <option value="30-40岁成熟女性（轻熟女）">30-40岁成熟女性（轻熟女）</option>
+                            <option value="40-50岁中年女性（家庭主力）">40-50岁中年女性（家庭主力）</option>
+                            <option value="少女观众（14-18岁）">少女观众（14-18岁）</option>
+                        </optgroup>
+                        
+                        <!-- 男性细分 -->
+                        <optgroup label="👨 男性细分">
+                            <option value="18-25岁年轻男性（Z世代）">18-25岁年轻男性（Z世代）</option>
+                            <option value="25-35岁都市男性（职场精英）">25-35岁都市男性（职场精英）</option>
+                            <option value="35-50岁中年男性（社会中坚）">35-50岁中年男性（社会中坚）</option>
+                            <option value="少年观众（14-18岁）">少年观众（14-18岁）</option>
+                        </optgroup>
+                        
+                        <!-- 场景/身份 -->
+                        <optgroup label="🎯 场景/身份">
+                            <option value="学生党（大学生、高中生）">学生党（大学生、高中生）</option>
+                            <option value="职场人群（白领、打工人）">职场人群（白领、打工人）</option>
+                            <option value="宝妈群体（育儿妈妈）">宝妈群体（育儿妈妈）</option>
+                            <option value="银发族（50岁以上）">银发族（50岁以上）</option>
+                            <option value="家庭观众（全家一起看）">家庭观众（全家一起看）</option>
+                        </optgroup>
+                        
+                        <!-- 圈层/兴趣 -->
+                        <optgroup label="🎨 圈层/兴趣">
+                            <option value="二次元群体（ACG爱好者）">二次元群体（ACG爱好者）</option>
+                            <option value="国风爱好者（汉服、传统文化）">国风爱好者（汉服、传统文化）</option>
+                            <option value="悬疑推理粉（烧脑剧爱好者）">悬疑推理粉（烧脑剧爱好者）</option>
+                            <option value="耽美圈（CP粉、腐女）">耽美圈（CP粉、腐女）</option>
+                            <option value="追星族（明星粉丝）">追星族（明星粉丝）</option>
+                            <option value="剧粉群体（重度追剧用户）">剧粉群体（重度追剧用户）</option>
+                        </optgroup>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>营销阶段 *</label>
+                    <select id="stage">
+                        <option value="">请选择...</option>
+                        <option value="概念期（项目立项/筹备）">概念期（项目立项/筹备）</option>
+                        <option value="预热期（上线前30-60天）">预热期（上线前30-60天）</option>
+                        <option value="热播期（正在播出）">热播期（正在播出）</option>
+                        <option value="收官期（即将完结）">收官期（即将完结）</option>
+                    </select>
+                </div>
+            </div>
+            <button class="generate-btn" onclick="generatePlan()">🚀 生成AI定制营销方案</button>
+        </div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>智能规则引擎正在分析剧集内容，生成定制化策略...</p>
+            <p style="margin-top: 20px;">
+                <button onclick="cancelGeneration()" style="padding: 10px 20px; background: linear-gradient(135deg, #53B76F 0%, #3D9F5A 100%); color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 14px; box-shadow: 0 2px 8px rgba(83, 183, 111, 0.3);">⏹️ 取消生成</button>
+            </p>
+        </div>
+
+        <div class="result-section" id="resultSection">
+            <div class="result-header">
+                <h2>📊 AI定制营销方案</h2>
+                <div class="action-btns">
+                    <button class="action-btn" onclick="exportMarkdown()">📥 导出MD</button>
+                    <button class="action-btn" onclick="exportPPT()">📊 下载PPT</button>
+                    <button class="action-btn" onclick="printPlan()">🖨️ 打印</button>
+                    <button class="action-btn" onclick="sharePlan()">🔗 分享</button>
+                </div>
+            </div>
+            <div class="result-content" id="resultContent"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        // ========== 智能规则引擎 ==========
+        
+        // 根据剧情类型生成差异化用户画像
+        function getUserInsights(plan) {
+            const insights = {
+                '古装剧': {
+                    core: '古装剧粉丝热爱架空世界观和权谋设定，追求视觉美学和情节爽感',
+                    demographics: '女性占70%，18-35岁为主，二三线城市占比高，追剧时间集中在晚8-12点',
+                    psychographics: '喜欢沉浸式体验，对服化道要求高，爱讨论剧情细节和角色命运',
+                    painPoints: '担心魔改原著、特效五毛、剧情注水、演员演技尴尬',
+                    desires: '想看到精良制作、尊重原著、演员在线、剧情紧凑不拖沓',
+                    mediaHabits: '微博超话活跃，B站看剪辑，抖音刷花絮，小红书找同款'
+                },
+                '现代都市剧': {
+                    core: '都市剧观众追求现实共鸣和情感代入，关注职场、情感、家庭等话题',
+                    demographics: '25-40岁都市白领，女性占65%，一线城市占比高，碎片化追剧',
+                    psychographics: '追求现实感和共鸣感，喜欢看到自己的影子，关注社会议题',
+                    painPoints: '担心悬浮剧情、人设崩塌、价值观不正、强行煽情',
+                    desires: '想看真实职场、成熟情感、接地气的人物、有共鸣的故事',
+                    mediaHabits: '小红书种草为主，微博看热搜，知乎看深度分析，朋友圈口碑传播'
+                },
+                '悬疑推理剧': {
+                    core: '悬疑剧粉丝是推理爱好者，享受烧脑过程和真相揭晓的快感',
+                    demographics: '男性占55%，20-35岁，高学历人群多，深度追剧派',
+                    psychographics: '逻辑思维强，喜欢分析推理，热衷讨论细节和伏笔',
+                    painPoints: '担心逻辑漏洞、强行反转、低级bug、侮辱智商',
+                    desires: '想看严谨推理、环环相扣、细节经得起推敲、结局意料之外情理之中',
+                    mediaHabits: '知乎深度讨论，豆瓣评分，B站解析视频，播客听推理分析'
+                },
+                '爱情剧': {
+                    core: '爱情剧观众追求情感满足和甜蜜体验，是最容易产生CP粉的类型',
+                    demographics: '女性占85%，18-30岁，学生党和年轻职场人，追剧粘性强',
+                    psychographics: '少女心重，代入感强，爱磕CP，喜欢浪漫情节和甜宠桥段',
+                    painPoints: '担心感情线注水、三观不正、强行虐恋、男主渣男人设',
+                    desires: '想看甜蜜日常、双向奔赴、势均力敌、HE结局',
+                    mediaHabits: '抖音刷甜蜜CUT，微博超话日常签到，小红书找壁纸表情包，B站看剪辑'
+                },
+                '家庭伦理剧': {
+                    core: '伦理剧观众关注家庭关系和代际矛盾，追求情感共鸣和价值观认同',
+                    demographics: '35-60岁中老年观众为主，女性占70%，下沉市场占比高',
+                    psychographics: '关注家庭和谐，重视亲情，对现实问题敏感，喜欢教育意义',
+                    painPoints: '担心价值观偏激、过度煽情、人物脸谱化、剧情狗血',
+                    desires: '想看真实家庭、温情治愈、正能量传递、问题有解决方案',
+                    mediaHabits: '央视和卫视直播为主，微信视频号补剧，朋友圈分享，家庭观看'
+                },
+                '职场剧': {
+                    core: '职场剧观众是职场人士，追求专业感和成长启发',
+                    demographics: '25-40岁职场人群，男女均衡，一二线城市，高收入人群',
+                    psychographics: '关注职场规则和晋升路径，追求代入感，喜欢职场智慧',
+                    painPoints: '担心悬浮不接地气、职场描写不专业、强行恋爱线',
+                    desires: '想看真实职场、专业知识、成长启发、职场智慧',
+                    mediaHabits: '知乎看职场讨论，小红书找职场穿搭，微博看热议，播客听职场话题'
+                },
+                '青春校园剧': {
+                    core: '校园剧观众是学生群体和怀旧派，追求青春回忆和纯真情感',
+                    demographics: '15-25岁学生党占70%，30+怀旧派占30%，女性占80%',
+                    psychographics: '怀念校园生活，追求纯真情感，喜欢青春热血和成长故事',
+                    painPoints: '担心过度狗血、早恋宣扬、校园霸凌美化、脱离现实',
+                    desires: '想看真实校园、纯真友情爱情、成长蜕变、青春热血',
+                    mediaHabits: '抖音是主阵地，B站看剪辑和弹幕，QQ空间分享，小红书找同款'
+                }
+            };
+            
+            return insights[plan.dramaType] || insights['现代都市剧'];
+        }
+
+        // 根据情感核心生成话题策略
+        function getTopicStrategy(plan) {
+            const topicMap = {
+                '热血励志': [
+                    { tag: '逆风翻盘', desc: '主角从底层逆袭的爽感时刻', example: '#' + plan.dramaName + '逆袭名场面#' },
+                    { tag: '燃点时刻', desc: '热血沸腾的励志瞬间', example: '#' + plan.dramaName + '燃起来了#' },
+                    { tag: '成长蜕变', desc: '角色成长轨迹对比', example: '#' + plan.dramaName + '成长史#' },
+                    { tag: '金句语录', desc: '励志台词传播', example: '#' + plan.dramaName + '励志语录#' },
+                    { tag: '打脸反转', desc: '打脸爽剧情节', example: '#' + plan.dramaName + '名场面打脸#' }
+                ],
+                '浪漫甜蜜': [
+                    { tag: 'CP名场面', desc: '甜蜜互动高光时刻', example: '#' + plan.dramaName + 'CP超甜#' },
+                    { tag: '恋爱教科书', desc: '恋爱技巧学习', example: '#' + plan.dramaName + '恋爱范本#' },
+                    { tag: '情侣壁纸', desc: 'CP向视觉物料', example: '#' + plan.dramaName + '情侣头像#' },
+                    { tag: '甜蜜日常', desc: '日常互动片段', example: '#' + plan.dramaName + '甜蜜CUT#' },
+                    { tag: '浪漫名场面', desc: '浪漫桥段合集', example: '#' + plan.dramaName + '浪漫瞬间#' }
+                ],
+                '虐心催泪': [
+                    { tag: '虐心名场面', desc: '催泪情节片段', example: '#' + plan.dramaName + '我哭了#' },
+                    { tag: '情感冲击', desc: '高情感冲击时刻', example: '#' + plan.dramaName + '太虐了#' },
+                    { tag: '角色命运', desc: '角色悲剧性命运', example: '#' + plan.dramaName + '为XX心疼#' },
+                    { tag: '遗憾美学', desc: '遗憾情节讨论', example: '#' + plan.dramaName + '意难平#' },
+                    { tag: '情感共鸣', desc: '引发情感讨论', example: '#' + plan.dramaName + '破防了#' }
+                ],
+                '爽感刺激': [
+                    { tag: '爽剧名场面', desc: '打脸反转高光', example: '#' + plan.dramaName + '太爽了#' },
+                    { tag: '主角开挂', desc: '主角爽感时刻', example: '#' + plan.dramaName + '开挂#' },
+                    { tag: '反派打脸', desc: '反派被打脸', example: '#' + plan.dramaName + '打脸名场面#' },
+                    { tag: '剧情反转', desc: '意想不到的反转', example: '#' + plan.dramaName + '神反转#' },
+                    { tag: '高能时刻', desc: '高能爽点合集', example: '#' + plan.dramaName + '高能时刻#' }
+                ],
+                '温情治愈': [
+                    { tag: '温情时刻', desc: '治愈系片段', example: '#' + plan.dramaName + '治愈#' },
+                    { tag: '感动瞬间', desc: '温暖人心的瞬间', example: '#' + plan.dramaName + '好暖#' },
+                    { tag: '家庭温情', desc: '亲情友情片段', example: '#' + plan.dramaName + '温暖#' },
+                    { tag: '正能量传递', desc: '正能量话题', example: '#' + plan.dramaName + '正能量#' },
+                    { tag: '生活哲理', desc: '人生道理讨论', example: '#' + plan.dramaName + '人生感悟#' }
+                ],
+                '紧张悬疑': [
+                    { tag: '悬疑推理', desc: '推理分析讨论', example: '#' + plan.dramaName + '烧脑#' },
+                    { tag: '真相揭秘', desc: '谜底揭晓时刻', example: '#' + plan.dramaName + '真相#' },
+                    { tag: '细节伏笔', desc: '细节分析', example: '#' + plan.dramaName + '细思极恐#' },
+                    { tag: '剧情反转', desc: '意外反转讨论', example: '#' + plan.dramaName + '反转#' },
+                    { tag: '案件解析', desc: '案件梳理分析', example: '#' + plan.dramaName + '案件分析#' }
+                ],
+                '幽默搞笑': [
+                    { tag: '爆笑名场面', desc: '搞笑片段合集', example: '#' + plan.dramaName + '笑死我了#' },
+                    { tag: '沙雕日常', desc: '沙雕片段', example: '#' + plan.dramaName + '沙雕#' },
+                    { tag: '表情包素材', desc: '搞笑表情包', example: '#' + plan.dramaName + '表情包#' },
+                    { tag: '名台词', desc: '搞笑台词', example: '#' + plan.dramaName + '金句#' },
+                    { tag: '解压神器', desc: '轻松解压内容', example: '#' + plan.dramaName + '解压#' }
+                ],
+                '家国情怀': [
+                    { tag: '家国情怀', desc: '家国主题讨论', example: '#' + plan.dramaName + '家国情怀#' },
+                    { tag: '英雄主义', desc: '英雄人物讨论', example: '#' + plan.dramaName + '英雄#' },
+                    { tag: '价值观共鸣', desc: '价值观讨论', example: '#' + plan.dramaName + '三观正#' },
+                    { tag: '历史启示', desc: '历史意义讨论', example: '#' + plan.dramaName + '历史#' },
+                    { tag: '民族自信', desc: '文化自信传播', example: '#' + plan.dramaName + '文化自信#' }
+                ]
+            };
+            
+            return topicMap[plan.emotionCore] || topicMap['热血励志'];
+        }
+
+        // 根据IP类型生成内容策略
+        function getIPStrategy(plan) {
+            const strategies = {
+                '小说改编': {
+                    fanBase: '原著有庞大书粉基础，预估书粉可转化20-30%成为剧粉',
+                    strategy: '激活书粉社群，引导书粉为剧集站台背书',
+                    tactics: [
+                        '建立500个书粉核心群，每群200人，覆盖10万核心书粉',
+                        '邀请原著作者站台：微博/直播互动，为改编背书',
+                        '制作"原著vs影视"对比内容，展示还原度',
+                        '设置书粉专属福利：提前观影、周边抽奖、见面会',
+                        '激励书粉产出UGC内容：人物解析、剧情解读、同人创作'
+                    ],
+                    risk: '需注意平衡书粉和剧粉需求，避免魔改引发书粉反弹'
+                },
+                '原创剧本': {
+                    fanBase: '无原著粉丝基础，需从零建立IP认知和受众群体',
+                    strategy: '通过内容为王+话题营销，从零打造IP影响力',
+                    tactics: [
+                        '加大内容营销投入：短视频日更量提升至15条+',
+                        '制造话题点：每周至少2个热搜话题',
+                        '明星粉丝引流：充分利用演员粉丝基础',
+                        'KOL种草矩阵：头部20+腰部100+尾部500',
+                        '首播前预热时间拉长至90天，持续曝光'
+                    ],
+                    risk: '营销难度大，需更高预算和更长预热周期'
+                },
+                '漫画改编': {
+                    fanBase: '二次元受众基础，粉丝年轻化，对还原度要求极高',
+                    strategy: '激活漫粉圈层，利用二次元传播生态',
+                    tactics: [
+                        'B站深度运营：UP主合作100+，二创激励计划',
+                        '漫展线下活动：Cos互动、周边销售、签售会',
+                        '二次元社区渗透：贴吧、微博超话、豆瓣小组',
+                        '人物还原度对比：原画vs定妆照，展示诚意',
+                        '声优配音话题：邀请知名声优参与，激活声控粉丝'
+                    ],
+                    risk: '二次元粉丝对三次元改编接受度低，需做好舆情应对'
+                },
+                '海外翻拍': {
+                    fanBase: '有对标作品参考，可借鉴成功经验，降低风险',
+                    strategy: '对比营销+本土化创新，吸引原版粉丝和新观众',
+                    tactics: [
+                        '制作"原版vs翻拍"对比视频，突出本土化优势',
+                        '邀请原版粉丝观看：提前点映，口碑发酵',
+                        '差异化卖点营销：强调本土化创新和文化适配',
+                        '海外宣发：利用原版影响力，进行反向输出',
+                        '情怀营销：激活老观众情怀，同时吸引新观众'
+                    ],
+                    risk: '容易被拿来对比，需做好差异化定位'
+                },
+                '真实事件改编': {
+                    fanBase: '社会关注度高，自带话题性和新闻价值',
+                    strategy: '借助社会议题热度，引发公共讨论和价值共鸣',
+                    tactics: [
+                        '新闻媒体发稿：主流媒体报道，提升严肃性',
+                        '专家学者背书：邀请相关领域专家解读',
+                        '社会议题讨论：知乎、微博引发深度讨论',
+                        '纪录片式宣传：幕后采访、主创说、真实还原',
+                        '公益活动绑定：结合社会公益，提升口碑'
+                    ],
+                    risk: '需严格把控舆论方向，避免争议'
+                },
+                '经典IP重拍': {
+                    fanBase: '情怀牌，老观众自带流量，但对比压力大',
+                    strategy: '平衡情怀与创新，既要致敬经典，也要超越经典',
+                    tactics: [
+                        '情怀营销：经典片段对比，致敬经典桥段',
+                        '老演员站台：邀请原版演员客串或站台',
+                        '升级卖点：特效/制作/演技全方位升级',
+                        '年轻化改编：吸引年轻观众，打破舒适圈',
+                        '对比式营销：展示新版优势，建立新经典'
+                    ],
+                    risk: '容易被拿来对比，需做好心理预期管理'
+                }
+            };
+            
+            return strategies[plan.ipType] || strategies['原创剧本'];
+        }
+
+        // 生成策略文案
+        function getCopywritingIdeas(plan) {
+            // 根据剧情梗概提取关键词
+            const plotKeywords = extractKeywords(plan.plotSummary);
+            
+            const copywriting = [
+                {
+                    platform: '微博',
+                    type: '开播官宣文案',
+                    text: `【${plan.dramaName}今晚开播！】${plan.coreSelling}，${plan.targetEmotion}的${plan.dramaType}来了！${plotKeywords}，今晚8点，${plan.platform}独家上线，不见不散！🔥`
+                },
+                {
+                    platform: '抖音',
+                    type: '短视频标题',
+                    text: `${plan.dramaName}${plan.emotionCore}名场面！这段看哭了...#${plan.dramaName} #${plan.dramaType} #追剧安利`
+                },
+                {
+                    platform: '小红书',
+                    type: '种草笔记标题',
+                    text: `必看！${plan.dramaName}为什么这么上头？｜${plan.coreSelling}｜追剧安利`
+                },
+                {
+                    platform: '微博',
+                    type: '话题引导文案',
+                    text: `【话题】如果你也经历过${plotKeywords}，你会怎么选择？《${plan.dramaName}》给了我们${plan.targetEmotion}的答案。说说你的看法👇 #${plan.dramaName}#`
+                },
+                {
+                    platform: '视频号',
+                    type: '朋友圈分享文案',
+                    text: `最近在追的${plan.dramaType}太好看了！${plan.dramaName}，${plan.coreSelling}，真的${plan.targetEmotion}！强烈推荐🔥`
+                },
+                {
+                    platform: '抖音',
+                    type: 'CP向文案',
+                    text: `${plan.dramaName}这对CP太好磕了！${plan.targetEmotion}的感觉！姐妹们冲！#${plan.dramaName}CP #磕CP #追剧`
+                },
+                {
+                    platform: '小红书',
+                    type: '演员同款文案',
+                    text: `${plan.dramaName}主演同款妆容/穿搭｜跟着剧追时尚｜平价替代`
+                },
+                {
+                    platform: '微博',
+                    type: '热搜冲刺文案',
+                    text: `【${plan.dramaName}】今晚大结局！${plotKeywords}的故事即将迎来最终答案！转发+评论，一起送剧上热搜！#${plan.dramaName}大结局#`
+                },
+                {
+                    platform: 'B站',
+                    type: '二创激励文案',
+                    text: `【${plan.dramaName}二创征集】剪辑/MAD/解说/吐槽，任何形式都欢迎！优质作品官方微博转发+周边奖励🎁`
+                },
+                {
+                    platform: '知乎',
+                    type: '深度分析标题',
+                    text: `如何评价《${plan.dramaName}》？｜${plan.dramaType}的新标杆还是旧瓶装新酒？`
+                }
+            ];
+            
+            return copywriting;
+        }
+
+        // 提取关键词（简化版）
+        function extractKeywords(text) {
+            if (!text) return '精彩剧情';
+            const keywords = text.split('。')[0].substring(0, 30);
+            return keywords || '精彩剧情';
+        }
+
+        // 生成平台定制策略
+        function getPlatformStrategy(plan) {
+            return {
+                weibo: {
+                    name: '微博',
+                    priority: '核心阵地',
+                    strategy: '热搜+超话双驱动，制造社交话题',
+                    tactics: [
+                        `【超话运营】建立"${plan.dramaName}超话"，日均10条官博内容+50条UGC激励`,
+                        `【热搜布局】每周2-3个热搜，配合剧情高潮点：#${plan.dramaName}开播# #${plan.dramaName}名场面# #${plan.dramaName}大结局#`,
+                        `【KOL合作】头部10人（粉丝500万+）+腰部50人（粉丝50-500万）+尾部200人（粉丝5-50万）`,
+                        `【粉丝互动】每日话题讨论+抽奖活动，激活${plan.castType}粉丝站台`,
+                        `【舆情监控】实时监控评论，及时回应质疑，引导正向讨论`
+                    ],
+                    content: `${plan.emotionCore}向内容为主，CP向/剧情向/花絮向内容配比3:4:3`,
+                    kpi: '超话签到10万+/日，热搜上榜率80%+，话题阅读量5亿+'
+                },
+                douyin: {
+                    name: '抖音',
+                    priority: '流量主阵地',
+                    strategy: '短视频矩阵+达人种草，霸屏算法推荐',
+                    tactics: [
+                        `【官方矩阵】@${plan.dramaName}官方 日更3条+@演员个人号联动+10个MCN矩阵号每号日更1-2条`,
+                        `【内容方向】${plan.emotionCore}名场面30% + CP甜蜜CUT25% + 剧情高光20% + 花絮幕后15% + 互动挑战10%`,
+                        `【达人合作】头部达人10人（粉丝1000万+）+腰部达人50人（粉丝100-1000万）+尾部达人200人（粉丝10-100万）`,
+                        `【挑战赛】发起"#${plan.dramaName}挑战"，设置BGM+动作，激励UGC创作`,
+                        `【直播互动】演员抖音直播，剧情答疑+福利抽奖，预期观看100万+`
+                    ],
+                    content: `15-60秒${plan.targetEmotion}向短视频，搭配热门BGM，字幕突出金句`,
+                    kpi: '官号粉丝100万+，单条播放量500万+，话题播放量50亿+'
+                },
+                xiaohongshu: {
+                    name: '小红书',
+                    priority: '种草转化阵地',
+                    strategy: 'KOC笔记矩阵+生活化种草，渗透决策链路',
+                    tactics: [
+                        `【KOC矩阵】100篇/周笔记矩阵，覆盖"剧集安利""演员同款""情节解析""台词文案"四大方向`,
+                        `【话题标签】#必看${plan.dramaType} #${plan.dramaName}安利 #追剧笔记 #${plan.targetEmotion}`,
+                        `【同款经济】演员同款妆容/穿搭/配饰，导流电商带货`,
+                        `【情绪共鸣】"这段看哭了""太上头了""强推"等情绪化表达`,
+                        `【品牌合作】美妆/服饰/配饰品牌植入，剧集+品牌联合种草`
+                    ],
+                    content: `图文笔记为主（9图），封面吸睛，标题带情绪，内容有干货`,
+                    kpi: '笔记总量5000+，总曝光5000万+，搜索卡位前3'
+                },
+                shipinhao: {
+                    name: '视频号',
+                    priority: '私域转化阵地',
+                    strategy: '微信生态闭环+社群裂变，沉淀私域流量',
+                    tactics: [
+                        `【视频号运营】@${plan.dramaName}官方视频号，日更2条，重点覆盖30-50岁中老年受众`,
+                        `【社群裂变】建立500个微信群，每群200人，覆盖10万核心剧粉`,
+                        `【朋友圈传播】设计分享海报/短视频，激励朋友圈转发`,
+                        `【公众号联动】推文深度解析+视频号观看引导，形成闭环`,
+                        `【直播观剧】视频号直播同步观剧，实时互动讨论`
+                    ],
+                    content: `1-3分钟横屏视频，画质高清，标题简洁，适合中老年审美`,
+                    kpi: '视频号粉丝50万+，单条播放50万+，社群活跃度60%+'
+                }
+            };
+        }
+
+        // 全局变量存储请求控制器
+        let currentController = null;
+
+        // 取消生成
+        function cancelGeneration() {
+            console.log('取消按钮被点击, currentController:', currentController);
+            if (currentController) {
+                try {
+                    currentController.abort();
+                    currentController = null;
+                    document.getElementById('loading').style.display = 'none';
+                    const resultDiv = document.getElementById('resultContent');
+                    if (resultDiv) {
+                        resultDiv.innerHTML = '<p style="color:#f39c12;">⚠️ 已取消生成</p>';
+                    }
+                    alert('已取消生成');
+                } catch (e) {
+                    console.error('取消失败:', e);
+                    alert('取消失败: ' + e.message);
+                }
+            } else {
+                console.log('没有正在进行的请求');
+                alert('当前没有正在进行的生成任务');
+            }
+        }
+
+        // 主生成函数
+        async function generatePlan() {
+            const dramaName = document.getElementById('dramaName').value;
+            const dramaType = document.getElementById('dramaType').value;
+            const platform = document.getElementById('platform').value;
+            const budget = document.getElementById('budget').value;
+            const audience = document.getElementById('audience').value;
+            const stage = document.getElementById('stage').value;
+            const coreSelling = document.getElementById('coreSelling').value;
+            const plotSummary = document.getElementById('plotSummary').value;
+            const emotionCore = document.getElementById('emotionCore').value;
+            const targetEmotion = document.getElementById('targetEmotion').value;
+            const castType = document.getElementById('castType').value;
+            const ipType = document.getElementById('ipType').value;
+
+            if (!dramaName || !dramaType || !platform || !budget || !audience || !stage || 
+                !coreSelling || !plotSummary || !emotionCore || !targetEmotion || !castType || !ipType) {
+                alert('请填写所有必填项！');
+                return;
+            }
+
+            // 显示加载状态和结果区域（实时显示）
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('resultSection').style.display = 'block';
+            document.getElementById('resultContent').innerHTML = '<p style="color:#888;">🚀 AI 正在生成方案，请稍候...</p>';
+            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
+
+            try {
+                // 智能检测后端地址
+                const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:'
+                    ? 'http://localhost:3000'
+                    : (window.BACKEND_URL || 'https://drama-marketing-api.onrender.com');
+
+                // 创建超时控制器
+                currentController = new AbortController();
+                const timeoutId = setTimeout(() => {
+                    if (currentController) {
+                        currentController.abort();
+                        console.log('请求超时，已取消');
+                    }
+                }, 180000); // 180秒超时
+
+                // 调用AI后端生成营销方案（流式响应）
+                const response = await fetch(`${API_BASE_URL}/api/generate-marketing-plan`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        dramaInfo: {
+                            dramaName, dramaType, platform, budget, audience, stage,
+                            coreSelling, plotSummary, emotionCore, targetEmotion, actors: castType, uniquePoint: ipType
+                        },
+                        planType: 'general'
+                    }),
+                    signal: currentController.signal
+                }).finally(() => {
+                    clearTimeout(timeoutId);
+                    currentController = null;
+                });
+
+                if (!response.ok) {
+                    throw new Error('后端服务暂时不可用，请稍后重试');
+                }
+
+                // 读取流式响应
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let fullContent = '';
+                let lastUpdateTime = Date.now();
+                const readTimeout = 60000; // 60秒读取超时
+
+                while (true) {
+                    // 检查读取超时
+                    if (Date.now() - lastUpdateTime > readTimeout) {
+                        throw new Error('数据接收超时，请重试');
+                    }
+
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    
+                    lastUpdateTime = Date.now(); // 更新最后接收时间
+                    
+                    const chunk = decoder.decode(value, { stream: true });
+                    const lines = chunk.split('\n');
+                    
+                    for (const line of lines) {
+                        if (line.startsWith('data: ')) {
+                            const data = line.slice(6);
+                            if (data === '[DONE]') continue;
+                            
+                            try {
+                                const json = JSON.parse(data);
+                                if (json.content) {
+                                    fullContent += json.content;
+                                    // 实时更新显示
+                                    updateResultPreview(fullContent);
+                                }
+                                if (json.error) {
+                                    throw new Error(json.error);
+                                }
+                            } catch (e) {
+                                if (e.message && !e.message.includes('JSON')) {
+                                    throw e;
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                if (!fullContent) {
+                    throw new Error('生成内容为空，请重试');
+                }
+                
+                const plan = {
+                    dramaName, dramaType, platform, budget, audience, stage,
+                    coreSelling, plotSummary, emotionCore, targetEmotion, castType, ipType,
+                    timestamp: new Date().toLocaleString('zh-CN'),
+                    aiResult: fullContent
+                };
+                
+                window.currentPlan = plan;
+                displayAIResult(plan);
+                document.getElementById('loading').style.display = 'none';
+            } catch (error) {
+                console.error('生成失败：', error);
+                let errorMsg = error.message || '未知错误';
+                
+                // 特殊错误处理
+                if (error.name === 'AbortError') {
+                    errorMsg = '⏱️ 请求超时（3分钟）\n\n可能原因：\n• 后端服务正在启动（首次访问需要30-60秒）\n• 网络连接不稳定\n• AI 生成内容过长\n\n💡 建议：\n• 刷新页面重试\n• 简化输入内容\n• 稍后再试';
+                } else if (errorMsg.includes('Failed to fetch') || errorMsg.includes('NetworkError') || errorMsg.includes('fetch') || errorMsg.includes('network')) {
+                    errorMsg = '🌐 网络连接失败\n\n可能原因：\n• 后端服务未启动\n• 网络连接中断\n• 防火墙阻止\n\n💡 建议：\n• 检查网络连接\n• 刷新页面重试\n• 联系管理员';
+                } else if (errorMsg.includes('超时') || errorMsg.includes('timeout')) {
+                    errorMsg = '⏱️ ' + errorMsg + '\n\n💡 提示：AI 生成需要时间，如果多次超时，请尝试简化输入内容';
+                }
+                document.getElementById('resultContent').innerHTML = `<p style="color:#e74c3c;">❌ 生成失败：${errorMsg}</p>`;
+                document.getElementById('loading').style.display = 'none';
+            }
+        }
+        
+        // 实时更新结果预览
+        function updateResultPreview(content) {
+            const resultDiv = document.getElementById('resultContent');
+            if (!resultDiv) {
+                console.error('resultContent元素不存在!');
+                return;
+            }
+            // 使用 marked.js 渲染 Markdown(支持表格)
+            if (typeof marked !== 'undefined') {
+                marked.setOptions({
+                    gfm: true,  // 启用GitHub风格Markdown(包括表格)
+                    breaks: true,
+                    sanitize: false
+                });
+                resultDiv.innerHTML = marked.parse(content);
+            } else {
+                // Fallback: 简单渲染
+                const htmlContent = content
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                    .replace(/### (.*?)(\n|$)/g, '<h3>$1</h3>')
+                    .replace(/## (.*?)(\n|$)/g, '<h2>$1</h2>')
+                    .replace(/# (.*?)(\n|$)/g, '<h1>$1</h1>')
+                    .replace(/\n\n/g, '</p><p>')
+                    .replace(/\n/g, '<br>');
+                resultDiv.innerHTML = '<p>' + htmlContent + '</p>';
+            }
+            console.log('已更新内容,长度:', content.length);
+        }
+
+        // 渲染AI生成的结果
+        function displayAIResult(plan) {
+            const resultDiv = document.getElementById('resultContent');
+            
+            // 使用 marked.js 渲染 Markdown(支持表格)
+            if (typeof marked !== 'undefined') {
+                marked.setOptions({
+                    gfm: true,  // 启用GitHub风格Markdown(包括表格)
+                    breaks: true,
+                    sanitize: false
+                });
+                resultDiv.innerHTML = marked.parse(plan.aiResult);
+            } else {
+                // Fallback: 简单渲染
+                const htmlContent = plan.aiResult
+                    .replace(/\n\n/g, '</p><p>')
+                    .replace(/\n/g, '<br>')
+                    .replace(/^/, '<p>')
+                    .replace(/$/, '</p>')
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                    .replace(/### (.*?)<br>/g, '<h3>$1</h3>')
+                    .replace(/## (.*?)<br>/g, '<h2>$1</h2>')
+                    .replace(/# (.*?)<br>/g, '<h1>$1</h1>');
+                resultDiv.innerHTML = htmlContent;
+            }
+            
+            // 为每个章节添加操作按钮(编辑/删除/重新生成)
+            addSectionControls();
+        }
+        
+        // 为每个二级标题添加操作按钮
+        function addSectionControls() {
+            const h2Elements = document.querySelectorAll('#resultContent h2');
+            
+            console.log(`找到 ${h2Elements.length} 个H2标题,准备添加操作按钮`);
+            
+            h2Elements.forEach((h2, index) => {
+                // 防止重复添加按钮
+                if (h2.querySelector('.section-control-btn')) {
+                    console.log(`章节 ${index} 已有按钮,跳过`);
+                    return;
+                }
+                
+                // 给每个章节添加唯一ID
+                const sectionId = `section-${index}`;
+                h2.setAttribute('data-section-id', sectionId);
+                h2.style.position = 'relative';
+                h2.style.display = 'flex';
+                h2.style.justifyContent = 'space-between';
+                h2.style.alignItems = 'center';
+                h2.style.flexWrap = 'wrap';  // 防止按钮换行
+                
+                // 创建操作按钮容器
+                const controlsDiv = document.createElement('div');
+                controlsDiv.className = 'section-controls-container';
+                controlsDiv.style.cssText = 'display: flex; gap: 8px; font-size: 14px; flex-shrink: 0;';
+                
+                // 编辑按钮
+                const editBtn = document.createElement('button');
+                editBtn.innerHTML = '✏️ 编辑';
+                editBtn.className = 'section-control-btn';
+                editBtn.onclick = () => editSection(sectionId, h2);
+                
+                // 重新生成按钮
+                const regenBtn = document.createElement('button');
+                regenBtn.innerHTML = '🔄 重新生成';
+                regenBtn.className = 'section-control-btn';
+                regenBtn.onclick = () => regenerateSection(sectionId, h2);
+                
+                // 删除按钮
+                const deleteBtn = document.createElement('button');
+                deleteBtn.innerHTML = '🗑️ 删除';
+                deleteBtn.className = 'section-control-btn section-control-btn-danger';
+                deleteBtn.onclick = () => deleteSection(sectionId, h2);
+                
+                controlsDiv.appendChild(editBtn);
+                controlsDiv.appendChild(regenBtn);
+                controlsDiv.appendChild(deleteBtn);
+                
+                h2.appendChild(controlsDiv);
+                
+                console.log(`✅ 为章节 ${index} 添加了操作按钮`);
+            });
+        }
+        
+        // 获取章节内容(从H2到下一个H2之间的所有内容)
+        function getSectionContent(h2Element) {
+            let content = '';
+            let currentElement = h2Element.nextElementSibling;
+            
+            while (currentElement && currentElement.tagName !== 'H2') {
+                content += currentElement.outerHTML || '';
+                currentElement = currentElement.nextElementSibling;
+            }
+            
+            return content;
+        }
+        
+        // 1. 编辑章节
+        function editSection(sectionId, h2Element) {
+            console.log(`编辑章节: ${sectionId}`);
+            
+            // 获取章节标题(去除按钮部分)
+            const sectionTitle = h2Element.childNodes[0].textContent.trim();
+            
+            // 获取章节的所有内容元素(从H2到下一个H2之间)
+            const sectionElements = [];
+            let currentElement = h2Element.nextElementSibling;
+            
+            while (currentElement && currentElement.tagName !== 'H2') {
+                sectionElements.push(currentElement);
+                currentElement = currentElement.nextElementSibling;
+            }
+            
+            // 获取完整的Markdown内容(从outerHTML转回Markdown,简化处理)
+            let markdownContent = `## ${sectionTitle}\n\n`;
+            sectionElements.forEach(el => {
+                markdownContent += el.innerText + '\n\n';
+            });
+            
+            // 创建编辑容器
+            const editContainer = document.createElement('div');
+            editContainer.className = 'section-editing';
+            editContainer.setAttribute('data-editing-section', sectionId);
+            editContainer.innerHTML = `
+                <h3 style="margin-top:0; color: #53B76F;">✏️ 编辑章节: ${sectionTitle}</h3>
+                <p style="font-size: 12px; color: #999; margin-bottom: 10px;">提示: 使用Markdown格式编辑，支持表格、列表等</p>
+                <textarea id="edit-textarea-${sectionId}" style="width: 100%; min-height: 300px; padding: 12px; border: 1px solid #d9d9d9; border-radius: 4px; font-family: monospace; font-size: 13px; line-height: 1.6;">${markdownContent}</textarea>
+                <div style="margin-top: 12px; display: flex; gap: 8px;">
+                    <button onclick="saveSectionEdit('${sectionId}')" style="padding: 8px 20px; background: #53B76F; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: 600;">💾 保存</button>
+                    <button onclick="cancelSectionEdit('${sectionId}')" style="padding: 8px 20px; background: #fff; color: #595959; border: 1px solid #d9d9d9; border-radius: 4px; cursor: pointer;">❌ 取消</button>
+                </div>
+            `;
+            
+            // 先插入编辑器到H2后面
+            h2Element.insertAdjacentElement('afterend', editContainer);
+            
+            // 然后隐藏H2和内容元素
+            h2Element.style.display = 'none';
+            sectionElements.forEach(el => el.style.display = 'none');
+            
+            // 滚动到编辑器
+            editContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        
+        // 保存编辑
+        window.saveSectionEdit = function(sectionId) {
+            const textarea = document.getElementById(`edit-textarea-${sectionId}`);
+            const newMarkdown = textarea.value;
+            const editContainer = document.querySelector(`[data-editing-section="${sectionId}"]`);
+            const h2 = document.querySelector(`[data-section-id="${sectionId}"]`);
+            
+            // 使用marked.js渲染新Markdown
+            const newHTML = marked.parse(newMarkdown);
+            
+            // 删除旧的内容元素(H2之后到下一个H2之前的所有元素)
+            let currentElement = h2.nextElementSibling;
+            while (currentElement && currentElement.tagName !== 'H2') {
+                const next = currentElement.nextElementSibling;
+                if (currentElement !== editContainer) {
+                    currentElement.remove();
+                }
+                currentElement = next;
+            }
+            
+            // 插入新内容
+            editContainer.insertAdjacentHTML('beforebegin', newHTML);
+            
+            // 移除编辑器
+            editContainer.remove();
+            
+            // 显示H2
+            h2.style.display = '';
+            
+            // 更新window.currentPlan
+            updateCurrentPlanFromDOM();
+            
+            // 重新添加控制按钮
+            addSectionControls();
+            
+            alert('✅ 章节已更新!');
+        };
+        
+        // 取消编辑
+        window.cancelSectionEdit = function(sectionId) {
+            const editContainer = document.querySelector(`[data-editing-section="${sectionId}"]`);
+            const h2 = document.querySelector(`[data-section-id="${sectionId}"]`);
+            
+            // 显示H2
+            h2.style.display = '';
+            
+            // 显示原内容元素
+            let currentElement = h2.nextElementSibling;
+            while (currentElement && currentElement.tagName !== 'H2') {
+                if (currentElement !== editContainer) {
+                    currentElement.style.display = '';
+                }
+                currentElement = currentElement.nextElementSibling;
+            }
+            
+            // 移除编辑器
+            editContainer.remove();
+        };
+        
+        // 2. 重新生成章节
+        async function regenerateSection(sectionId, h2Element) {
+            const sectionTitle = h2Element.textContent.split('\n')[0].trim().replace(/^##\s*/, '');
+            
+            if (!confirm(`确定要重新生成章节"${sectionTitle}"吗?\n\n将根据全局上下文生成新内容,保持与其他章节的一致性。`)) {
+                return;
+            }
+            
+            console.log(`重新生成章节: ${sectionTitle}`);
+            
+            // 显示加载状态
+            const loadingDiv = document.createElement('div');
+            loadingDiv.style.cssText = 'padding: 20px; text-align: center; background: #f0f9f3; border-radius: 8px; margin: 10px 0;';
+            loadingDiv.innerHTML = `<p>🔄 正在重新生成章节"${sectionTitle}"...<br><span style="font-size:12px;color:#999;">根据全局上下文生成中，请稍候</span></p>`;
+            h2Element.insertAdjacentElement('afterend', loadingDiv);
+            
+            try {
+                // 获取全局上下文(完整方案的前2000字符)
+                const fullPlanContext = window.currentPlan.aiResult;
+                
+                // 调用重新生成接口
+                const response = await fetch(`${API_BASE_URL}/api/regenerate-section`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        dramaInfo: {
+                            dramaName: window.currentPlan.dramaName,
+                            dramaType: window.currentPlan.dramaType,
+                            audience: window.currentPlan.audience
+                        },
+                        sectionTitle: sectionTitle,
+                        fullPlanContext: fullPlanContext
+                    })
+                });
+                
+                if (!response.ok) throw new Error('生成失败');
+                
+                // 流式读取
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let newSectionContent = '';
+                
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    
+                    const chunk = decoder.decode(value);
+                    const lines = chunk.split('\n');
+                    
+                    for (let line of lines) {
+                        if (line.startsWith('data: ')) {
+                            const data = line.slice(6);
+                            if (data === '[DONE]') break;
+                            
+                            try {
+                                const parsed = JSON.parse(data);
+                                if (parsed.content) {
+                                    newSectionContent += parsed.content;
+                                    loadingDiv.innerHTML = `<p>🔄 生成中... (${newSectionContent.length}字)</p>`;
+                                }
+                            } catch (e) {}
+                        }
+                    }
+                }
+                
+                // 替换章节内容
+                loadingDiv.remove();
+                
+                // 删除旧内容
+                let oldElement = h2Element.nextElementSibling;
+                while (oldElement && oldElement.tagName !== 'H2') {
+                    const next = oldElement.nextElementSibling;
+                    oldElement.remove();
+                    oldElement = next;
+                }
+                
+                // 插入新内容
+                const newHTML = marked.parse(newSectionContent);
+                h2Element.insertAdjacentHTML('afterend', newHTML);
+                
+                // 更新window.currentPlan
+                updateCurrentPlanFromDOM();
+                
+                // 重新添加控制按钮
+                addSectionControls();
+                
+                alert('✅ 章节已重新生成!');
+                
+            } catch (error) {
+                console.error('重新生成失败:', error);
+                loadingDiv.innerHTML = `<p style="color:#e74c3c;">❌ 生成失败: ${error.message}</p>`;
+                setTimeout(() => loadingDiv.remove(), 3000);
+            }
+        }
+        
+        // 3. 删除章节
+        function deleteSection(sectionId, h2Element) {
+            const sectionTitle = h2Element.textContent.split('\n')[0].trim();
+            
+            if (!confirm(`确定要删除章节"${sectionTitle}"吗?\n\n删除后可以通过"重新生成完整方案"恢复。`)) {
+                return;
+            }
+            
+            console.log(`删除章节: ${sectionId}`);
+            
+            // 删除H2及其后续内容(直到下一个H2)
+            let currentElement = h2Element.nextElementSibling;
+            while (currentElement && currentElement.tagName !== 'H2') {
+                const next = currentElement.nextElementSibling;
+                currentElement.remove();
+                currentElement = next;
+            }
+            h2Element.remove();
+            
+            // 更新window.currentPlan
+            updateCurrentPlanFromDOM();
+            
+            alert('✅ 章节已删除!');
+        }
+        
+        // 从DOM更新window.currentPlan.aiResult
+        function updateCurrentPlanFromDOM() {
+            const resultDiv = document.getElementById('resultContent');
+            // 简单处理: 保存HTML,下次导出时会用到
+            window.currentPlan.aiResult = resultDiv.innerText;  // 纯文本
+            window.currentPlan.aiResultHTML = resultDiv.innerHTML;  // HTML版本
+        }
+
+        // 渲染结果（保留原有模板生成功能）
+        function displayResult(plan) {
+            const insights = getUserInsights(plan);
+            const topics = getTopicStrategy(plan);
+            const ipStrategy = getIPStrategy(plan);
+            const copywriting = getCopywritingIdeas(plan);
+            const platformStrategy = getPlatformStrategy(plan);
+            
+            const content = `
+                <h3>🎯 项目本体分析</h3>
+                <p><strong>剧集名称：</strong>${plan.dramaName}</p>
+                <p><strong>类型定位：</strong>${plan.dramaType}</p>
+                <p><strong>核心卖点：</strong>${plan.coreSelling}</p>
+                <p><strong>剧情概述：</strong>${plan.plotSummary}</p>
+                <p><strong>情感核心：</strong>${plan.emotionCore}</p>
+                <p><strong>目标情绪：</strong>${plan.targetEmotion}</p>
+                <p><strong>演员阵容：</strong>${plan.castType}</p>
+                <p><strong>IP类型：</strong>${plan.ipType}</p>
+                <p><strong>播出平台：</strong>${plan.platform}</p>
+                <p><strong>营销预算：</strong>${plan.budget}</p>
+                <p><strong>营销阶段：</strong>${plan.stage}</p>
+
+                <h3>👥 深度用户洞察</h3>
+                <div class="insight-card">
+                    <h4>核心洞察</h4>
+                    <p>${insights.core}</p>
+                </div>
+                <div class="insight-card">
+                    <h4>人口统计特征</h4>
+                    <p>${insights.demographics}</p>
+                </div>
+                <div class="insight-card">
+                    <h4>心理特征</h4>
+                    <p>${insights.psychographics}</p>
+                </div>
+                <div class="insight-card">
+                    <h4>痛点分析</h4>
+                    <p>${insights.painPoints}</p>
+                </div>
+                <div class="insight-card">
+                    <h4>需求洞察</h4>
+                    <p>${insights.desires}</p>
+                </div>
+                <div class="insight-card">
+                    <h4>媒体习惯</h4>
+                    <p>${insights.mediaHabits}</p>
+                </div>
+
+                <h3>📝 策略文案创意（可直接使用）</h3>
+                ${copywriting.map(item => `
+                    <div class="copywriting-item">
+                        <div class="label">${item.platform} - ${item.type}</div>
+                        <div class="text">${item.text}</div>
+                    </div>
+                `).join('')}
+
+                <h3>🎨 话题策略设计（基于${plan.emotionCore}）</h3>
+                ${topics.map((topic, index) => `
+                    <div class="strategy-item">
+                        <strong>${index + 1}. ${topic.tag}</strong>
+                        <p><strong>策略描述：</strong>${topic.desc}</p>
+                        <p><strong>话题示例：</strong>${topic.example}</p>
+                        <p><strong>执行建议：</strong>配合剧情进度，在${topic.tag}相关剧情播出时集中投放，预期话题阅读量5000万+</p>
+                    </div>
+                `).join('')}
+
+                <h3>🎬 IP类型差异化策略</h3>
+                <div class="strategy-item">
+                    <strong>粉丝基础分析</strong>
+                    <p>${ipStrategy.fanBase}</p>
+                </div>
+                <div class="strategy-item">
+                    <strong>核心策略</strong>
+                    <p>${ipStrategy.strategy}</p>
+                </div>
+                <div class="strategy-item">
+                    <strong>执行tactics</strong>
+                    ${ipStrategy.tactics.map(t => `<p>• ${t}</p>`).join('')}
+                </div>
+                <div class="strategy-item">
+                    <strong>风险提示</strong>
+                    <p>${ipStrategy.risk}</p>
+                </div>
+
+                <h3>📱 平台定制化策略</h3>
+                
+                <div class="strategy-item">
+                    <strong>微博 - ${platformStrategy.weibo.priority}</strong>
+                    <p><strong>核心策略：</strong>${platformStrategy.weibo.strategy}</p>
+                    <p><strong>执行tactics：</strong></p>
+                    ${platformStrategy.weibo.tactics.map(t => `<p>• ${t}</p>`).join('')}
+                    <p><strong>内容方向：</strong>${platformStrategy.weibo.content}</p>
+                    <p><strong>KPI目标：</strong>${platformStrategy.weibo.kpi}</p>
+                </div>
+
+                <div class="strategy-item">
+                    <strong>抖音 - ${platformStrategy.douyin.priority}</strong>
+                    <p><strong>核心策略：</strong>${platformStrategy.douyin.strategy}</p>
+                    <p><strong>执行tactics：</strong></p>
+                    ${platformStrategy.douyin.tactics.map(t => `<p>• ${t}</p>`).join('')}
+                    <p><strong>内容方向：</strong>${platformStrategy.douyin.content}</p>
+                    <p><strong>KPI目标：</strong>${platformStrategy.douyin.kpi}</p>
+                </div>
+
+                <div class="strategy-item">
+                    <strong>小红书 - ${platformStrategy.xiaohongshu.priority}</strong>
+                    <p><strong>核心策略：</strong>${platformStrategy.xiaohongshu.strategy}</p>
+                    <p><strong>执行tactics：</strong></p>
+                    ${platformStrategy.xiaohongshu.tactics.map(t => `<p>• ${t}</p>`).join('')}
+                    <p><strong>内容方向：</strong>${platformStrategy.xiaohongshu.content}</p>
+                    <p><strong>KPI目标：</strong>${platformStrategy.xiaohongshu.kpi}</p>
+                </div>
+
+                <div class="strategy-item">
+                    <strong>视频号 - ${platformStrategy.shipinhao.priority}</strong>
+                    <p><strong>核心策略：</strong>${platformStrategy.shipinhao.strategy}</p>
+                    <p><strong>执行tactics：</strong></p>
+                    ${platformStrategy.shipinhao.tactics.map(t => `<p>• ${t}</p>`).join('')}
+                    <p><strong>内容方向：</strong>${platformStrategy.shipinhao.content}</p>
+                    <p><strong>KPI目标：</strong>${platformStrategy.shipinhao.kpi}</p>
+                </div>
+
+                <h3>💰 预算分配建议（总预算：${plan.budget}）</h3>
+                <div class="strategy-item">
+                    <strong>线上推广 30%</strong>
+                    <p>微博热搜、抖音信息流、小红书KOC、搜索引擎SEM</p>
+                </div>
+                <div class="strategy-item">
+                    <strong>内容制作 25%</strong>
+                    <p>短视频制作、图文物料、长视频花絮、创意物料设计</p>
+                </div>
+                <div class="strategy-item">
+                    <strong>KOL/达人合作 25%</strong>
+                    <p>头部达人+腰部达人+尾部达人阶梯式投放</p>
+                </div>
+                <div class="strategy-item">
+                    <strong>线下活动 15%</strong>
+                    <p>首映礼、见面会、粉丝活动、院线宣传</p>
+                </div>
+                <div class="strategy-item">
+                    <strong>应急储备 5%</strong>
+                    <p>舆情应对、突发事件、补充投放</p>
+                </div>
+
+                <h3>📊 效果评估指标体系</h3>
+                <div class="strategy-item">
+                    <strong>曝光指标</strong>
+                    <p>• 微博话题阅读量：目标50亿+</p>
+                    <p>• 抖音话题播放量：目标100亿+</p>
+                    <p>• 小红书笔记曝光：目标5000万+</p>
+                    <p>• 百度搜索指数：峰值50万+，日均15万+</p>
+                </div>
+                <div class="strategy-item">
+                    <strong>互动指标</strong>
+                    <p>• 微博超话签到：日均10万+</p>
+                    <p>• 抖音官号粉丝：目标100万+</p>
+                    <p>• UGC内容产出：目标5000条+</p>
+                    <p>• 社群活跃度：60%+</p>
+                </div>
+                <div class="strategy-item">
+                    <strong>转化指标</strong>
+                    <p>• 首播收视率/播放量：行业前3</p>
+                    <p>• 会员转化率：15%+</p>
+                    <p>• 豆瓣评分：7.5+</p>
+                    <p>• ROI投资回报：3:1以上</p>
+                </div>
+
+                <h3>⏰ 执行时间表（${plan.stage}）</h3>
+                ${getTimelineContent(plan.stage)}
+
+                <h3>🎯 舆情应对预案</h3>
+                <div class="strategy-item">
+                    <strong>日常监控</strong>
+                    <p>• 7*24小时舆情监控，15分钟响应机制</p>
+                    <p>• 重点监控平台：微博、豆瓣、知乎、抖音评论区</p>
+                    <p>• 建立舆情预警等级：绿色（正常）/黄色（关注）/橙色（预警）/红色（危机）</p>
+                </div>
+                <div class="strategy-item">
+                    <strong>常见风险点</strong>
+                    <p>• 剧情争议：提前准备解释口径，引导理性讨论</p>
+                    <p>• 演员争议：第一时间发声，澄清事实</p>
+                    <p>• 粉丝撕逼：及时介入调解，避免扩大化</p>
+                    <p>• 竞品攻击：不回应不理会，专注自身内容</p>
+                </div>
+                <div class="strategy-item">
+                    <strong>危机公关流程</strong>
+                    <p>1. 事件发生后15分钟内启动应急机制</p>
+                    <p>2. 30分钟内完成情况核实和口径确定</p>
+                    <p>3. 1小时内发布官方声明</p>
+                    <p>4. 持续跟进，及时更新进展</p>
+                    <p>5. 事后复盘，优化预案</p>
+                </div>
+
+                <p style="margin-top: 40px; padding: 20px; background: rgba(83, 183, 111, 0.1); border-radius: 10px; text-align: center;">
+                    <strong>📌 方案生成时间：</strong>${plan.timestamp}<br>
+                    <strong>💡 提示：</strong>本方案基于智能规则引擎生成，已结合《${plan.dramaName}》的剧情内容、情感核心、演员阵容等要素进行深度定制。建议结合实际情况灵活调整执行细节。
+                </p>
+            `;
+            
+            document.getElementById('resultContent').innerHTML = content;
+        }
+
+        // 根据阶段生成时间表
+        function getTimelineContent(stage) {
+            const timelines = {
+                '概念期': `
+                    <div class="strategy-item">
+                        <strong>T-90天至T-60天：概念预热</strong>
+                        <p>• 官宣立项，释放概念海报</p>
+                        <p>• 建立官方微博/抖音/小红书账号</p>
+                        <p>• 开通超话，积累种子用户</p>
+                        <p>• 定期发布筹备进度，保持热度</p>
+                    </div>
+                    <div class="strategy-item">
+                        <strong>T-60天至T-30天：演员官宣</strong>
+                        <p>• 主演定妆照分批释放</p>
+                        <p>• 幕后团队介绍</p>
+                        <p>• 拍摄花絮定期更新</p>
+                        <p>• 激活演员粉丝圈层</p>
+                    </div>
+                    <div class="strategy-item">
+                        <strong>T-30天：进入预热期</strong>
+                        <p>转入预热期执行策略</p>
+                    </div>
+                `,
+                '预热期': `
+                    <div class="strategy-item">
+                        <strong>T-30天至T-15天：物料释放</strong>
+                        <p>• 首版预告片发布</p>
+                        <p>• 人物海报/关系海报陆续释放</p>
+                        <p>• KOL种草启动，头部10人+腰部50人</p>
+                        <p>• 微博/抖音话题预热</p>
+                    </div>
+                    <div class="strategy-item">
+                        <strong>T-15天至T-7天：密集轰炸</strong>
+                        <p>• 终极预告+花絮轰炸</p>
+                        <p>• 主演直播互动</p>
+                        <p>• 提前点映/看片会</p>
+                        <p>• 信息流广告投放</p>
+                    </div>
+                    <div class="strategy-item">
+                        <strong>T-7天至T-1天：倒计时冲刺</strong>
+                        <p>• 每日倒计时海报</p>
+                        <p>• 抖音/快手挑战赛启动</p>
+                        <p>• 热搜预定：#XX剧开播倒计时#</p>
+                        <p>• 首播福利预告</p>
+                    </div>
+                `,
+                '热播期': `
+                    <div class="strategy-item">
+                        <strong>首播周（D1-D7）：爆发期</strong>
+                        <p>• 首播当天冲刺3个热搜</p>
+                        <p>• 实时数据播报（播放量/讨论量）</p>
+                        <p>• 每集播出后30分钟内发布名场面剪辑</p>
+                        <p>• KOL同步发声</p>
+                    </div>
+                    <div class="strategy-item">
+                        <strong>中期（D8-D20）：持续运营</strong>
+                        <p>• 每周2-3个热搜，配合剧情高潮</p>
+                        <p>• 短视频日更10-15条</p>
+                        <p>• UGC内容激励，二创征集</p>
+                        <p>• 周边商品上线</p>
+                    </div>
+                    <div class="strategy-item">
+                        <strong>收官前（D21-D30）：情绪积累</strong>
+                        <p>• 结局预测话题讨论</p>
+                        <p>• 角色命运投票</p>
+                        <p>• 幕后纪录片释放</p>
+                        <p>• 为大结局蓄力</p>
+                    </div>
+                `,
+                '收官期': `
+                    <div class="strategy-item">
+                        <strong>收官前3天：情绪高峰</strong>
+                        <p>• 大结局倒计时</p>
+                        <p>• 回顾名场面合集</p>
+                        <p>• 角色告别视频</p>
+                        <p>• 热搜冲刺：#XX剧大结局#</p>
+                    </div>
+                    <div class="strategy-item">
+                        <strong>收官当天：引爆社交</strong>
+                        <p>• 大结局实时讨论</p>
+                        <p>• 主创直播道别</p>
+                        <p>• 花絮纪录片上线</p>
+                        <p>• 周边/蓝光预售</p>
+                    </div>
+                    <div class="strategy-item">
+                        <strong>收官后7天：长尾运营</strong>
+                        <p>• 完整版幕后纪录片</p>
+                        <p>• 二次传播素材整理</p>
+                        <p>• 沉淀粉丝社群</p>
+                        <p>• 为续集/衍生品铺路</p>
+                    </div>
+                `
+            };
+            
+            return timelines[stage] || timelines['预热期'];
+        }
+
+        // 导出Markdown
+        function exportMarkdown() {
+            const content = document.getElementById('resultContent').innerText;
+            const blob = new Blob([content], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = window.currentPlan.dramaName + '_营销方案.md';
+            a.click();
+        }
+
+        // 打印方案
+        function printPlan() {
+            window.print();
+        }
+
+        // 分享方案
+        function sharePlan() {
+            if (navigator.share) {
+                navigator.share({
+                    title: window.currentPlan.dramaName + ' 营销方案',
+                    text: '查看专业营销方案',
+                    url: window.location.href
+                }).catch(err => console.log('分享失败', err));
+            } else {
+                alert('您的浏览器不支持分享功能，请手动复制链接');
+            }
+        }
+
+        // 解析AI生成的Markdown为PPT结构
+        function parseMarkdownForPPT(markdown) {
+            const sections = [];
+            const lines = markdown.split('\n');
+            let currentSection = null;
+            
+            for (let line of lines) {
+                // 二级标题 - 新章节
+                if (line.startsWith('## ')) {
+                    if (currentSection) {
+                        // 将长内容拆分成多页
+                        const pages = splitContentToPages(currentSection.content);
+                        pages.forEach((pageContent, pageIndex) => {
+                            sections.push({
+                                title: currentSection.title + (pages.length > 1 ? ` (${pageIndex + 1}/${pages.length})` : ''),
+                                content: pageContent
+                            });
+                        });
+                    }
+                    currentSection = {
+                        title: line.replace(/^## /, '').trim(),
+                        content: []
+                    };
+                }
+                // 三级标题或内容
+                else if (currentSection && line.trim()) {
+                    currentSection.content.push(line);
+                }
+            }
+            
+            // 处理最后一个章节
+            if (currentSection) {
+                const pages = splitContentToPages(currentSection.content);
+                pages.forEach((pageContent, pageIndex) => {
+                    sections.push({
+                        title: currentSection.title + (pages.length > 1 ? ` (${pageIndex + 1}/${pages.length})` : ''),
+                        content: pageContent
+                    });
+                });
+            }
+            
+            return sections;
+        }
+        
+        // 智能分页:将长内容拆分成多页,每页不超过10行或800字符
+        function splitContentToPages(contentLines) {
+            const pages = [];
+            let currentPage = [];
+            let currentLength = 0;
+            const MAX_LINES_PER_PAGE = 12;
+            const MAX_CHARS_PER_PAGE = 600;
+            
+            for (let line of contentLines) {
+                const lineLength = line.length;
+                
+                // 如果当前页已满,创建新页
+                if (currentPage.length >= MAX_LINES_PER_PAGE || currentLength + lineLength > MAX_CHARS_PER_PAGE) {
+                    if (currentPage.length > 0) {
+                        pages.push([...currentPage]);
+                        currentPage = [];
+                        currentLength = 0;
+                    }
+                }
+                
+                currentPage.push(line);
+                currentLength += lineLength;
+            }
+            
+            // 添加最后一页
+            if (currentPage.length > 0) {
+                pages.push(currentPage);
+            }
+            
+            return pages.length > 0 ? pages : [contentLines];
+        }
+
+        // 导出PPT (使用AI生成的真实内容)
+        function exportPPT() {
+            const plan = window.currentPlan;
+            
+            if (!plan || !plan.aiResult) {
+                alert('请先生成营销方案！');
+                return;
+            }
+            
+            let pptx = new PptxGenJS();
+            const primaryColor = '53B76F';
+            const accentColor = 'DD7694';
+            
+            // 封面页
+            let slide1 = pptx.addSlide();
+            slide1.background = { color: 'F8FBF9' };
+            slide1.addText('剧集营销方案', {
+                x: 0.5, y: 2.0, w: 9, h: 1.5,
+                fontSize: 44, bold: true, color: primaryColor, align: 'center'
+            });
+            slide1.addText(plan.dramaName || '剧集名称', {
+                x: 0.5, y: 3.5, w: 9, h: 0.8,
+                fontSize: 32, color: accentColor, align: 'center'
+            });
+            slide1.addText('AI定制版 v3.0 (含真实搜索数据)', {
+                x: 0.5, y: 4.5, w: 9, h: 0.5,
+                fontSize: 18, color: '666666', align: 'center'
+            });
+            slide1.addText(plan.timestamp || new Date().toLocaleString('zh-CN'), {
+                x: 0.5, y: 5.2, w: 9, h: 0.5,
+                fontSize: 14, color: '999999', align: 'center'
+            });
+            
+            // 解析AI生成的Markdown并转换为PPT
+            const sections = parseMarkdownForPPT(plan.aiResult);
+            console.log(`解析到 ${sections.length} 个章节`);
+            
+            // 为每个章节生成一页PPT
+            sections.slice(0, 20).forEach((section, index) => {  // 最多20页内容
+                let slide = pptx.addSlide();
+                slide.background = { color: 'FFFFFF' };
+                
+                // 标题
+                slide.addText(section.title, {
+                    x: 0.5, y: 0.3, w: 9, h: 0.6,
+                    fontSize: 22, bold: true, color: primaryColor
+                });
+                
+                // 处理内容:识别列表、三级标题等
+                let yPos = 1.1;
+                const lineHeight = 0.35;
+                
+                for (let line of section.content) {
+                    if (yPos > 5.0) break;  // 防止超出页面
+                    
+                    line = line.trim();
+                    if (!line) continue;
+                    
+                    // 三级标题
+                    if (line.startsWith('###')) {
+                        const title = line.replace(/^###\s*/, '').replace(/\*\*/g, '');
+                        slide.addText(title, {
+                            x: 0.6, y: yPos, w: 8.8,
+                            fontSize: 14, bold: true, color: accentColor
+                        });
+                        yPos += lineHeight;
+                    }
+                    // 列表项
+                    else if (line.match(/^[-*•]\s/) || line.match(/^\d+\.\s/)) {
+                        const text = line.replace(/^[-*•]\s/, '').replace(/^\d+\.\s/, '').replace(/\*\*/g, '');
+                        slide.addText('• ' + text, {
+                            x: 0.8, y: yPos, w: 8.6,
+                            fontSize: 11, color: '333333'
+                        });
+                        yPos += lineHeight * 0.9;
+                    }
+                    // 表格行(简单处理:显示为文本)
+                    else if (line.includes('|')) {
+                        const text = line.replace(/\|/g, ' | ').replace(/\*\*/g, '');
+                        slide.addText(text, {
+                            x: 0.8, y: yPos, w: 8.6,
+                            fontSize: 10, color: '666666', fontFace: 'Courier New'
+                        });
+                        yPos += lineHeight * 0.8;
+                    }
+                    // 普通段落
+                    else {
+                        const text = line.replace(/\*\*/g, '').substring(0, 150);
+                        slide.addText(text, {
+                            x: 0.8, y: yPos, w: 8.6,
+                            fontSize: 11, color: '595959'
+                        });
+                        yPos += lineHeight;
+                    }
+                }
+            });
+            
+            // 保存PPT
+            const totalPages = Math.min(sections.length, 20) + 1;  // +1是封面
+            pptx.writeFile({ fileName: (plan.dramaName || '剧集') + '_AI营销方案_v3.0.pptx' })
+                .then(() => {
+                    alert(`✅ PPT已生成下载！\n\n• 总页数: ${totalPages}页\n• 内容: 基于AI真实生成方案\n• 格式: 已优化分页和排版`);
+                })
+                .catch(err => {
+                    console.error('PPT生成失败:', err);
+                    alert('❌ PPT生成失败，请重试！');
+                });
+        }
+    </script>
+</body>
+</html>
