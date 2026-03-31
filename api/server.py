@@ -578,6 +578,143 @@ def build_user_prompt(drama_info):
     return prompt
 
 
+# 新增: 智能验证接口
+@app.route('/api/validate', methods=['POST'])
+def validate_drama_info():
+    """验证用户填写的剧集信息准确性"""
+    try:
+        data = request.json
+        drama_name = data.get('dramaName', '')
+        user_actors = data.get('castType', '')
+        user_plot = data.get('plotSummary', '')
+        
+        print(f"🔍 开始验证剧集信息: {drama_name}")
+        
+        # 如果没有填写剧名,直接返回
+        if not drama_name or len(drama_name.strip()) < 2:
+            return jsonify({
+                'success': True,
+                'needsValidation': False,
+                'message': '剧名未填写,跳过验证'
+            })
+        
+        # 搜索真实剧集信息
+        search_results = search_drama_info(drama_name)
+        
+        if not search_results or not any(search_results.values()):
+            # 没有搜索到信息,可能是新剧或小众剧
+            return jsonify({
+                'success': True,
+                'needsValidation': False,
+                'message': '未找到该剧信息,可能是新剧或信息较少的剧集'
+            })
+        
+        # 使用AI分析用户填写vs真实信息
+        validation_prompt = f"""你是一位专业的剧集信息审核专家。请对比用户填写的信息和搜索到的真实信息,找出可能的错误。
+
+## 用户填写的信息:
+- 剧名: {drama_name}
+- 演员阵容: {user_actors}
+- 剧情概述: {user_plot[:200] if user_plot else '未填写'}
+
+## 搜索到的真实信息:
+{json.dumps(search_results, ensure_ascii=False, indent=2)[:4000]}
+
+## 任务:
+请分析用户填写的信息是否有明显错误,重点检查:
+1. 剧名拼写是否正确
+2. 演员阵容是否匹配(如果填写了具体演员名字)
+3. 剧情是否与真实剧情相符
+
+如果发现错误,请以JSON格式返回:
+{{
+    "hasErrors": true,
+    "errors": [
+        {{
+            "field": "字段名(如:演员、剧情)",
+            "userValue": "用户填写的值",
+            "correctValue": "正确的值",
+            "reason": "错误原因说明",
+            "confidence": 0.9
+        }}
+    ]
+}}
+
+如果没有明显错误,返回:
+{{
+    "hasErrors": false,
+    "message": "信息看起来准确"
+}}
+
+只返回JSON,不要其他内容。"""
+        
+        # 调用AI进行验证
+        try:
+            headers = {
+                'Authorization': f'Bearer {ALIYUN_API_KEY}',
+                'Content-Type': 'application/json'
+            }
+            
+            payload = {
+                'model': MODEL_NAME,
+                'messages': [
+                    {'role': 'user', 'content': validation_prompt}
+                ],
+                'temperature': 0.3,
+                'max_tokens': 2000
+            }
+            
+            response = requests.post(
+                f'{ALIYUN_API_ENDPOINT}/chat/completions',
+                headers=headers,
+                json=payload,
+                timeout=30
+            )
+            
+            response.raise_for_status()
+            ai_response = response.json()
+            
+            if 'choices' in ai_response and len(ai_response['choices']) > 0:
+                content = ai_response['choices'][0]['message']['content']
+                
+                # 提取JSON
+                import re
+                json_match = re.search(r'\{[\s\S]*\}', content)
+                if json_match:
+                    validation_result = json.loads(json_match.group())
+                    
+                    print(f"✅ 验证完成: {validation_result}")
+                    
+                    return jsonify({
+                        'success': True,
+                        'needsValidation': validation_result.get('hasErrors', False),
+                        'validation': validation_result
+                    })
+        
+        except Exception as e:
+            print(f"AI验证失败: {e}")
+            return jsonify({
+                'success': True,
+                'needsValidation': False,
+                'message': '验证服务暂时不可用'
+            })
+        
+        return jsonify({
+            'success': True,
+            'needsValidation': False,
+            'message': '验证完成,未发现明显错误'
+        })
+        
+    except Exception as e:
+        print(f"验证接口错误: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+
 # 保留旧接口兼容性（非流式，用于 fallback）
 @app.route('/api/generate-drama-marketing', methods=['POST'])
 def generate_drama_marketing():

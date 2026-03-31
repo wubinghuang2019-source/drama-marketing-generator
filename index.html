@@ -1145,6 +1145,90 @@
         }
 
         // 主生成函数
+        // 验证用户填写信息
+        async function validateDramaInfo() {
+            const dramaName = document.getElementById('dramaName').value;
+            const castType = document.getElementById('castType').value;
+            const plotSummary = document.getElementById('plotSummary').value;
+            
+            try {
+                const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:'
+                    ? 'http://localhost:3000'
+                    : (window.BACKEND_URL || 'https://drama-marketing-api.onrender.com');
+                
+                const response = await fetch(`${API_BASE_URL}/api/validate`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({dramaName, castType, plotSummary}),
+                    signal: AbortSignal.timeout(30000)
+                });
+                
+                const result = await response.json();
+                return result;
+            } catch (error) {
+                console.log('验证服务不可用,跳过验证:', error);
+                return {success: true, needsValidation: false};
+            }
+        }
+
+        // 显示验证错误弹窗
+        function showValidationDialog(validation) {
+            const errors = validation.errors || [];
+            if (errors.length === 0) return;
+            
+            let errorHtml = '<div style="background:white;border-radius:16px;padding:30px;max-width:600px;margin:20px;box-shadow:0 8px 32px rgba(0,0,0,0.15);">';
+            errorHtml += '<h3 style="color:#DD7694;margin-bottom:20px;font-size:1.5em;">⚠️ 检测到可能的错误</h3>';
+            errorHtml += '<div style="margin-bottom:25px;color:#666;line-height:1.6;">为确保生成方案的准确性,请确认以下信息:</div>';
+            
+            errors.forEach((err, index) => {
+                errorHtml += `<div style="background:#F8F9FA;padding:20px;border-radius:12px;margin-bottom:15px;border-left:4px solid #DD7694;">`;
+                errorHtml += `<p style="margin:0 0 10px 0;font-weight:600;color:#262626;">字段: ${err.field}</p>`;
+                errorHtml += `<p style="margin:5px 0;color:#666;"><span style="color:#999;">你填写的:</span> <span style="background:#FFE5EC;padding:2px 8px;border-radius:4px;">${err.userValue}</span></p>`;
+                errorHtml += `<p style="margin:5px 0;color:#666;"><span style="color:#999;">建议更正为:</span> <span style="background:#E6F4EB;padding:2px 8px;border-radius:4px;color:#53B76F;font-weight:600;">${err.correctValue}</span></p>`;
+                errorHtml += `<p style="margin:10px 0 0 0;font-size:0.9em;color:#888;">${err.reason}</p>`;
+                errorHtml += `</div>`;
+            });
+            
+            errorHtml += '<div style="display:flex;gap:15px;margin-top:25px;">';
+            errorHtml += '<button onclick="useCorrectInfo()" style="flex:1;padding:14px;background:linear-gradient(135deg,#53B76F,#3D9F5A);color:white;border:none;border-radius:12px;font-size:1em;font-weight:600;cursor:pointer;">使用正确信息</button>';
+            errorHtml += '<button onclick="keepMyInfo()" style="flex:1;padding:14px;background:white;color:#53B76F;border:2px solid #53B76F;border-radius:12px;font-size:1em;font-weight:600;cursor:pointer;">保留我的填写</button>';
+            errorHtml += '</div>';
+            errorHtml += '</div>';
+            
+            // 创建遮罩层
+            const overlay = document.createElement('div');
+            overlay.id = 'validationOverlay';
+            overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:9999;';
+            overlay.innerHTML = errorHtml;
+            document.body.appendChild(overlay);
+            
+            // 保存验证结果供后续使用
+            window.validationResult = validation;
+        }
+
+        // 使用正确信息
+        function useCorrectInfo() {
+            const validation = window.validationResult;
+            if (validation && validation.errors) {
+                validation.errors.forEach(err => {
+                    if (err.field === '演员' || err.field === '演员阵容') {
+                        document.getElementById('castType').value = err.correctValue;
+                    }
+                    if (err.field === '剧情' || err.field === '剧情概述') {
+                        document.getElementById('plotSummary').value = err.correctValue;
+                    }
+                });
+            }
+            document.getElementById('validationOverlay').remove();
+            setTimeout(() => generatePlanAfterValidation(), 300);
+        }
+
+        // 保留用户填写
+        function keepMyInfo() {
+            document.getElementById('validationOverlay').remove();
+            setTimeout(() => generatePlanAfterValidation(), 300);
+        }
+
         async function generatePlan() {
             const dramaName = document.getElementById('dramaName').value;
             const dramaType = document.getElementById('dramaType').value;
@@ -1164,6 +1248,31 @@
                 alert('请填写所有必填项！');
                 return;
             }
+
+            // 先验证信息
+            const validation = await validateDramaInfo();
+            if (validation.needsValidation && validation.validation && validation.validation.hasErrors) {
+                showValidationDialog(validation.validation);
+                return;
+            }
+            
+            // 验证通过,继续生成
+            generatePlanAfterValidation();
+        }
+
+        async function generatePlanAfterValidation() {
+            const dramaName = document.getElementById('dramaName').value;
+            const dramaType = document.getElementById('dramaType').value;
+            const platform = document.getElementById('platform').value;
+            const budget = document.getElementById('budget').value;
+            const audience = document.getElementById('audience').value;
+            const stage = document.getElementById('stage').value;
+            const coreSelling = document.getElementById('coreSelling').value;
+            const plotSummary = document.getElementById('plotSummary').value;
+            const emotionCore = document.getElementById('emotionCore').value;
+            const targetEmotion = document.getElementById('targetEmotion').value;
+            const castType = document.getElementById('castType').value;
+            const ipType = document.getElementById('ipType').value;
 
             // 显示加载状态和结果区域（实时显示）
             document.getElementById('loading').style.display = 'block';
