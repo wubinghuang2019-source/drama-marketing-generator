@@ -1750,9 +1750,92 @@
         // 从DOM更新window.currentPlan.aiResult
         function updateCurrentPlanFromDOM() {
             const resultDiv = document.getElementById('resultContent');
-            // 简单处理: 保存HTML,下次导出时会用到
-            window.currentPlan.aiResult = resultDiv.innerText;  // 纯文本
-            window.currentPlan.aiResultHTML = resultDiv.innerHTML;  // HTML版本
+            
+            // 从DOM重新构建Markdown格式
+            let markdown = '';
+            const elements = resultDiv.children;
+            
+            for (let el of elements) {
+                const tagName = el.tagName.toLowerCase();
+                const text = el.innerText.trim();
+                
+                if (!text) continue;
+                
+                // H2标题 - 提取纯文本(去除按钮)
+                if (tagName === 'h2') {
+                    const titleText = el.childNodes[0]?.textContent?.trim() || text.split('\n')[0];
+                    markdown += `## ${titleText}\n\n`;
+                }
+                // H3标题
+                else if (tagName === 'h3') {
+                    markdown += `### ${text}\n\n`;
+                }
+                // H4标题
+                else if (tagName === 'h4') {
+                    markdown += `#### ${text}\n\n`;
+                }
+                // 列表
+                else if (tagName === 'ul') {
+                    const items = el.querySelectorAll('li');
+                    items.forEach(li => {
+                        markdown += `- ${li.innerText.trim()}\n`;
+                    });
+                    markdown += '\n';
+                }
+                else if (tagName === 'ol') {
+                    const items = el.querySelectorAll('li');
+                    items.forEach((li, index) => {
+                        markdown += `${index + 1}. ${li.innerText.trim()}\n`;
+                    });
+                    markdown += '\n';
+                }
+                // 表格
+                else if (tagName === 'table') {
+                    const rows = el.querySelectorAll('tr');
+                    rows.forEach((row, rowIndex) => {
+                        const cells = row.querySelectorAll('th, td');
+                        const cellTexts = Array.from(cells).map(cell => cell.innerText.trim());
+                        markdown += `| ${cellTexts.join(' | ')} |\n`;
+                        
+                        // 表头分隔线
+                        if (rowIndex === 0 && row.querySelector('th')) {
+                            markdown += `| ${cellTexts.map(() => '---').join(' | ')} |\n`;
+                        }
+                    });
+                    markdown += '\n';
+                }
+                // 引用块
+                else if (tagName === 'blockquote') {
+                    const lines = text.split('\n');
+                    lines.forEach(line => {
+                        if (line.trim()) markdown += `> ${line}\n`;
+                    });
+                    markdown += '\n';
+                }
+                // 普通段落
+                else if (tagName === 'p') {
+                    // 检查是否有加粗
+                    const strongTags = el.querySelectorAll('strong');
+                    if (strongTags.length > 0) {
+                        let paraText = el.innerHTML;
+                        paraText = paraText.replace(/<strong>(.*?)<\/strong>/g, '**$1**');
+                        paraText = paraText.replace(/<[^>]+>/g, '');
+                        markdown += `${paraText}\n\n`;
+                    } else {
+                        markdown += `${text}\n\n`;
+                    }
+                }
+                // 其他元素
+                else {
+                    markdown += `${text}\n\n`;
+                }
+            }
+            
+            // 更新window.currentPlan
+            window.currentPlan.aiResult = markdown.trim();
+            window.currentPlan.aiResultHTML = resultDiv.innerHTML;
+            
+            console.log('✅ currentPlan已更新,Markdown长度:', markdown.length);
         }
 
         // 渲染结果（保留原有模板生成功能）
