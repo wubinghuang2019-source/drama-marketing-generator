@@ -240,7 +240,7 @@ def generate_marketing_plan():
                         {'role': 'user', 'content': user_prompt}
                     ],
                     'temperature': 0.7,
-                    'max_tokens': 4000,
+                    'max_tokens': 16000,  # 约10,000字 (优先1万字,不超过2万字)
                     'stream': True  # 启用流式
                 }
                 
@@ -1050,6 +1050,7 @@ def build_user_prompt(drama_info):
 - ✅ 预算要合理
 - ✅ 要考虑不同营销阶段
 - ✅ 风格要专业但不失温度
+- ✅ **方案字数控制在10,000字左右,不超过20,000字**
 
 ### 格式要求：
 - 使用 Markdown 格式
@@ -1112,7 +1113,7 @@ def generate_drama_marketing():
                     {'role': 'user', 'content': user_prompt}
                 ],
                 'temperature': 0.7,
-                'max_tokens': 4000,
+                'max_tokens': 16000,  # 约10,000字 (优先1万字,不超过2万字)
                 'stream': True
             }
             
@@ -1210,7 +1211,7 @@ def generate_male_drama_marketing():
                     {'role': 'user', 'content': user_prompt}
                 ],
                 'temperature': 0.7,
-                'max_tokens': 4000,
+                'max_tokens': 16000,  # 约10,000字 (优先1万字,不超过2万字)
                 'stream': True
             }
             
